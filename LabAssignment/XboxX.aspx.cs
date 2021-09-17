@@ -2,6 +2,8 @@
 
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace LabAssignment
 {
@@ -18,6 +20,8 @@ namespace LabAssignment
                 string url = ConfigurationManager.AppSettings["SecurePath"] + "XboxX.aspx";
                 Response.Redirect(url);
             }
+            if (Session["Account"] == "Admin")
+                Page.Master.FindControl("AdminFunc").Visible = true;
             conn = new SqlConnection
             {
                 ConnectionString = ConfigurationManager.ConnectionStrings["LIConnectionString"].ConnectionString
@@ -31,6 +35,14 @@ namespace LabAssignment
                 {
                     temp = (byte[])reader["p_image"];
                     Price2.InnerText = "$"+float.Parse(reader["u_price"].ToString()).ToString();
+                    TableCell tableCell=new TableCell();
+                    tableCell.HorizontalAlign = HorizontalAlign.Left;
+                    tableCell.Controls.Add(new LiteralControl(reader["p_details"].ToString()));
+                    TableRow tableRow= new TableRow();
+                    tableCell.Font.Size = FontUnit.Medium;
+                    tableRow.Cells.Add(tableCell);
+                    Description.Rows.Add(tableRow);
+                    
                     CarouselImg1.ImageUrl = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
                     if (reader.Read())
                     {

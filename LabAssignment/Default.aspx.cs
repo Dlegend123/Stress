@@ -26,7 +26,7 @@ namespace LabAssignment
                 Response.Redirect(url);
             }
             if (Session["Account"] == "Admin")
-                Page.Master.FindControl("DynamicHyperLink1").Visible = true;
+                Page.Master.FindControl("AdminFunc").Visible = true;
             conn = new SqlConnection
             {
                 ConnectionString = ConfigurationManager.ConnectionStrings["LIConnectionString"].ConnectionString

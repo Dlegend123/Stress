@@ -13,9 +13,9 @@ namespace LabAssignment
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            int width = (Request.Browser.ScreenPixelsWidth) * 2 - 100;
-            int height = (Request.Browser.ScreenPixelsHeight) * 2 - 100;
-            if (width <= 600)
+            int width = (Request.Browser.ScreenPixelsWidth)*2-100;
+            int height = (Request.Browser.ScreenPixelsHeight)*2-100;
+            if (width <= 700)
             {
                 Response.Redirect("~/ContactM.aspx");
             }
@@ -25,7 +25,7 @@ namespace LabAssignment
                 Response.Redirect(url);
             }
             if (Session["Account"] == "Admin")
-                Page.Master.FindControl("DynamicHyperLink1").Visible = true;
+                Page.Master.FindControl("AdminFunc").Visible = true;
 
         }
     }

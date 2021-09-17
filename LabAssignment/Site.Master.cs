@@ -14,10 +14,7 @@ namespace LabAssignment
         }
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Account == "Admin")
-            {
-                DynamicHyperLink1.Visible = true;
-            }
+   
         }
     }
 }

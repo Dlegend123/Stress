@@ -25,7 +25,7 @@ namespace LabAssignment
                 Response.Redirect(url);
             }
             if (Session["Account"] == "Admin")
-                Page.Master.FindControl("DynamicHyperLink1").Visible = true;
+                Page.Master.FindControl("AdminFunc").Visible = true;
 
             conn = new SqlConnection
             {
@@ -76,66 +76,70 @@ namespace LabAssignment
         
         protected void SortBy_SelectedIndexChanged(object sender, EventArgs e)
         {
-            stressTable.Rows.Clear();
-            switch (SortBy.SelectedIndex)
+            if (SortBy.SelectedItem.Text != "")
             {
-                case 0:
-                    list.Sort((x, y) => x.p_name.CompareTo(y.p_name));
-                    break;
-                case 1:
-                    list.Sort((x, y) => x.p_id.CompareTo(y.p_id));
-                    break;
-                case 2:
-                    list.Sort((x, y) => x.u_price.CompareTo(y.u_price));
-                    break;
-            }
-            if (DropDownCategory.SelectedItem != null&& DropDownCategory.SelectedIndex != 0)
-            {
-                PriceCategory();
-            }
-            else
-            {
-                int count = 0;
-                if (MinPrice.Text != "" || MaxPrice.Text != "")
+                stressTable.Rows.Clear();
+                switch (SortBy.SelectedIndex)
                 {
-                    if (MinPrice.Text != "" && MaxPrice.Text != "")
-                        list.FindAll(t => (t.u_price >= float.Parse(MinPrice.Text) &&
-                            t.u_price <= float.Parse(MaxPrice.Text)))
-                            .ForEach(x => QuickFunction(x, count++));
-                    else
-                    {
-                        if (MinPrice.Text != "")
-                            list.FindAll(t => (t.u_price >= float.Parse(MinPrice.Text)))
-                                .ForEach(x => QuickFunction(x, count++));
-                        else
-                            list.FindAll(t => (t.u_price <= float.Parse(MaxPrice.Text)))
-                                .ForEach(x => QuickFunction(x, count++));
-                    }
+                    case 1:
+                        list.Sort((x, y) => x.p_name.CompareTo(y.p_name));
+                        break;
+                    case 2:
+                        list.Sort((x, y) => y.p_id.CompareTo(x.p_id));
+                        break;
+                    case 3:
+                        list.Sort((x, y) => x.u_price.CompareTo(y.u_price));
+                        break;
                 }
+                if (DropDownCategory.SelectedItem.Text!="All")
+                    PriceCategory();
                 else
-                    list.ForEach(x => QuickFunction(x, count++));
+                {
+                    int count = 0;
+                    if (MinPrice.Text != "" || MaxPrice.Text != "")
+                    {
+                        if (MinPrice.Text != "" && MaxPrice.Text != "")
+                            list.FindAll(t => (t.u_price >= float.Parse(MinPrice.Text) &&
+                                t.u_price <= float.Parse(MaxPrice.Text)))
+                                .ForEach(t => QuickFunction(t, count++));
+                        else
+                        {
+                            if (MinPrice.Text != "")
+                                list.FindAll(t => (t.u_price >= float.Parse(MinPrice.Text)))
+                                    .ForEach(t => QuickFunction(t, count++));
+                            else
+                                list.FindAll(t => (t.u_price <= float.Parse(MaxPrice.Text)))
+                                    .ForEach(t => QuickFunction(t, count++));
+                        }
+                    }
+                    else
+                        list.ForEach(x => QuickFunction(x, count++));
+                }
             }
         }
 
         void PriceCategory()
         {
             int count = 0;
-            if (MinPrice.Text != "" || MaxPrice.Text != "")
+            if (MinPrice.Text == "" && MaxPrice.Text == "")
+                list.FindAll(t => t.category.Equals(DropDownCategory.SelectedItem.Text))
+                    .ForEach(t => QuickFunction(t, count++));
+            else
             {
                 if (MinPrice.Text != "" && MaxPrice.Text != "")
                     list.FindAll(t => (t.u_price >= float.Parse(MinPrice.Text) && t.u_price <= float.Parse(MaxPrice.Text)))
-                        .FindAll(x => x.category.Equals(DropDownCategory.SelectedItem.Text))
-                        .ForEach(x => QuickFunction(x, count++));
+                        .FindAll(t => t.category.Equals(DropDownCategory.SelectedItem.Text))
+                        .ForEach(t => QuickFunction(t, count++));
                 else
                 {
                     if (MinPrice.Text != "")
                         list.FindAll(t => (t.u_price >= float.Parse(MinPrice.Text)))
-                            .FindAll(x => x.category.Equals(DropDownCategory.SelectedItem.Text))
-                            .ForEach(x => QuickFunction(x, count++));
+                            .FindAll(t => t.category.Equals(DropDownCategory.SelectedItem.Text))
+                            .ForEach(t => QuickFunction(t, count++));
                     else
                         list.FindAll(t => (t.u_price <= float.Parse(MaxPrice.Text)))
-                            .FindAll(x => x.category.Equals(DropDownCategory.SelectedItem.Text))
-                            .ForEach(x => QuickFunction(x, count++)); ;
+                            .FindAll(t => t.category.Equals(DropDownCategory.SelectedItem.Text))
+                            .ForEach(t => QuickFunction(t, count++));
                 }
             }
         }
@@ -162,6 +166,18 @@ namespace LabAssignment
                     }
                 }
                 conn.Close();
+                switch (SortBy.SelectedIndex)
+                {
+                    case 1:
+                        products.Sort((x, y) => x.p_name.CompareTo(y.p_name));
+                        break;
+                    case 2:
+                        products.Sort((x, y) => y.p_id.CompareTo(x.p_id));
+                        break;
+                    case 3:
+                        products.Sort((x, y) => x.u_price.CompareTo(y.u_price));
+                        break;
+                }
                 products.ForEach(x => QuickFunction(x, count++));
             }
             catch (SqlException)
@@ -186,24 +202,18 @@ namespace LabAssignment
         }
         void QuickFunction(Product p, int count)
         {
-            int width = (Request.Browser.ScreenPixelsWidth) * 2 - 100;
-            int height = (Request.Browser.ScreenPixelsHeight) * 2 - 100;
-            if (width <= 600)
+            int width = (Request.Browser.ScreenPixelsWidth)*2-100;
+            int height = (Request.Browser.ScreenPixelsHeight)*2-100;
+            if (width <= 700)
             {
-                
                 if(!ProductTable.CssClass.Contains("-fluid"))
                     ProductTable.CssClass += "-fluid";
             }
-            if (width <= 1000)
-                if (BeforeGo.Controls.Count == 0)
-                    BeforeGo.Controls.Add(new LiteralControl("<br />"));
             /*    else
                 {
                     if (ProductTable.CssClass.Contains("container"))
                         ProductTable.CssClass.Remove(ProductTable.CssClass.IndexOf("container"), "container".Length - 1);
                 }*/
-
-
 
             TableRow tableRow = new TableRow();
             TableCell tableCell = new TableCell();
@@ -221,10 +231,10 @@ namespace LabAssignment
             hyperLink.CssClass = "nav-link active";
             hyperLink.ForeColor = System.Drawing.Color.WhiteSmoke;
             hyperLink.Controls.Add(image);
-            if (width <= 600)
+            if (width <= 700)
             {
-                hyperLink.Controls.Add(new LiteralControl("<br /> Name: " + width + "<br />"));
-                hyperLink.Controls.Add(new LiteralControl("ID: " + height + "<br />"));
+                hyperLink.Controls.Add(new LiteralControl("<br /> Name: " + p.p_name + "<br />"));
+                hyperLink.Controls.Add(new LiteralControl("ID: " + p.p_id + "<br />"));
                 hyperLink.Controls.Add(new LiteralControl("Category: " + p.category + "<br />"));
                 hyperLink.Controls.Add(new LiteralControl("Unit Price: " + p.u_price + "<br />"));
                 hyperLink.Controls.Add(new LiteralControl("Details: " + p.p_details));
@@ -238,9 +248,9 @@ namespace LabAssignment
             }
             else
             {
-                
                 tableCell.Controls.Add(hyperLink);
                 tableRow.Visible = true;
+                tableRow.Cells.Add(tableCell);
                 stressTable.Rows.Add(tableRow);
                 DynamicHyperLink hyperLink2 = new DynamicHyperLink();
                 TableCell tableCell2 = new TableCell();
@@ -250,7 +260,6 @@ namespace LabAssignment
                 hyperLink2.ForeColor = System.Drawing.Color.WhiteSmoke;
                 hyperLink2.CssClass = "nav-link active";
                 ProductFilter.RowSpan++;
-                stressTable.Rows[count].Cells.Add(tableCell);
                 hyperLink2.Controls.Add(new LiteralControl("Name: " + p.p_name + "<br />"));
                 hyperLink2.Controls.Add(new LiteralControl("ID: " + p.p_id + "<br />"));
                 hyperLink2.Controls.Add(new LiteralControl("Category: " + p.category + "<br />"));

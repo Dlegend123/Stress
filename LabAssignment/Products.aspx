@@ -1,8 +1,9 @@
 ﻿<%@ Page Title="Products" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Products.aspx.cs" Inherits="LabAssignment.Products" EnableEventValidation="false" %>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    <div runat="server" id="ProductContain" class="h-100" style="margin-left:auto;margin-right:auto;"> 
+    <div runat="server" id="ProductContain" class="container-fluid"> 
     <br />                   
-    <asp:table ID="ProductTable" runat="server" CssClass="table table-dark table-striped table-bordered h-100 container" BorderStyle="Solid" ForeColor="WhiteSmoke"  BorderWidth="3px" >
+     <br />
+    <asp:table ID="ProductTable" runat="server" CssClass="table table-dark table-striped table-bordered container" BorderStyle="Solid" ForeColor="WhiteSmoke"  BorderWidth="3px" >
        <asp:TableRow>
        </asp:TableRow>
         <asp:TableHeaderRow BorderStyle="Solid" BorderWidth="3px">
@@ -20,6 +21,9 @@
                 &nbsp;
                 <asp:DropDownList runat="server" ID="SortBy" AutoPostBack="true" OnSelectedIndexChanged="SortBy_SelectedIndexChanged" >
                     
+                    <asp:ListItem Text="">
+
+                    </asp:ListItem>
                     <asp:ListItem Text="Name">
 
                     </asp:ListItem>
@@ -89,13 +93,11 @@
                     <h4>Price</h4>
 
                 </asp:Label>
-                <asp:TextBox runat="server" CssClass="w-25" ID="MinPrice" Text=""></asp:TextBox>
+                <asp:TextBox runat="server" CssClass="w-25" ID="MinPrice" Text="" TextMode="Number"></asp:TextBox>
                 &nbsp; - &nbsp;
-                <asp:TextBox runat="server" CssClass="w-25" ID="MaxPrice" Text=""></asp:TextBox>
-                    &nbsp;
-                    <div runat="server" id="BeforeGo" visible="false">
-                        
-                    </div>
+                <asp:TextBox runat="server" CssClass="w-25" ID="MaxPrice" Text="" TextMode="Number"></asp:TextBox>
+                    <br />
+                    <br />
                 <asp:Button runat="server" Text="Go" ID="PriceRange" OnClick="PriceRange_Click" CssClass="btn btn-outline-warning" />
                 </div>
                 

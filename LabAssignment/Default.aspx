@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="LabAssignment._Default" EnableEventValidation="false" %>
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    <div class="container h-100">
+    <div class="container-fluid">
     <br />
     <br />
         <table class="table container" style="margin-left:auto;margin-right:auto;">

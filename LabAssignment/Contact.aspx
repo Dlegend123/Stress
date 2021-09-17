@@ -2,7 +2,7 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     
-    <div class=" container h-100">
+    <div class=" container-fluid h-100">
         <br />
     <br />
     <asp:Table runat="server" CssClass="table container-fluid">
@@ -13,7 +13,7 @@
         </asp:TableHeaderRow>
     <asp:TableRow>
         <asp:TableCell>
-    <asp:Table runat="server" CssClass="table table-dark table-striped table-bordered container">
+    <asp:Table runat="server" CssClass="table table-dark table-striped table-bordered container-fluid">
         <asp:TableHeaderRow>
             <asp:TableHeaderCell  CssClass="rounded shadow" BorderWidth="3px" BorderStyle="Solid" ColumnSpan="3">
                 <h4 class="title">Legacy Industries </h4>
@@ -85,7 +85,7 @@
               </div>
             </asp:TableCell>
             <asp:TableCell  CssClass="rounded shadow" BorderWidth="3px">
-                <img class="img-fluid"  src="Images/Contact/Users-01.svg" style="max-height:20vh;max-width:20vw;"/>              
+                <img class="img-fluid"  src="Images/Contact/Users-01.svg" style="max-height:15vh;max-width:15vw;"/>              
               <h3 class="mt-2">Contact us on Social Media</h3>
               <div class="justify-content-center">
                 <p>Tweet us <a href="#" target="_blank" style="text-decoration:none">@LISupport</a><br>

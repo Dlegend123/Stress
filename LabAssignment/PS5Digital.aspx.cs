@@ -2,12 +2,17 @@
 
 using System.Configuration;
 using System.Data.SqlClient;
-
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace LabAssignment
 {
     public partial class PS5Digital : System.Web.UI.Page
     {
+        SqlCommand sqlCommand;
+        SqlConnection conn;
+        SqlDataReader reader;
+        byte[] temp;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Request.IsSecureConnection)
@@ -15,10 +20,9 @@ namespace LabAssignment
                 string url = ConfigurationManager.AppSettings["SecurePath"] + "PS5Digital.aspx";
                 Response.Redirect(url);
             }
-            SqlCommand sqlCommand;
-            SqlConnection conn;
-            SqlDataReader reader;
-            byte[] temp;
+            if (Session["Account"] == "Admin")
+                Page.Master.FindControl("AdminFunc").Visible = true;
+            
             conn = new SqlConnection
             {
                 ConnectionString = ConfigurationManager.ConnectionStrings["LIConnectionString"].ConnectionString
@@ -31,6 +35,13 @@ namespace LabAssignment
                 while (reader.Read())
                 {
                     temp = (byte[])reader["p_image"];
+                    TableCell tableCell = new TableCell();
+                    tableCell.HorizontalAlign = HorizontalAlign.Left;
+                    tableCell.Controls.Add(new LiteralControl(reader["p_details"].ToString()));
+                    TableRow tableRow = new TableRow();
+                    tableCell.Font.Size = FontUnit.Medium;
+                    tableRow.Cells.Add(tableCell);
+                    Description.Rows.Add(tableRow);
                     Price2.InnerText = "$" + float.Parse(reader["u_price"].ToString()).ToString();
                     CarouselImg1.ImageUrl = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
                     if (reader.Read())

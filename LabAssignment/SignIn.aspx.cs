@@ -19,13 +19,21 @@ namespace LabAssignment
         byte[] temp;
         protected void Page_Load(object sender, EventArgs e)
         {
+            int width = (Request.Browser.ScreenPixelsWidth) * 2 - 100;
+            int height = (Request.Browser.ScreenPixelsHeight) * 2 - 100;
+            if (width <= 700)
+            {
+                if (!SignInTable.CssClass.Contains("container-fluid"))
+                    SignInTable.CssClass += "container-fluid";
+            }
+
             if (!Request.IsSecureConnection)
             {
                 string url = ConfigurationManager.AppSettings["SecurePath"] + "SignIn.aspx";
                 Response.Redirect(url);
             }
             if (Session["Account"] == "Admin")
-                Page.Master.FindControl("DynamicHyperLink1").Visible = true;
+                Page.Master.FindControl("AdminFunc").Visible = true;
 
         }
         protected void Validate(object sender, EventArgs e)

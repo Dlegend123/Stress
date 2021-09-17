@@ -22,6 +22,8 @@ namespace LabAssignment
                 string url = ConfigurationManager.AppSettings["SecurePath"] + "ManageProduct.aspx";
                 Response.Redirect(url);
             }
+            if (Session["Account"] == "Admin")
+                Page.Master.FindControl("AdminFunc").Visible = true;
         }
 
         protected void ProductAdd_Click(object sender, EventArgs e)

@@ -1,22 +1,24 @@
 ﻿<%@ Page Title="Sign In" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="SignIn.aspx.cs" Inherits="LabAssignment.SignIn" EnableEventValidation="false" %>
 <%@ MasterType VirtualPath ="~/Site.Master" %>  
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <div class="container" style="min-width:300px;height:stretch;">
+    <div class="container-fluid" >
     <br />
     <br />
-        <asp:Table runat="server" CssClass="container" Width="25%">
+        <asp:Table runat="server" HorizontalAlign="Center" ID="SignInTable" CssClass="container-fluid">
             <asp:TableRow>
-                <asp:TableCell>
-    <asp:table runat="server" CssClass="table table-dark table-striped table-bordered" BorderStyle="Solid" ForeColor="WhiteSmoke"  BorderWidth="3px" >
-       <asp:TableHeaderRow>
-<asp:TableCell>
-    <h3>
+                <asp:TableCell HorizontalAlign="Center">
+    <table runat="server" class="table table-dark table-striped table-bordered img-fluid" style="max-width:50vw;max-height:60vh;">
+       <thead>
+           <tr>
+               <th style="text-align:center">
+           <h3>
         Sign In
     </h3>
-</asp:TableCell>
-       </asp:TableHeaderRow>
-        <asp:TableRow>
-            <asp:TableCell HorizontalAlign="Left">
+               </th>
+       </tr>
+       </thead>
+        <tr>
+            <td style="text-align:left">
                 <h5>
                     Name
                 </h5>
@@ -24,10 +26,10 @@
                 <asp:TextBox runat="server" Font-Size="Medium" CssClass="w-100" ID="SName">
 
                 </asp:TextBox>
-                </asp:TableCell>
-            </asp:TableRow>
-        <asp:TableRow>
-            <asp:TableCell HorizontalAlign="Left">
+                </td>
+            </tr>
+        <tr>
+            <td style="text-align:left">
                 <h5>
                     Password
                 </h5>
@@ -35,15 +37,15 @@
                 <asp:TextBox runat="server" Font-Size="Medium" CssClass="w-100" ID="SPassword">
 
                 </asp:TextBox>
-            </asp:TableCell>
-        </asp:TableRow>
-        <asp:TableRow>
-            <asp:TableCell HorizontalAlign="Center">
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:center">
                 <asp:Button runat="server" Text="Sign In" CssClass="btn btn-outline-warning" ID="SignInClick" OnClick="Validate"/>
-                </asp:TableCell>
+                </td>
             
-        </asp:TableRow>
-    </asp:table>
+        </tr>
+    </table>
                     </asp:TableCell>
             </asp:TableRow>
             <asp:TableRow>

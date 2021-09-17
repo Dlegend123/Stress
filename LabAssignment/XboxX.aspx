@@ -58,20 +58,14 @@
               <button type="button" id="SeriesSHomeLaunch" class="btn btn-secondary btn-sm" runat="server" onserverclick="SeriesSHomeLaunch_ServerClick"><h3>Series S</h3></button>
         </div>
     <br />
-    <table class="table container table-dark table-striped table-bordered">
-        <tr>
-            <th colspan="2" style="text-align:center"><h3>Specifications</h3></th>
-        </tr>
-        <tr>
-            <td style="font-size:larger">Steam Deck ready for preorder</td>
-            <td style="font-size:larger">Both Xbox series X & S now 10% off</td>
-        </tr>
-        <tr>
-            <td style="font-size:larger">Nintendo Switch Oled Model</td>
-            <td style="font-size:larger">Both Playstation 5 versions now 10% off</td>
-        </tr>
+    <asp:table class="table container table-dark table-striped table-bordered" runat="server" ID="Description">
+        <asp:TableHeaderRow>
+            <asp:TableHeaderCell ColumnSpan="2" HorizontalAlign="Center">
+                <h3>Description</h3>
+            </asp:TableHeaderCell>
+        </asp:TableHeaderRow>
         
-     </table>
+     </asp:table>
         </div>
     </asp:Content>
 

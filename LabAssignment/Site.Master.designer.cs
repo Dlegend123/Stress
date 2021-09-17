@@ -15,13 +15,22 @@ namespace LabAssignment
     {
 
         /// <summary>
-        /// DynamicHyperLink1 control.
+        /// stress control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.DynamicData.DynamicHyperLink DynamicHyperLink1;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl stress;
+
+        /// <summary>
+        /// AdminFunc control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl AdminFunc;
 
         /// <summary>
         /// MainContent control.

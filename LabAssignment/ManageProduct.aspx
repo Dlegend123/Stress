@@ -1,9 +1,9 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ManageProduct.aspx.cs" Inherits="LabAssignment.ManageProduct" EnableEventValidation="false" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <div class="container w-50 h-100"> 
+    <div class="container h-100"> 
     <br />  
-    <asp:table runat="server" CssClass="table table-dark table-striped table-bordered container h-100" BorderStyle="Solid" ForeColor="WhiteSmoke"  BorderWidth="3px" >
+    <asp:table runat="server" CssClass="table table-dark table-striped table-bordered container h-100 w-50" BorderStyle="Solid" ForeColor="WhiteSmoke"  BorderWidth="3px" >
       <asp:TableHeaderRow>
           <asp:TableHeaderCell ColumnSpan="2">
               <h3>
