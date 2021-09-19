@@ -30,7 +30,7 @@ namespace LabAssignment
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Image CarouselImg1;
+        protected global::System.Web.UI.HtmlControls.HtmlImage CarouselImg1;
 
         /// <summary>
         /// Carousel2Link control.
@@ -48,7 +48,7 @@ namespace LabAssignment
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Image CarouselImg2;
+        protected global::System.Web.UI.HtmlControls.HtmlImage CarouselImg2;
 
         /// <summary>
         /// Carousel3Link control.
@@ -66,7 +66,7 @@ namespace LabAssignment
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Image CarouselImg3;
+        protected global::System.Web.UI.HtmlControls.HtmlImage CarouselImg3;
 
         /// <summary>
         /// Carousel4Link control.
@@ -84,6 +84,6 @@ namespace LabAssignment
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Image CarouselImg4;
+        protected global::System.Web.UI.HtmlControls.HtmlImage CarouselImg4;
     }
 }

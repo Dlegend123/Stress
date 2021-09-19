@@ -1,79 +1,104 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ManageProduct.aspx.cs" Inherits="LabAssignment.ManageProduct" EnableEventValidation="false" %>
+﻿<%@ Page Title="Manage Products" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ManageProduct.aspx.cs" Inherits="LabAssignment.ManageProduct" EnableEventValidation="false" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <div class="container h-100"> 
+    <div class="container-fluid"> 
     <br />  
-    <asp:table runat="server" CssClass="table table-dark table-striped table-bordered container h-100 w-50" BorderStyle="Solid" ForeColor="WhiteSmoke"  BorderWidth="3px" >
-      <asp:TableHeaderRow>
-          <asp:TableHeaderCell ColumnSpan="2">
+    <table runat="server" class="table table-dark table-striped table-bordered container-fluid" style="border-width:3px;border-style:solid;color:whitesmoke;max-width:50vw;max-height:60vh;">
+      <tr>
+          <th colspan="2">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="text-align:center">
+
+              <li class="nav-item">
               <h3>
                   Product
               </h3>
-          </asp:TableHeaderCell>
-      </asp:TableHeaderRow> 
-      <asp:TableRow>
-           <asp:TableCell HorizontalAlign="Left">
+                  </li>
+                  <li style="text-align:right;" class="nav-item">
+              <asp:DropDownList runat="server">
+                  <asp:ListItem Text="Add">
+
+                  </asp:ListItem>
+                  <asp:ListItem Text="Edit">
+
+                  </asp:ListItem>
+              </asp:DropDownList>
+                      </li>
+                  </ul>
+          </th>
+      </tr> 
+      <tr>
+          <td>
+
+          <table runat="server" id="ManageTable" class="table table-dark table-striped table-bordered container-fluid" style="border-width:3px;border-style:solid;color:whitesmoke;max-width:50vw;max-height:60vh;">
+    <tr>
+           <td style="text-align:left">
                <h5>
                   ID#
                </h5>
-               <asp:TextBox runat="server" ID="ProductID" >
+               <asp:TextBox  runat="server" ID="ProductID" >
 
                </asp:TextBox>
-           </asp:TableCell>
-           <asp:TableCell HorizontalAlign="Left">
+           </td>
+           <td style="text-align:left;">
                <h5>
                    Name
                </h5>
-               <asp:TextBox runat="server" ID="ProductName">
+               <asp:TextBox  runat="server" ID="ProductName">
 
                </asp:TextBox>
-           </asp:TableCell>
-       </asp:TableRow>
-        <asp:TableRow>
-            <asp:TableCell HorizontalAlign="Left">
+           </td>
+       </tr>
+        <tr>
+            <td style="text-align:left;">
                <h5>
                    Category
                </h5>
-                <asp:TextBox runat="server" ID="ProductCat">
+                <asp:TextBox  runat="server" ID="ProductCat">
 
                </asp:TextBox>
-           </asp:TableCell>
-            <asp:TableCell HorizontalAlign="Left">
+           </td>
+            <td style="text-align:left;">
                <h5>
                    Price
                </h5>
-                <asp:TextBox runat="server" ID="ProductPrice">
+                <asp:TextBox  runat="server" ID="ProductPrice">
 
                </asp:TextBox>
-           </asp:TableCell>
-       </asp:TableRow>
-        <asp:TableRow>
-            <asp:TableCell HorizontalAlign="Left">
+           </td>
+       </tr>
+        <tr>
+            <td style="text-align:left;" colspan="2">
                 <h5>
                     Details
                 </h5>
-                <asp:TextBox runat="server" ID="ProductDetail">
+                <asp:TextBox  runat="server" ID="ProductDetail">
 
                 </asp:TextBox>
-           </asp:TableCell>
-            <asp:TableCell HorizontalAlign="Left">
+           </td>
+            
+       </tr>
+        <tr>
+            <td colspan="2" style="text-align:left" >
                 <h5>
                     Video
                 </h5>
                 <asp:FileUpload ID="ProductVid" runat="server" />
-            </asp:TableCell>
-       </asp:TableRow>
-        
-        <asp:TableRow>
-            <asp:TableCell HorizontalAlign="Left">
+
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:left;" colspan="2">
                <h5>
                    Quantity
                </h5>
-                <asp:TextBox runat="server" ID="ProductQuantity">
+                <asp:TextBox  runat="server" ID="ProductQuantity">
 
                </asp:TextBox>
-           </asp:TableCell>
-            <asp:TableCell HorizontalAlign="Left">
+           </td>
+            
+       </tr>
+        <tr>
+            <td style="text-align:left;" colspan="2">
                <h5>
                    Images
                </h5>
@@ -82,40 +107,44 @@
                 <asp:FileUpload runat="server" ID="ProductImage2" ></asp:FileUpload>
                 <br />
                 <asp:FileUpload runat="server" ID="ProductImage3" ></asp:FileUpload>
-           </asp:TableCell>
-       </asp:TableRow>
-        <asp:TableRow>
-            <asp:TableCell HorizontalAlign="Left">
+           </td>
+        </tr>
+        <tr>
+            <td style="text-align:left;">
                <h5>
                    Page(Desktop)
                </h5>
-                <asp:TextBox runat="server" ID="ProductDesk"></asp:TextBox>
-                </asp:TableCell>
-                <asp:TableCell HorizontalAlign="Left">
+                <asp:TextBox  runat="server" ID="ProductDesk"></asp:TextBox>
+                </td>
+                <td style="text-align:left;">
                 <h5>
                    Page(Mobile)
                </h5>
-                    <asp:TextBox runat="server" ID="ProductMob"></asp:TextBox>
-                </asp:TableCell>
-       </asp:TableRow>
-        <asp:TableRow>
-            <asp:TableCell HorizontalAlign="Right" ColumnSpan="2">
+                    <asp:TextBox  runat="server" ID="ProductMob"></asp:TextBox>
+                
+            </td>
+       </tr>
+              </table>
+        </td>
+        </tr>
+        <tr>
+            <td style="text-align:left;" colspan="2">
                 <asp:Button runat="server" Text="Go" CssClass="btn btn-outline-warning" ID="ProductAdd" OnClick="ProductAdd_Click"/>
-                </asp:TableCell>
+                </td>
             
-        </asp:TableRow>
-        </asp:table>
+        </tr>
+        </table>
         <br />
-        <asp:table runat="server" CssClass="table table-dark table-striped table-bordered container h-100" BorderStyle="Solid" ForeColor="WhiteSmoke"  BorderWidth="3px">
-       <asp:TableHeaderRow>
-           <asp:TableHeaderCell ColumnSpan="2">
+        <table runat="server" class="table table-dark table-striped table-bordered container-fluid" style="border-width:3px;border-style:solid;color:whitesmoke;max-width:50vw;max-height:60vh;">
+            <tr>
+           <td colspan="2">
                <h3>
                    Carousel
                </h3>
-           </asp:TableHeaderCell>
-       </asp:TableHeaderRow>
-         <asp:TableRow>
-           <asp:TableCell HorizontalAlign="Left">
+           </td>
+       </tr>
+         <tr>
+           <td style="text-align:left;" colspan="2">
                
                <h5>
                    Name
@@ -134,38 +163,41 @@
 
                    </asp:ListItem>
                </asp:DropDownList>
-           </asp:TableCell>
-            <asp:TableCell HorizontalAlign="Left">
+           </td>
+            
+       </tr>
+            <tr>
+                <td style="text-align:left;" colspan="2">
                <h5>
                    Image
                </h5>
                 <asp:FileUpload runat="server" ID="CarouselImage"></asp:FileUpload>
-           </asp:TableCell>
-       </asp:TableRow>
-        <asp:TableRow>
-            <asp:TableCell HorizontalAlign="Left">
+           </td>
+            </tr>
+        <tr>
+            <td style="text-align:left;">
                <h5>
                    Page(Desktop)
                </h5>
-                <asp:TextBox runat="server" ID="CarouselDesk" >
+                <asp:TextBox  runat="server" ID="CarouselDesk" >
 
                 </asp:TextBox>
-                </asp:TableCell>
-            <asp:TableCell HorizontalAlign="Left">
+                </td>
+            <td style="text-align:left;">
                 <h5>
                    Page(Mobile)
                </h5>
-                <asp:TextBox runat="server" ID="CarouselMob">
+                <asp:TextBox  runat="server" ID="CarouselMob">
 
                 </asp:TextBox>
-           </asp:TableCell>
-       </asp:TableRow>
-            <asp:TableRow>
-            <asp:TableCell HorizontalAlign="Right" ColumnSpan="2">
+           </td>
+       </tr>
+            <tr>
+            <td style="text-align:left;" colspan="2">
                 <asp:Button runat="server" Text="Go" CssClass="btn btn-outline-warning" ID="CarouselAdd" OnClick="CarouselAdd_Click"/>
-                </asp:TableCell>
+                </td>
             
-            </asp:TableRow>
-        </asp:table>
+            </tr>
+        </table>
         </div>
 </asp:Content>

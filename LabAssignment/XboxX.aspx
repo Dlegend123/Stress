@@ -7,7 +7,7 @@
     <br />
     <table>
         <tr >
-        <td>
+        <td style="vertical-align:central;width:60vw" >
 <div id="carousel2" class="carousel carousel-dark slide container-fluid" data-bs-ride="carousel" >
   <div class="carousel-indicators">
     <button type="button" data-bs-target="#carousel2" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -16,16 +16,16 @@
   </div>
   <div class="carousel-inner">  
     <div class="carousel-item  active">
-        <asp:Image CssClass="img-fluid" runat="server" ID="CarouselImg1" />
-    <!--  <img src="../../Images/Xbox/seriesX/XboxX1.jpg" class="img-fluid" alt="...">-->
+        <img class="img-fluid"  runat="server" id="CarouselImg1" alt="..." />
+
     </div>
       <div class="carousel-item">
-          <asp:Image CssClass="img-fluid" runat="server" ID="CarouselImg2" />
-      <!--<img src="../../Images/Xbox/seriesX/9eccdb3c-e965-4ab7-97d2-651c5f5a7fbe.jpg" class="img-fluid" alt="...">-->
+          <img class="img-fluid"  runat="server" id="CarouselImg2" alt="..."/>
+     
     </div>
       <div class="carousel-item">
-          <asp:Image CssClass="img-fluid" runat="server" ID="CarouselImg3" />
-    <!--  <img src="../../Images/Xbox/seriesX/uFicTu3Ti56psJpsTGQ64C.jpg" class="img-fluid" alt="...">-->
+         <img class="img-fluid"  runat="server" id="CarouselImg3" alt="..."/>
+
     </div>
   </div>
   <button class="carousel-control-prev" type="button" data-bs-target="#carousel2" data-bs-slide="prev">
@@ -39,7 +39,7 @@
 </div>
 
             </td>
-            <td style="vertical-align: middle;">
+            <td style="vertical-align: middle;padding-left:2px">
                 <h3 style="text-align:center;color:whitesmoke" runat="server" id="Price2" ></h3>
                 
                 <button type="button" class="btn btn-secondary btn-sm active" data-bs-toggle="button"><h3 style="width:max-content">Add to cart</h3></button>

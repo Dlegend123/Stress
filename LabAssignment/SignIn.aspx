@@ -1,5 +1,5 @@
 ﻿<%@ Page Title="Sign In" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="SignIn.aspx.cs" Inherits="LabAssignment.SignIn" EnableEventValidation="false" %>
-<%@ MasterType VirtualPath ="~/Site.Master" %>  
+
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="container-fluid" >
     <br />
@@ -7,7 +7,7 @@
         <asp:Table runat="server" HorizontalAlign="Center" ID="SignInTable" CssClass="container-fluid">
             <asp:TableRow>
                 <asp:TableCell HorizontalAlign="Center">
-    <table runat="server" class="table table-dark table-striped table-bordered img-fluid" style="max-width:50vw;max-height:60vh;">
+    <table runat="server" class="table table-dark table-striped table-bordered" style="max-width:50vw;max-height:60vh;">
        <thead>
            <tr>
                <th style="text-align:center">
@@ -34,7 +34,7 @@
                     Password
                 </h5>
 
-                <asp:TextBox runat="server" Font-Size="Medium" CssClass="w-100" ID="SPassword">
+                <asp:TextBox runat="server" Font-Size="Medium" CssClass="w-100" ID="SPassword" TextMode="Password">
 
                 </asp:TextBox>
             </td>

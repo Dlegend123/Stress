@@ -6,7 +6,7 @@
         <br />
     <table>
         <tr>
-        <td>
+        <td style="vertical-align:central;width:60vw" >
 <div id="carousel4" class="carousel carousel-dark slide container-fluid" data-bs-ride="carousel"  >
   <div class="carousel-indicators">
     <button type="button" data-bs-target="#carousel4" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -14,11 +14,11 @@
   </div>
   <div class="carousel-inner">  
     <div class="carousel-item active">
-        <asp:Image CssClass="img-fluid" runat="server" ID="CarouselImg1" />
+        <img class="img-fluid"  runat="server" id="CarouselImg1" alt="..." />
       <!--<img src="Images/Playstation5/NoDisc/Ps5-Digital-Edition-Package-Go-Go-Deals-.jpg" class="img-fluid" alt="...">-->
     </div>
       <div class="carousel-item">
-          <asp:Image ID="CarouselImg2" runat="server" CssClass="img-fluid" />
+          <img class="img-fluid"  runat="server" id="CarouselImg2" alt="..."/>
       <!--<img src="Images/Playstation5/NoDisc/d4ad0557-5714-4ec8-9373-dc60e4a52789.__CR0,0,1464,600_PT0_SX1464_V1___.jpg" class="img-fluid" alt="...">-->
     </div>
   </div>
@@ -33,7 +33,7 @@
 </div>
 
             </td>
-            <td style="vertical-align: middle;">
+            <td style="vertical-align: middle;padding-left:2px">
                 <h3 style="text-align:center;color:whitesmoke" runat="server" id="Price2" ></h3>
 
                 <button type="button" class="btn btn-secondary btn-sm active" data-bs-toggle="button"><h3 style="width:max-content">Add to cart</h3></button>

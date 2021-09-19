@@ -220,7 +220,7 @@ namespace LabAssignment
             Image image = new Image();
             image.ImageUrl = "data:image/jpeg;base64," + Convert.ToBase64String(p.p_image);
             image.CssClass = "img-fluid";
-            image.Width = Unit.Percentage(100);
+            image.Height = Unit.Percentage(70);
             tableRow.HorizontalAlign = HorizontalAlign.Justify;
             tableRow.BorderStyle = BorderStyle.Solid;
             tableRow.BorderWidth = Unit.Pixel(3);

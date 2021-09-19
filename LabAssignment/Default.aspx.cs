@@ -43,22 +43,22 @@ namespace LabAssignment
                     temp = (byte[])reader["p_image"];
                     if (reader["p_name"].ToString() == "CarouselImg1")
                     {
-                        CarouselImg1.ImageUrl = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
+                        CarouselImg1.Src = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
                         Carousel1Link.HRef = filePath;
                     }
                     if (reader["p_name"].ToString() == "CarouselImg2")
                     {
-                        CarouselImg2.ImageUrl = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
+                        CarouselImg2.Src = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
                         Carousel2Link.HRef= filePath;
                     }
                     if (reader["p_name"].ToString() == "CarouselImg3")
                     {
-                        CarouselImg3.ImageUrl = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
+                        CarouselImg3.Src = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
                         Carousel3Link.HRef = filePath;
                     }
                     if (reader["p_name"].ToString() == "CarouselImg4")
                     {
-                        CarouselImg4.ImageUrl = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
+                        CarouselImg4.Src = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
                         Carousel4Link.HRef = filePath;
                     }
                 }
@@ -121,9 +121,9 @@ namespace LabAssignment
                         if (reader["p_name"].ToString() == "CarouselImg1")
                         {
                             temp = (byte[])reader["p_image"];
-                            if (("data:image/jpeg;base64," + Convert.ToBase64String(temp)) != CarouselImg1.ImageUrl)
+                            if (("data:image/jpeg;base64," + Convert.ToBase64String(temp)) != CarouselImg1.Src)
                             {
-                                CarouselImg1.ImageUrl = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
+                                CarouselImg1.Src = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
                                 Update();
                                 Carousel1Link.HRef = filePath;
                             }
@@ -131,9 +131,9 @@ namespace LabAssignment
                         if (reader["p_name"].ToString() == "CarouselImg2")
                         {
                             temp = (byte[])reader["p_image"];
-                            if (("data:image/jpeg;base64," + Convert.ToBase64String(temp)) != CarouselImg2.ImageUrl)
+                            if (("data:image/jpeg;base64," + Convert.ToBase64String(temp)) != CarouselImg2.Src)
                             {
-                                CarouselImg2.ImageUrl = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
+                                CarouselImg2.Src = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
                                 Update();
                                 Carousel2Link.HRef = filePath;
                             }
@@ -142,9 +142,9 @@ namespace LabAssignment
                         if (reader["p_name"].ToString() == "CarouselImg3")
                         {
                             temp = (byte[])reader["p_image"];
-                            if (("data:image/jpeg;base64," + Convert.ToBase64String(temp)) != CarouselImg3.ImageUrl)
+                            if (("data:image/jpeg;base64," + Convert.ToBase64String(temp)) != CarouselImg3.Src)
                             {
-                                CarouselImg3.ImageUrl = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
+                                CarouselImg3.Src = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
                                 Update();
                                 Carousel3Link.HRef = filePath;
                             }
@@ -153,9 +153,9 @@ namespace LabAssignment
                         if (reader["p_name"].ToString() == "CarouselImg4")
                         {
                             temp = (byte[])reader["p_image"];
-                            if (("data:image/jpeg;base64," + Convert.ToBase64String(temp)) != CarouselImg4.ImageUrl)
+                            if (("data:image/jpeg;base64," + Convert.ToBase64String(temp)) != CarouselImg4.Src)
                             {
-                                CarouselImg4.ImageUrl = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
+                                CarouselImg4.Src = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
                                 Update();
                                 Carousel4Link.HRef = filePath;
                             }

@@ -33,7 +33,7 @@
 
                             </strong>
                             <span class="info">
-                                <a href="tel:876-683-0000">876-683-0000</a>
+                                <a href="tel:876-683-0000" style="text-decoration:none">876-683-0000</a>
 
                             </span>
 
@@ -89,7 +89,7 @@
             </asp:TableRow >
             <asp:TableRow >
             <asp:TableCell  CssClass="rounded shadow" BorderWidth="3px">
-                <img class="img-fluid"  src="Images/Contact/Users-01.svg" style="max-height:20vh;max-width:20vw;"/>              
+                <img class="img-fluid"  src="Images/Contact/Users-01.svg" style="max-height:8vh;"/>              
               <h3 class="mt-2">Contact us on Social Media</h3>
               <div class="justify-content-center">
                 <p>Tweet us <a href="#" target="_blank" style="text-decoration:none">@LISupport</a><br>

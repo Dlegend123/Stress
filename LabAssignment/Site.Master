@@ -42,7 +42,7 @@ div {
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
             <div class="container-fluid">
                 
-                    <a class="navbar-brand">
+                    <a class="navbar-brand" aria-current="page" href="./">
                         <img src="~/Images/Logox.png" style="padding-right:1em; border-right:1px solid;height:30px;width:45px;" runat="server">
                     </a>
             
@@ -57,16 +57,16 @@ div {
                       <a class="nav-link active" aria-current="page" href="./" style="font-size:larger" runat="server">Home</a>
                     </li>
                       <li class="nav-item" >
-                      <a class="nav-link active" href="Products.aspx" style="font-size:larger" runat="server">Products</a>
+                      <a class="nav-link" href="Products.aspx" style="font-size:larger" runat="server">Products</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link active" href="About" style="font-size:larger" runat="server">About Us</a>
+                      <a class="nav-link" href="About" style="font-size:larger" runat="server">About Us</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link active" href="Contact" style="font-size:larger" runat="server">Contact Us</a>
+                      <a class="nav-link" href="Contact" style="font-size:larger" runat="server">Contact Us</a>
                     </li>
                       <li class="nav-item">
-                      <a class="nav-link active" href="SignIn.aspx" style="font-size:larger" runat="server">Sign In</a>
+                      <a class="nav-link" href="SignIn.aspx" style="font-size:larger" runat="server">Sign In</a>
                     </li>
                       <li class="nav-item dropdown" runat="server" id="AdminFunc" visible="false">
                           <a class="nav-link active dropdown-toggle" style="font-size:larger" href="#" role="button" id="AdminList" data-bs-toggle="dropdown" aria-expanded="false">
@@ -118,7 +118,7 @@ div {
      </main>
     </form>
             <footer class="fixed-bottom border-top border-light bg-dark container-fluid" style="text-align:right;" >
-                <p style="margin-bottom: auto;margin-right:20px;color:whitesmoke;font-family:Impact">&copy; <%: DateTime.Now.Year %> - Legacy Industries</p>
+                <p style="margin-bottom: auto;margin-right:20px;color:whitesmoke;font-family:fantasy">&copy; <%: DateTime.Now.Year %> - Legacy Industries</p>
             </footer>
         
 </body>

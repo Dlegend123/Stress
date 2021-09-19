@@ -6,7 +6,7 @@
         <br />
     <table >
         <tr>
-        <td>
+        <td style="vertical-align:central;width:60vw" >
 <div id="carousel3" class="carousel carousel-dark slide container-fluid" data-bs-ride="carousel" >
   <div class="carousel-indicators">
     <button type="button" data-bs-target="#carousel3" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -15,16 +15,16 @@
   </div>
   <div class="carousel-inner">  
     <div class="carousel-item active">
-        <asp:Image CssClass="img-fluid" runat="server" ID="CarouselImg1" />
+        <img class="img-fluid"  runat="server" id="CarouselImg1" alt="..." />
      <!-- <img src="../../Images/Playstation5/Disc/xWZMNYm.jpg" class="img-fluid" alt="...">-->
     </div>
       <div class="carousel-item">
-          <asp:Image CssClass="img-fluid" runat="server" ID="CarouselImg2" />
+          <img class="img-fluid"  runat="server" id="CarouselImg2" alt="..."/>
         
     <!--  <img src="Images/Playstation5/Disc/PS5Unboxing.jpg" class="img-fluid" alt="...">-->
     </div>
       <div class="carousel-item">
-          <asp:Image CssClass="img-fluid" runat="server" ID="CarouselImg3" />
+          <img class="img-fluid"  runat="server" id="CarouselImg3" alt="..."/>
         
       <!--<img src="Images/Playstation5/Disc/playstation-5-kutusu-canli-olarak-goruntulendi-technopat-oyun-haber.jpg" class="img-fluid" alt="...">-->
     </div>
@@ -40,7 +40,7 @@
 </div>
 
             </td>
-            <td style="vertical-align: middle;">
+            <td style="vertical-align: middle;padding-left:2px">
                 <h3 style="text-align:center;color:whitesmoke" runat="server" id="Price2" ></h3>
 
                 <button type="button" class="btn btn-secondary btn-sm active" data-bs-toggle="button"><h3 style="width:max-content">Add to cart</h3></button>

@@ -42,17 +42,17 @@ namespace LabAssignment
                     tableRow.Cells.Add(tableCell);
                     Description.Rows.Add(tableRow);
                     Price2.InnerText = "$" + float.Parse(reader["u_price"].ToString()).ToString();
-                    CarouselImg1.ImageUrl = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
+                    CarouselImg1.Src = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
                     if (reader.Read())
                     {
                         temp = (byte[])reader["p_image"];
-                        CarouselImg2.ImageUrl = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
+                        CarouselImg2.Src = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
 
                     }
                     if (reader.Read())
                     {
                         temp = (byte[])reader["p_image"];
-                        CarouselImg3.ImageUrl = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
+                        CarouselImg3.Src = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
                     }
                 }
             }

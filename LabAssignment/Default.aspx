@@ -11,7 +11,7 @@
     <table class="container">
         
 <tr>
-    <td>
+    <td class="img-fluid">
         <div id="carouselExampleCaptions" class="carousel carousel-dark slide container-fluid" data-bs-ride="carousel" >
   <div class="carousel-indicators">
     <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -23,7 +23,7 @@
     <div class="carousel-item active">
         <a id="Carousel1Link" runat="server" onserverclick="Carousel1Link_ServerClick">
           <!--  <img src="Images/steamDeck/Steam-Deck4K-Resolution.jpg" class="img-fluid" alt="...">-->
-            <asp:Image CssClass="img-fluid" runat="server" ID="CarouselImg1" />
+            <img class="img-fluid" runat="server" id="CarouselImg1" alt="..." />
         </a>
       
       
@@ -31,7 +31,7 @@
     <div class="carousel-item">
         <a id="Carousel2Link" runat="server" onserverclick="Carousel2Link_ServerClick">
            <!-- <img src="Images/switchOled/jVc4Rij62TqrC5AGnWRCoR.jpg" class="img-fluid" alt="...">-->
-       <asp:Image CssClass="img-fluid" runat="server" ID="CarouselImg2" />
+       <img class="img-fluid" runat="server" id="CarouselImg2" alt="..."/>
         </a>
       
       
@@ -39,14 +39,14 @@
     <div class="carousel-item">
         <a id="Carousel3Link" runat="server" onserverclick="Carousel3Link_ServerClick">
            <!-- <img src="Images/Xbox/xbox_series_x_s_pre_order_packaging.jpg" class="img-fluid" alt="...">-->
-        <asp:Image CssClass="img-fluid" runat="server" ID="CarouselImg3" />
+        <img class="img-fluid"  runat="server" id="CarouselImg3" alt="..."/>
         
         </a>
     </div>
       <div class="carousel-item">
           <a id="Carousel4Link" runat="server" onserverclick="Carousel4Link_ServerClick">
              <!-- <img src="Images/Playstation5/check.jpeg" class="img-fluid" alt="..."> -->
-          <asp:Image CssClass="img-fluid" runat="server" ID="CarouselImg4"  />
+          <img class="img-fluid" runat="server" id="CarouselImg4" alt="..." />
         
           </a>      
     </div>
