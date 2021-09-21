@@ -55,8 +55,8 @@
             </td>
             <td style="vertical-align: middle;text-align:center">
                 <h3 style="text-align:center;color:whitesmoke" runat="server" id="Price2" ></h3>
-
-                <button type="button" class="btn btn-secondary btn-sm active" data-bs-toggle="button"><h3 style="width:max-content">Add to cart</h3></button>
+                <asp:TextBox runat="server" ID="Quantity" TextMode="Number" ToolTip="Quantity" Font-Size="Medium" Width="100px" ></asp:TextBox><br/><br />
+                <button type="button" class="btn btn-secondary btn-sm active" data-bs-toggle="button" runat="server" id="AddToCart" onserverclick="AddToCart_ServerClick"><h3 style="width:max-content">Add to cart</h3></button>
                 <br />
                 <br />
                 <button type="button" class="btn btn-secondary btn-sm active" data-bs-toggle="button" ><h3 style="width:max-content;">Buy it now&nbsp;</h3></button>

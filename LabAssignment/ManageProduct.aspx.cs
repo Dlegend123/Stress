@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 
 using System.Configuration;
 using System.Data.SqlClient;
 using System.IO;
-
+using System.Linq;
 
 namespace LabAssignment
 {
@@ -22,8 +23,11 @@ namespace LabAssignment
                 string url = ConfigurationManager.AppSettings["SecurePath"] + "ManageProduct.aspx";
                 Response.Redirect(url);
             }
-            if ((Session["Account"] as User).Roles.Any(x => x.RoleId == "Admin"))
-                Page.Master.FindControl("AdminFunc").Visible = true;
+            if (Session["Account"] != null)
+            {
+                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
+                    Page.Master.FindControl("AdminFunc").Visible = true;
+            }
         }
 
         protected void ProductAdd_Click(object sender, EventArgs e)

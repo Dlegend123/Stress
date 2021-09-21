@@ -1,14 +1,18 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Cart.aspx.cs" Inherits="LabAssignment.Cart" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+    <br />
+    <br />
     <asp:table ID="CartTable" runat="server" CssClass="table table-dark table-striped table-bordered container" BorderStyle="Solid" ForeColor="WhiteSmoke"  BorderWidth="3px" >
        <asp:TableHeaderRow BorderStyle="Solid" BorderWidth="3px">
            <asp:TableHeaderCell>
-               <h3 style="color:whitesmoke">Shopping Cart</h3>
+               <h3 style="color:whitesmoke;text-align:center;">Shopping Cart</h3>
            </asp:TableHeaderCell>
        </asp:TableHeaderRow>
         <asp:TableRow>
             <asp:TableCell>
-                <asp:TextBox runat="server" ID="GrandTotal"></asp:TextBox>
+                <asp:Label runat="server" Text="GrandTotal" Font-Size="Large" ForeColor="WhiteSmoke"></asp:Label>
+                &nbsp;
+                <asp:TextBox runat="server" ID="GrandTotal" BorderStyle="None" Font-Size="Large" BackColor="Transparent" ForeColor="WhiteSmoke"></asp:TextBox>
             </asp:TableCell>
         </asp:TableRow>
         <asp:TableRow>

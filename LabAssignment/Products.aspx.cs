@@ -7,6 +7,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.DynamicData;
 using System.Linq;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace LabAssignment
 {
@@ -25,8 +26,11 @@ namespace LabAssignment
                 string url = ConfigurationManager.AppSettings["SecurePath"] + "Products.aspx";
                 Response.Redirect(url);
             }
-            if ((Session["Account"] as User).Roles.Any(x => x.RoleId == "Admin"))
-                Page.Master.FindControl("AdminFunc").Visible = true;
+            if (Session["Account"] != null)
+            {
+                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
+                    Page.Master.FindControl("AdminFunc").Visible = true;
+            }
 
             conn = new SqlConnection
             {
@@ -66,57 +70,57 @@ namespace LabAssignment
         {
             stressTable.Rows.Clear();
             int count = 0;
-            if (DropDownCategory.SelectedItem != null && DropDownCategory.SelectedIndex != 0)
-                list.FindAll(t => (t.u_price >= float.Parse(MinPrice.Text) && t.u_price <= float.Parse(MaxPrice.Text)))
-                    .FindAll(x => x.category.Equals(DropDownCategory.SelectedItem.Text))
-                    .ForEach(p => QuickFunction(p, count++));
+            if (DropDownCategory.SelectedItem.Text != "All")
+                PriceCategory();
             else
+            {
                 list.FindAll(x => (x.u_price >= float.Parse(MinPrice.Text) && x.u_price <= float.Parse(MaxPrice.Text)))
                     .ForEach(p => QuickFunction(p, count++));
+            }
         }
-        
+
         protected void SortBy_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (SortBy.SelectedItem.Text != "")
+            stressTable.Rows.Clear();
+            switch (SortBy.SelectedIndex)
             {
-                stressTable.Rows.Clear();
-                switch (SortBy.SelectedIndex)
+                case 0:
+                    break;
+                case 1:
+                    list.Sort((x, y) => x.p_name.CompareTo(y.p_name));
+                    break;
+                case 2:
+                    list.Sort((x, y) => y.p_id.CompareTo(x.p_id));
+                    break;
+                case 3:
+                    list.Sort((x, y) => x.u_price.CompareTo(y.u_price));
+                    break;
+            }
+            if (DropDownCategory.SelectedItem.Text != "All")
+                PriceCategory();
+            else
+            {
+                int count = 0;
+                if (MinPrice.Text != "" || MaxPrice.Text != "")
                 {
-                    case 1:
-                        list.Sort((x, y) => x.p_name.CompareTo(y.p_name));
-                        break;
-                    case 2:
-                        list.Sort((x, y) => y.p_id.CompareTo(x.p_id));
-                        break;
-                    case 3:
-                        list.Sort((x, y) => x.u_price.CompareTo(y.u_price));
-                        break;
-                }
-                if (DropDownCategory.SelectedItem.Text!="All")
-                    PriceCategory();
-                else
-                {
-                    int count = 0;
-                    if (MinPrice.Text != "" || MaxPrice.Text != "")
+                    if (MinPrice.Text != "" && MaxPrice.Text != "")
+                        list.FindAll(t => (t.u_price >= float.Parse(MinPrice.Text) &&
+                            t.u_price <= float.Parse(MaxPrice.Text)))
+                            .ForEach(t => QuickFunction(t, count++));
+                    else
                     {
-                        if (MinPrice.Text != "" && MaxPrice.Text != "")
-                            list.FindAll(t => (t.u_price >= float.Parse(MinPrice.Text) &&
-                                t.u_price <= float.Parse(MaxPrice.Text)))
+                        if (MinPrice.Text != "")
+                            list.FindAll(t => (t.u_price >= float.Parse(MinPrice.Text)))
                                 .ForEach(t => QuickFunction(t, count++));
                         else
-                        {
-                            if (MinPrice.Text != "")
-                                list.FindAll(t => (t.u_price >= float.Parse(MinPrice.Text)))
-                                    .ForEach(t => QuickFunction(t, count++));
-                            else
-                                list.FindAll(t => (t.u_price <= float.Parse(MaxPrice.Text)))
-                                    .ForEach(t => QuickFunction(t, count++));
-                        }
+                            list.FindAll(t => (t.u_price <= float.Parse(MaxPrice.Text)))
+                                .ForEach(t => QuickFunction(t, count++));
                     }
-                    else
-                        list.ForEach(x => QuickFunction(x, count++));
                 }
+                else
+                    list.ForEach(x => QuickFunction(x, count++));
             }
+
         }
 
         void PriceCategory()
@@ -220,10 +224,12 @@ namespace LabAssignment
 
             TableRow tableRow = new TableRow();
             TableCell tableCell = new TableCell();
-            Image image = new Image();
-            image.ImageUrl = "data:image/jpeg;base64," + Convert.ToBase64String(p.p_image);
-            image.CssClass = "img-fluid";
-            image.Height = Unit.Percentage(70);
+            Image image = new Image
+            {
+                ImageUrl = "data:image/jpeg;base64," + Convert.ToBase64String(p.p_image),
+                CssClass = "img-fluid",
+                Height = Unit.Percentage(70)
+            };
             tableRow.HorizontalAlign = HorizontalAlign.Justify;
             tableRow.BorderStyle = BorderStyle.Solid;
             tableRow.BorderWidth = Unit.Pixel(3);
@@ -241,7 +247,7 @@ namespace LabAssignment
                 hyperLink.Controls.Add(new LiteralControl("<br /> Name: " + p.p_name + "<br />"));
                 hyperLink.Controls.Add(new LiteralControl("ID: " + p.p_id + "<br />"));
                 hyperLink.Controls.Add(new LiteralControl("Category: " + p.category + "<br />"));
-                hyperLink.Controls.Add(new LiteralControl("Unit Price: " + p.u_price + "<br />"));
+                hyperLink.Controls.Add(new LiteralControl("Unit Price: $" + p.u_price + "<br />"));
                 hyperLink.Controls.Add(new LiteralControl("Details: " + p.p_details));
                 tableCell.Controls.Add(hyperLink);
                 tableCell.VerticalAlign = VerticalAlign.Middle;
@@ -268,7 +274,7 @@ namespace LabAssignment
                 hyperLink2.Controls.Add(new LiteralControl("Name: " + p.p_name + "<br />"));
                 hyperLink2.Controls.Add(new LiteralControl("ID: " + p.p_id + "<br />"));
                 hyperLink2.Controls.Add(new LiteralControl("Category: " + p.category + "<br />"));
-                hyperLink2.Controls.Add(new LiteralControl("Unit Price: " + p.u_price + "<br />"));
+                hyperLink2.Controls.Add(new LiteralControl("Unit Price: $" + p.u_price + "<br />"));
                 hyperLink2.Controls.Add(new LiteralControl("Details: " + p.p_details));
                 tableCell2.Controls.Add(hyperLink2);
                 tableCell2.RowSpan = 1;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -26,13 +27,16 @@ namespace LabAssignment
                 string url = ConfigurationManager.AppSettings["SecurePath"] + "Cart.aspx";
                 Response.Redirect(url);
             }
-            if ((Session["Account"] as User).Roles.Any(x=>x.RoleId == "Admin") )
-                Page.Master.FindControl("AdminFunc").Visible = true;
+            if (Session["Account"] != null)
+            {
+                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
+                    Page.Master.FindControl("AdminFunc").Visible = true;
+            }
             conn = new SqlConnection
             {
                 ConnectionString = ConfigurationManager.ConnectionStrings["LIConnectionString"].ConnectionString
             };
-            sqlCommand = new SqlCommand("select * from proorder inner join proimage on proorder.p_id=proimage.p_id where proorder.c_name='" + (Session["Account"] as User).UserName+"'", conn);
+            sqlCommand = new SqlCommand("select * from proorder inner join proimage on proorder.p_id=proimage.p_id where proorder.c_name='" + (Session["Account"] as IdentityUser).UserName+"'", conn);
             conn.Open();
             shoppingCart = new ShoppingCart();
             subTotals= new List<float>();
@@ -52,6 +56,17 @@ namespace LabAssignment
                 }
                 GrandTotal.Text = "$" + subTotals.Sum().ToString();
                 prices = new List<float>();
+                if (subTotals.Count == 0)
+                {
+                    TableRow tableRow = new TableRow();
+                    TableCell tableCell = new TableCell();
+                    tableRow.HorizontalAlign = HorizontalAlign.Justify;
+                    tableRow.BorderStyle = BorderStyle.Solid;
+                    tableRow.BorderWidth = Unit.Pixel(3);
+                    tableCell.Controls.Add(new LiteralControl("The cart is empty"));
+                    tableRow.Cells.Add(tableCell);
+                    stressTable.Rows.Add(tableRow);
+                }
             }
             catch (SqlException)
             {

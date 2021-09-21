@@ -12,6 +12,6 @@ namespace LabAssignment
         public string quantity { set; get; }
         public byte[] p_image { set; get; }
         public string p_url { set; get; }
-
+        public string p_urlM { set; get; }
     }
 }

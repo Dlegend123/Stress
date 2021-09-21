@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -24,8 +25,11 @@ namespace LabAssignment
                 string url = ConfigurationManager.AppSettings["SecurePath"] + "Contact.aspx";
                 Response.Redirect(url);
             }
-            if (Session["Account"] == "Admin")
-                Page.Master.FindControl("AdminFunc").Visible = true;
+            if (Session["Account"] != null)
+            {
+                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
+                    Page.Master.FindControl("AdminFunc").Visible = true;
+            }
 
         }
     }

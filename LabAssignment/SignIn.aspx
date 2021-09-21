@@ -37,6 +37,10 @@
                 <asp:TextBox runat="server" Font-Size="Medium" CssClass="w-100" ID="SPassword" TextMode="Password">
 
                 </asp:TextBox>
+                <br />
+                <asp:TextBox runat="server" ForeColor="Red" Font-Bold="true" ID="PasswordNotValid" Visible="false" AutoPostBack="true" BackColor="Transparent" BorderStyle="None">
+
+                </asp:TextBox>
             </td>
         </tr>
         <tr>
@@ -61,7 +65,7 @@
             </asp:TableRow>
             <asp:TableRow>
                 <asp:TableCell>
-                    <asp:Button runat="server" Text="Create your LI account" CssClass="btn btn-outline-warning"/>
+                    <asp:Button runat="server" Text="Create your LI account" CssClass="btn btn-outline-warning" PostBackUrl="~/Registration.aspx"/>
                 </asp:TableCell>
             </asp:TableRow>
             </asp:Table>

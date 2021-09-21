@@ -59,7 +59,7 @@ namespace LabAssignment
             WebAdmin = new UserManager<IdentityUser>(userStore);
             Customers = new UserManager<IdentityUser>(userStore);
 
-            if ((Session["Account"] as User).Roles.Any(x => x.RoleId == "Admin"))
+            if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
                 Page.Master.FindControl("AdminFunc").Visible = true;
 
         }
@@ -71,11 +71,20 @@ namespace LabAssignment
                 .ConnectionStrings["LIConnectionString"].ConnectionString;
             UserStore<IdentityUser> userStore1 = new UserStore<IdentityUser>(entity);
             Customers = new UserManager<IdentityUser>(userStore1);
+            IdentityUser customer = Customers.FindByName(SName.Text);
 
-            if (Customers.FindByName(SName.Text).Email == SPassword.Text)
+
+            if (customer.Email == SPassword.Text)
             {
-                Session["Account"] = "Customer";
+                if (PasswordNotValid.Visible)
+                    PasswordNotValid.Visible = false;
+                Session["Account"] = customer;
                 Response.Redirect("~/Default.aspx");
+            }
+            else
+            {
+                PasswordNotValid.Text = "Invalid Username/Password";
+                PasswordNotValid.Visible = true;
             }
             /*  IdentityUser customer = new IdentityUser
               {
@@ -145,6 +154,12 @@ namespace LabAssignment
             if (conn.State != System.Data.ConnectionState.Closed)
                 conn.Close();
             */
+        }
+
+        protected void SPassword_TextChanged(object sender, EventArgs e)
+        {
+            if (PasswordNotValid.Visible)
+                PasswordNotValid.Visible = false;
         }
     }
 }

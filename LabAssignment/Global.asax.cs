@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,6 +12,22 @@ namespace LabAssignment
 {
     public class Global : HttpApplication
     {
+        void Session_Start(object sender, EventArgs e)
+        {
+            IdentityUser Account;
+            IdentityUserRole role = new IdentityUserRole
+            {
+                RoleId = "Visitor",
+                UserId = "Random"
+            };
+            Account = new IdentityUser
+            {
+                UserName = "Unknown",
+                Id = "Random"
+            };
+            Account.Roles.Add(role);
+            Session["Account"] = Account;
+        }
         void Application_Start(object sender, EventArgs e)
         {
             // Code that runs on application startup

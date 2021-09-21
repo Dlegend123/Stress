@@ -23,9 +23,12 @@ namespace LabAssignment
         //private readonly Microsoft.AspNetCore.Identity.SignInManager<IdentityUser> signInManager;
         protected void Page_Load(object sender, EventArgs e)
         {
-            
-            if ((Session["Account"] as User).Roles.Any(x => x.RoleId == "Admin"))
-                Page.Master.FindControl("AdminFunc").Visible = true;
+
+            if (Session["Account"] != null)
+            {
+                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
+                    Page.Master.FindControl("AdminFunc").Visible = true;
+            }
             entity = new Entity();
             entity.Database.Connection.ConnectionString = ConfigurationManager
                 .ConnectionStrings["LIConnectionString"].ConnectionString;
@@ -102,7 +105,7 @@ namespace LabAssignment
                         result=Customers.UpdateAsync(customer).Result;
                         if (result.Succeeded)
                         {
-                            Session["Account"] = "Customer";
+                            Session["Account"] = customer;
                             //var x = signInManager.PasswordSignInAsync(customer.UserName, customer.PasswordHash, isPersistent: true, false).Result;
                             Response.Redirect("~/Default.aspx", false);
                         }

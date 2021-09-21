@@ -9,10 +9,10 @@ namespace LabAssignment
 {
     public class User:IdentityUser
     {
-
+        ShoppingCart cart;
         public User() : base()
         {
-
+            cart= new ShoppingCart();
         } 
     }
 }

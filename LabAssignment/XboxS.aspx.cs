@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 
 using System.Configuration;
 using System.Data.SqlClient;
@@ -14,6 +15,7 @@ namespace LabAssignment
         SqlConnection conn;
         SqlDataReader reader;
         byte[] temp;
+        Product product;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Request.IsSecureConnection)
@@ -21,8 +23,11 @@ namespace LabAssignment
                 string url = ConfigurationManager.AppSettings["SecurePath"] + "XboxS.aspx";
                 Response.Redirect(url);
             }
-            if ((Session["Account"] as User).Roles.Any(x => x.RoleId == "Admin"))
-                Page.Master.FindControl("AdminFunc").Visible = true;
+            if (Session["Account"] != null)
+            {
+                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
+                    Page.Master.FindControl("AdminFunc").Visible = true;
+            }
             conn = new SqlConnection
             {
                 ConnectionString = ConfigurationManager.ConnectionStrings["LIConnectionString"].ConnectionString
@@ -36,6 +41,15 @@ namespace LabAssignment
                 while (reader.Read())
                 {
                     temp = (byte[])reader["p_image"];
+                    product = new Product
+                    {
+                        p_id = reader["p_id"].ToString(),
+                        p_url = reader["p_url"].ToString(),
+                        p_name = reader["p_name"].ToString(),
+                        u_price = float.Parse(reader["u_price"].ToString()),
+                        quantity = reader["quantity"].ToString(),
+                        p_urlM= reader["p_urlM"].ToString()
+                    };
                     Price2.InnerText = "$" + float.Parse(reader["u_price"].ToString()).ToString();
                     TableCell tableCell = new TableCell();
                     tableCell.HorizontalAlign = HorizontalAlign.Center;
@@ -67,6 +81,19 @@ namespace LabAssignment
         protected void SeriesXHomeLaunch_ServerClick(object sender, EventArgs e)
         {
             Response.Redirect("~/XboxX.aspx");
+        }
+        protected void AddToCart_ServerClick(object sender, EventArgs e)
+        {
+            sqlCommand = new SqlCommand("Insert into proorder(p_id,c_name,u_price,quantity,p_url,p_urlM) Values (@p_id,@c_name,@u_price,@quantity,@p_url,@p_urlM)", conn);
+            sqlCommand.Parameters.AddWithValue("@p_id", Convert.ToInt32(product.p_id));
+            sqlCommand.Parameters.AddWithValue("@c_name", (Session["Account"] as IdentityUser).UserName);
+            sqlCommand.Parameters.AddWithValue("@u_price", product.p_id);
+            sqlCommand.Parameters.AddWithValue("@quantity", Convert.ToInt32(Quantity.Text));
+            sqlCommand.Parameters.AddWithValue("@p_url", product.p_url);
+            sqlCommand.Parameters.AddWithValue("@p_urlM", product.p_urlM);
+            conn.Open();
+            sqlCommand.ExecuteNonQuery();
+            conn.Close();
         }
     }
 }

@@ -85,7 +85,7 @@
               </div>
             </asp:TableCell>
             <asp:TableCell  CssClass="rounded shadow" BorderWidth="3px">
-                <img class="img-fluid"  src="Images/Contact/Users-01.svg" style="max-height:8vh;"/>              
+                <img class="img-fluid"  src="Images/Contact/Users-01.svg" style="max-height:8vh;min-height:inherit;"/>              
               <h3 class="mt-2">Contact us on Social Media</h3>
               <div class="justify-content-center">
                 <p>Tweet us <a href="#" target="_blank" style="text-decoration:none">@LISupport</a><br>
