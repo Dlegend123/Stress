@@ -8,7 +8,7 @@ namespace LabAssignment
 {
     public partial class SiteMaster : MasterPage
     {
-        private readonly SignInManager<User> signInManager;
+       // private readonly SignInManager<User> signInManager;
         public User Account;
         public User _Account
         {

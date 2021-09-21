@@ -9,12 +9,12 @@ namespace LabAssignment
 {
     public partial class ManageProduct : System.Web.UI.Page
     {
-        SqlCommand sqlCommand;
-        SqlConnection conn;
-        SqlDataReader reader;
-        string filePath;
-        BinaryReader b;
-        byte[] binData;
+        private SqlCommand sqlCommand;
+        private SqlConnection conn;
+        private SqlDataReader reader;
+        private string filePath;
+        private BinaryReader b;
+        private byte[] binData;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Request.IsSecureConnection)
@@ -22,7 +22,7 @@ namespace LabAssignment
                 string url = ConfigurationManager.AppSettings["SecurePath"] + "ManageProduct.aspx";
                 Response.Redirect(url);
             }
-            if (Session["Account"] == "Admin")
+            if ((Session["Account"] as User).Roles.Any(x => x.RoleId == "Admin"))
                 Page.Master.FindControl("AdminFunc").Visible = true;
         }
 

@@ -12,7 +12,7 @@
     <table class="table table-dark table-striped table-bordered">
         <tr>
             <td>
-                <p class="head-copy">
+                <p style="font-size:medium">
                     Legacy Idustries philosophy revolves around people and sincerity. <br />It is to understand our customers and to offer current gaming consoles and games at the best prices, <br />thus allowing our customers to play what they want to during their free time.
                   </p>
             </td>
@@ -20,7 +20,7 @@
             <tr>
 
             <td style="padding-bottom:7em">
-                <div class="body-copy font-regular">We are reaching out to discerning consumers with keen sensibilities - people who continue to explore<br /> new ways to make a comfortable gaming experience cheaper and and still enjoyable.<br /> We have developed our brand image gradually and consistently, always to communicate, “Life is Good so enjoy it.”</div>
+                <p style="font-size:medium">We are reaching out to discerning consumers with keen sensibilities - people who continue to explore<br /> new ways to make a comfortable gaming experience cheaper and and still enjoyable.<br /> We have developed our brand image gradually and consistently, always to communicate, “Life is Good so enjoy it.”</p>
             </td>
         </tr>
     </table>

@@ -2,6 +2,7 @@
 
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -20,7 +21,7 @@ namespace LabAssignment
                 string url = ConfigurationManager.AppSettings["SecurePath"] + "XboxS.aspx";
                 Response.Redirect(url);
             }
-            if (Session["Account"] == "Admin")
+            if ((Session["Account"] as User).Roles.Any(x => x.RoleId == "Admin"))
                 Page.Master.FindControl("AdminFunc").Visible = true;
             conn = new SqlConnection
             {
@@ -37,7 +38,7 @@ namespace LabAssignment
                     temp = (byte[])reader["p_image"];
                     Price2.InnerText = "$" + float.Parse(reader["u_price"].ToString()).ToString();
                     TableCell tableCell = new TableCell();
-                    tableCell.HorizontalAlign = HorizontalAlign.Left;
+                    tableCell.HorizontalAlign = HorizontalAlign.Center;
                     tableCell.Controls.Add(new LiteralControl(reader["p_details"].ToString()));
                     TableRow tableRow = new TableRow();
                     tableCell.Font.Size = FontUnit.Medium;

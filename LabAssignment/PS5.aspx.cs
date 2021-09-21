@@ -35,7 +35,7 @@ namespace LabAssignment
                 {
                     temp = (byte[])reader["p_image"];
                     TableCell tableCell = new TableCell();
-                    tableCell.HorizontalAlign = HorizontalAlign.Left;
+                    tableCell.HorizontalAlign = HorizontalAlign.Center;
                     tableCell.Controls.Add(new LiteralControl(reader["p_details"].ToString()));
                     TableRow tableRow = new TableRow();
                     tableCell.Font.Size = FontUnit.Medium;

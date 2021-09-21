@@ -34,7 +34,11 @@
                     Password
                 </h5>
 
-                <asp:TextBox runat="server" Font-Size="Medium" CssClass="w-100" ID="Password" TextMode="Password">
+                <asp:TextBox runat="server" Font-Size="Medium" CssClass="w-100" ID="Password" TextMode="Password" OnTextChanged="Password_TextChanged">
+
+                </asp:TextBox>
+                <br />
+                <asp:TextBox runat="server" ForeColor="Red" Font-Bold="true" ID="PasswordNotValid" Visible="false">
 
                 </asp:TextBox>
             </td>

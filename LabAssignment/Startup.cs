@@ -26,6 +26,7 @@ namespace LabAssignment
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<Microsoft.AspNetCore.Http.IHttpContextAccessor, Microsoft.AspNetCore.Http.HttpContextAccessor>();
             services.TryAddScoped<SignInManager<IdentityUser>>();
             services.AddIdentity<IdentityUser, IdentityRole>()
         .AddDefaultTokenProviders();

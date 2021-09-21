@@ -43,7 +43,7 @@ div {
             <div class="container-fluid">
                 
                     <a class="navbar-brand" aria-current="page" href="./">
-                        <img src="~/Images/Logox.png" style="padding-right:1em; border-right:1px solid;height:30px;width:45px;" runat="server">
+                        <img src="~/Images/Logox.png" style="padding-right:1em; border-right:1px solid;height:30px;width:45px;" runat="server"></img>
                     </a>
             
                     

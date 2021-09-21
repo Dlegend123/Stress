@@ -21,11 +21,11 @@ namespace LabAssignment
     {
         SqlCommand sqlCommand;
         SqlConnection conn;
-        SqlDataReader reader;
+        //SqlDataReader reader;
         string filePath;
         UserStore<IdentityUser> userStore;
         Entity entity;
-        byte[] temp;
+        //byte[] temp;
         protected UserManager<IdentityUser> Customers;
         protected UserManager<IdentityUser> WebAdmin;
         
@@ -59,12 +59,24 @@ namespace LabAssignment
             WebAdmin = new UserManager<IdentityUser>(userStore);
             Customers = new UserManager<IdentityUser>(userStore);
 
-            if (Session["Account"] == "Admin")
+            if ((Session["Account"] as User).Roles.Any(x => x.RoleId == "Admin"))
                 Page.Master.FindControl("AdminFunc").Visible = true;
 
         }
         protected void Validate(object sender, EventArgs e)
         {
+            UserManager<IdentityUser> Customers;
+            Entity entity = new Entity();
+            entity.Database.Connection.ConnectionString = ConfigurationManager
+                .ConnectionStrings["LIConnectionString"].ConnectionString;
+            UserStore<IdentityUser> userStore1 = new UserStore<IdentityUser>(entity);
+            Customers = new UserManager<IdentityUser>(userStore1);
+
+            if (Customers.FindByName(SName.Text).Email == SPassword.Text)
+            {
+                Session["Account"] = "Customer";
+                Response.Redirect("~/Default.aspx");
+            }
             /*  IdentityUser customer = new IdentityUser
               {
                   UserName = SName.Text,
@@ -101,6 +113,7 @@ namespace LabAssignment
 
               //    }
             */
+            /*
             conn = new SqlConnection
             {
                 ConnectionString = ConfigurationManager.ConnectionStrings["LIConnectionString"].ConnectionString
@@ -131,6 +144,7 @@ namespace LabAssignment
             }
             if (conn.State != System.Data.ConnectionState.Closed)
                 conn.Close();
+            */
         }
     }
 }

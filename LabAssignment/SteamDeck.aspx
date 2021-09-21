@@ -1,10 +1,18 @@
 ﻿<%@ Page Title="Steam Deck" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="SteamDeck.aspx.cs" Inherits="LabAssignment.SteamDeck" EnableEventValidation="false" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    <div class="container">
-        <br />
-        <br />
-    <table>
+    <br />
+    <br />
+        <asp:table class="table container table-dark table-striped table-bordered" runat="server" ID="Table1">
+            <asp:TableRow>
+                <asp:TableCell>
+            
+         <table class="table container-fluid" style="margin-left:auto;margin-right:auto;">
+            <tr>
+            <th class="text-center"><h1 style="color:whitesmoke">SteamDeck</h1></th>
+        </tr>
+        </table>
+    <table class="table container-fluid">
         <tr>
         <td style="vertical-align:central;width:60vw" >
 <div id="carousel6" class="carousel carousel-dark slide container-fluid" data-bs-ride="carousel"  >
@@ -45,7 +53,7 @@
 </div>
             <br />
             </td>
-            <td style="vertical-align: middle;padding-left:2px">
+            <td style="vertical-align: middle;text-align:center">
                 <h3 style="text-align:center;color:whitesmoke" runat="server" id="Price2" ></h3>
 
                 <button type="button" class="btn btn-secondary btn-sm active" data-bs-toggle="button"><h3 style="width:max-content">Add to cart</h3></button>
@@ -60,15 +68,17 @@
         <br />
      <asp:table class="table container table-dark table-striped table-bordered" runat="server" ID="Description">
         <asp:TableHeaderRow>
-            <asp:TableHeaderCell ColumnSpan="2" HorizontalAlign="Center">
-                <h3>Description</h3>
+            <asp:TableHeaderCell>
+                <h3 style="text-align:center">Description</h3>
             </asp:TableHeaderCell>
         </asp:TableHeaderRow>
 
         
         
      </asp:table>
-        </div>
+        </asp:TableCell>
+                </asp:TableRow>
+            </asp:table>
     </asp:Content>
 
 

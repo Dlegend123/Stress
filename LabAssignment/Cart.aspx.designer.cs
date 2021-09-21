@@ -11,61 +11,43 @@ namespace LabAssignment
 {
 
 
-    public partial class PS5Digital
+    public partial class Cart
     {
 
         /// <summary>
-        /// Table1 control.
+        /// CartTable control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Table Table1;
+        protected global::System.Web.UI.WebControls.Table CartTable;
 
         /// <summary>
-        /// CarouselImg1 control.
+        /// GrandTotal control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlImage CarouselImg1;
+        protected global::System.Web.UI.WebControls.TextBox GrandTotal;
 
         /// <summary>
-        /// CarouselImg2 control.
+        /// ProceedCheck control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlImage CarouselImg2;
+        protected global::System.Web.UI.WebControls.Button ProceedCheck;
 
         /// <summary>
-        /// Price2 control.
+        /// stressTable control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Price2;
-
-        /// <summary>
-        /// PS5HomeLaunch control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlButton PS5HomeLaunch;
-
-        /// <summary>
-        /// Description control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Table Description;
+        protected global::System.Web.UI.WebControls.Table stressTable;
     }
 }

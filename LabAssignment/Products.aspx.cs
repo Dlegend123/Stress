@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.DynamicData;
+using System.Linq;
 
 namespace LabAssignment
 {
@@ -24,7 +25,7 @@ namespace LabAssignment
                 string url = ConfigurationManager.AppSettings["SecurePath"] + "Products.aspx";
                 Response.Redirect(url);
             }
-            if (Session["Account"] == "Admin")
+            if ((Session["Account"] as User).Roles.Any(x => x.RoleId == "Admin"))
                 Page.Master.FindControl("AdminFunc").Visible = true;
 
             conn = new SqlConnection
@@ -187,15 +188,17 @@ namespace LabAssignment
         }
         Product DataCollect()
         {
-            Product product = new Product();
-            product.p_id = reader["p_id"].ToString();
-            product.p_url = reader["p_url"].ToString();
-            product.p_details = reader["p_details"].ToString();
-            product.p_name = reader["p_name"].ToString();
-            product.u_price = float.Parse(reader["u_price"].ToString());
-            product.quantity = reader["quantity"].ToString();
-            product.p_image = (byte[])(reader["p_image"]);
-            product.category = reader["category"].ToString();
+            Product product = new Product
+            {
+                p_id = reader["p_id"].ToString(),
+                p_url = reader["p_url"].ToString(),
+                p_details = reader["p_details"].ToString(),
+                p_name = reader["p_name"].ToString(),
+                u_price = float.Parse(reader["u_price"].ToString()),
+                quantity = reader["quantity"].ToString(),
+                p_image = (byte[])(reader["p_image"]),
+                category = reader["category"].ToString()
+            };
             list.Add(product);
 
             return product;
@@ -225,11 +228,13 @@ namespace LabAssignment
             tableRow.BorderStyle = BorderStyle.Solid;
             tableRow.BorderWidth = Unit.Pixel(3);
             image.Visible = true;
-            DynamicHyperLink hyperLink = new DynamicHyperLink();
-            hyperLink.NavigateUrl = p.p_url;
-            hyperLink.Visible = true;
-            hyperLink.CssClass = "nav-link active";
-            hyperLink.ForeColor = System.Drawing.Color.WhiteSmoke;
+            DynamicHyperLink hyperLink = new DynamicHyperLink
+            {
+                NavigateUrl = p.p_url,
+                Visible = true,
+                CssClass = "nav-link active",
+                ForeColor = System.Drawing.Color.WhiteSmoke
+            };
             hyperLink.Controls.Add(image);
             if (width <= 700)
             {

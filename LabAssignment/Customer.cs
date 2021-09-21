@@ -10,6 +10,7 @@ namespace LabAssignment
 {
     public class Customer : User
     {
+        ShoppingCart cart;
         public Customer():base(){
             
         }
