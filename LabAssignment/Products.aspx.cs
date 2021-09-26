@@ -30,6 +30,8 @@ namespace LabAssignment
             {
                 if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
                     Page.Master.FindControl("AdminFunc").Visible = true;
+                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Cust"))
+                    Page.Master.FindControl("CartLink").Visible = true;
             }
 
             conn = new SqlConnection
@@ -42,14 +44,13 @@ namespace LabAssignment
             try
             {
                 reader = sqlCommand.ExecuteReader();
-                int count = 0;
                 string id = "";
                 while (reader.Read())
                 {
                     if (id != reader["p_id"].ToString())
                     {
                         id = reader["p_id"].ToString();
-                        QuickFunction(DataCollect(), count++);
+                        QuickFunction(DataCollect());
                     }
                 }
             }
@@ -62,20 +63,18 @@ namespace LabAssignment
         protected void SearchSubmit_Click(object sender, EventArgs e)
         {
             stressTable.Rows.Clear();
-            int count = 0;
             list.FindAll(x => x.p_name.ToLower().Contains(SearchInput.Text.ToLower()))
-                .ForEach(p => QuickFunction(p, count++));
+                .ForEach(p => QuickFunction(p));
         }
         protected void PriceRange_Click(object sender, EventArgs e)
         {
             stressTable.Rows.Clear();
-            int count = 0;
             if (DropDownCategory.SelectedItem.Text != "All")
                 PriceCategory();
             else
             {
                 list.FindAll(x => (x.u_price >= float.Parse(MinPrice.Text) && x.u_price <= float.Parse(MaxPrice.Text)))
-                    .ForEach(p => QuickFunction(p, count++));
+                    .ForEach(p => QuickFunction(p));
             }
         }
 
@@ -100,58 +99,56 @@ namespace LabAssignment
                 PriceCategory();
             else
             {
-                int count = 0;
                 if (MinPrice.Text != "" || MaxPrice.Text != "")
                 {
                     if (MinPrice.Text != "" && MaxPrice.Text != "")
                         list.FindAll(t => (t.u_price >= float.Parse(MinPrice.Text) &&
                             t.u_price <= float.Parse(MaxPrice.Text)))
-                            .ForEach(t => QuickFunction(t, count++));
+                            .ForEach(t => QuickFunction(t));
                     else
                     {
                         if (MinPrice.Text != "")
                             list.FindAll(t => (t.u_price >= float.Parse(MinPrice.Text)))
-                                .ForEach(t => QuickFunction(t, count++));
+                                .ForEach(t => QuickFunction(t));
                         else
                             list.FindAll(t => (t.u_price <= float.Parse(MaxPrice.Text)))
-                                .ForEach(t => QuickFunction(t, count++));
+                                .ForEach(t => QuickFunction(t));
                     }
                 }
                 else
-                    list.ForEach(x => QuickFunction(x, count++));
+                    list.ForEach(x => QuickFunction(x));
             }
 
         }
 
         void PriceCategory()
         {
-            int count = 0;
             if (MinPrice.Text == "" && MaxPrice.Text == "")
                 list.FindAll(t => t.category.Equals(DropDownCategory.SelectedItem.Text))
-                    .ForEach(t => QuickFunction(t, count++));
+                    .ForEach(t => QuickFunction(t));
             else
             {
                 if (MinPrice.Text != "" && MaxPrice.Text != "")
                     list.FindAll(t => (t.u_price >= float.Parse(MinPrice.Text) && t.u_price <= float.Parse(MaxPrice.Text)))
                         .FindAll(t => t.category.Equals(DropDownCategory.SelectedItem.Text))
-                        .ForEach(t => QuickFunction(t, count++));
+                        .ForEach(t => QuickFunction(t));
                 else
                 {
                     if (MinPrice.Text != "")
                         list.FindAll(t => (t.u_price >= float.Parse(MinPrice.Text)))
                             .FindAll(t => t.category.Equals(DropDownCategory.SelectedItem.Text))
-                            .ForEach(t => QuickFunction(t, count++));
+                            .ForEach(t => QuickFunction(t));
                     else
                         list.FindAll(t => (t.u_price <= float.Parse(MaxPrice.Text)))
                             .FindAll(t => t.category.Equals(DropDownCategory.SelectedItem.Text))
-                            .ForEach(t => QuickFunction(t, count++));
+                            .ForEach(t => QuickFunction(t));
                 }
             }
         }
         protected void Categorize(object sender, EventArgs e)
         {
-            if(DropDownCategory.SelectedIndex!=0)
-            sqlCommand = new SqlCommand("select * from product inner join proimage on product.p_id=proimage.p_id where product.category= '" + DropDownCategory.SelectedItem.Text + "'", conn);
+            if (DropDownCategory.SelectedIndex != 0)
+                sqlCommand = new SqlCommand("select * from product inner join proimage on product.p_id=proimage.p_id where product.category= '" + DropDownCategory.SelectedItem.Text + "'", conn);
             else
                 sqlCommand = new SqlCommand("select * from product inner join proimage on product.p_id=proimage.p_id", conn);
             conn.Open();
@@ -159,7 +156,6 @@ namespace LabAssignment
             try
             {
                 reader = sqlCommand.ExecuteReader();
-                int count = 0;
                 string id = "";
                 List<Product> products = new List<Product>();
                 while (reader.Read())
@@ -183,10 +179,11 @@ namespace LabAssignment
                         products.Sort((x, y) => x.u_price.CompareTo(y.u_price));
                         break;
                 }
-                products.ForEach(x => QuickFunction(x, count++));
+                products.ForEach(x => QuickFunction(x));
             }
-            catch (SqlException)
+            catch (Exception x)
             {
+                Session["LastError"] = x;
 
             }
         }
@@ -199,7 +196,7 @@ namespace LabAssignment
                 p_details = reader["p_details"].ToString(),
                 p_name = reader["p_name"].ToString(),
                 u_price = float.Parse(reader["u_price"].ToString()),
-                quantity = reader["quantity"].ToString(),
+                quantity = int.Parse(reader["quantity"].ToString()),
                 p_image = (byte[])(reader["p_image"]),
                 category = reader["category"].ToString()
             };
@@ -207,7 +204,7 @@ namespace LabAssignment
 
             return product;
         }
-        void QuickFunction(Product p, int count)
+        void QuickFunction(Product p)
         {
             int width = (Request.Browser.ScreenPixelsWidth)*2-100;
             int height = (Request.Browser.ScreenPixelsHeight)*2-100;
@@ -228,8 +225,8 @@ namespace LabAssignment
             {
                 ImageUrl = "data:image/jpeg;base64," + Convert.ToBase64String(p.p_image),
                 CssClass = "img-fluid",
-                Height = Unit.Percentage(70)
             };
+            image.Style.Add("max-height", "70vh");
             tableRow.HorizontalAlign = HorizontalAlign.Justify;
             tableRow.BorderStyle = BorderStyle.Solid;
             tableRow.BorderWidth = Unit.Pixel(3);
@@ -280,7 +277,7 @@ namespace LabAssignment
                 tableCell2.RowSpan = 1;
                 tableCell2.HorizontalAlign = HorizontalAlign.Left;
                 tableCell2.Visible = true;
-                stressTable.Rows[count].Cells.Add(tableCell2);
+                stressTable.Rows[stressTable.Rows.Count-1].Cells.Add(tableCell2);
                 ProductFilter.RowSpan++;
             }
         }

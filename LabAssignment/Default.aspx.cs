@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 
 using System.Configuration;
 using System.Data.SqlClient;
-
+using System.Linq;
 using System.Threading;
 
 using System.Web.UI;
@@ -12,7 +13,6 @@ namespace LabAssignment
 {
     public partial class _Default : Page
     {
-        Thread CheckNew;
         SqlCommand sqlCommand;
         SqlConnection conn;
         SqlDataReader reader;
@@ -25,8 +25,13 @@ namespace LabAssignment
                 string url = ConfigurationManager.AppSettings["SecurePath"] + "Default.aspx";
                 Response.Redirect(url);
             }
-            if (Session["Account"] == "Admin")
-                Page.Master.FindControl("AdminFunc").Visible = true;
+            if (Session["Account"] != null)
+            {
+                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
+                    Page.Master.FindControl("AdminFunc").Visible = true;
+                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Cust"))
+                    Page.Master.FindControl("CartLink").Visible = true;
+            }
             conn = new SqlConnection
             {
                 ConnectionString = ConfigurationManager.ConnectionStrings["LIConnectionString"].ConnectionString
@@ -62,48 +67,17 @@ namespace LabAssignment
                         Carousel4Link.HRef = filePath;
                     }
                 }
+                conn.Close();
+          //      CheckNew = new Thread(new ThreadStart(ThreadTask));
+            //    CheckNew.Start();
             }
-            catch (SqlException)
+            catch (Exception x)
             {
-
+                Session["LastError"] = x;
             }
-            conn.Close();
-            CheckNew = new Thread(new ThreadStart(ThreadTask));
-        }
-       /* protected override void Render(HtmlTextWriter writer)
-        {
-            // Register controls for event validation
-            foreach (Control c in this.Controls)
-            {
-                this.Page.ClientScript.RegisterForEventValidation(
-                        c.UniqueID.ToString()
-                );
-            }
-            base.Render(writer);
-        }*/
-       /*
-        protected void PS5HomeLaunch_ServerClick(object sender, EventArgs e)
-        {
-
-            Response.Redirect("~/PS5.aspx");
         }
 
-        protected void XboxHomeLaunch_ServerClick(object sender, EventArgs e)
-        {
-            Response.Redirect("~/XboxX.aspx");
-        }
-
-        protected void SwitchOledHomeLaunch_ServerClick(object sender, EventArgs e)
-        {
-            Response.Redirect("~/Switch Oled model.aspx");
-        }
-
-        protected void SteamDeckHomeLaunch_ServerClick(object sender, EventArgs e)
-        {
-            Response.Redirect("~/SteamDeck.aspx");
-        }
-       */
-        protected void ThreadTask()
+      /*  protected void ThreadTask()
         {
             while (true)
             {
@@ -161,33 +135,34 @@ namespace LabAssignment
                             }
                         }
                     }
+                    conn.Close();
                 }
-                catch (SqlException)
+                catch (Exception x)
                 {
-
+                    Session["LastError"] = x;
+    
                 }
-                conn.Close();
             }
-        }
+        }*/
         protected void Update()
         {
             filePath = reader["p_url"].ToString();
         }
         protected void Carousel1Link_ServerClick(object sender, EventArgs e)
         {
-            Response.Redirect(Carousel1Link.HRef);
+            Response.Redirect(Carousel1Link.HRef, false);
         }
         protected void Carousel2Link_ServerClick(object sender, EventArgs e)
         {
-            Response.Redirect(Carousel2Link.HRef);
+            Response.Redirect(Carousel2Link.HRef, false);
         }
         protected void Carousel3Link_ServerClick(object sender, EventArgs e)
         {
-            Response.Redirect(Carousel3Link.HRef);
+            Response.Redirect(Carousel3Link.HRef,false);
         }
         protected void Carousel4Link_ServerClick(object sender, EventArgs e)
         {
-            Response.Redirect(Carousel4Link.HRef);
+            Response.Redirect(Carousel4Link.HRef, false);
         }
     }
 }

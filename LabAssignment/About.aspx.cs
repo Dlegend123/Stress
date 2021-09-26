@@ -22,8 +22,9 @@ namespace LabAssignment
             {
                 if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
                     Page.Master.FindControl("AdminFunc").Visible = true;
+                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Cust"))
+                    Page.Master.FindControl("CartLink").Visible = true;
             }
-
         }
     }
 }

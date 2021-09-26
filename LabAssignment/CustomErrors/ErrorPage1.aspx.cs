@@ -11,7 +11,17 @@ namespace LabAssignment.CustomErrors
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            Exception err = Server.GetLastError();
+            //Exception err = Server.GetLastError();
+            if ( err!= null)
+            {
+                err = err.GetBaseException();
+                ErrorMessage.InnerText = err.Message;
+                ErrorSource.InnerText = err.Source;
+                InnerEx.InnerText = (err.InnerException != null) ? err.InnerException.ToString() : "";
+                StackTrace.InnerText = err.StackTrace;
+                Session["LastError"] = null;
+            }
         }
     }
 }

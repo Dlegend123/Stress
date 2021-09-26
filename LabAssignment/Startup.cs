@@ -75,7 +75,7 @@ namespace LabAssignment
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = false;
             });
-/*
+
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings
@@ -85,7 +85,7 @@ namespace LabAssignment
                 options.LoginPath = "~/SignIn";
                 options.AccessDeniedPath = "~/Default";
                 options.SlidingExpiration = true;
-            });*/
+            });
         }
         public void ConfigureAuth(IAppBuilder app)
         {
@@ -96,10 +96,9 @@ namespace LabAssignment
                 (
                     options.
                 );*/
-
-            app.CreatePerOwinContext(ApplicationDbContext.Create);
+           /* app.CreatePerOwinContext(ApplicationDbContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
-            app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
+            app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);*/
 
             app.Build();
             app.UseCookieAuthentication(new CookieAuthenticationOptions

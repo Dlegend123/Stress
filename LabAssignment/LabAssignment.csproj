@@ -748,8 +748,8 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
-    <Content Include="cssStyle.css" />
     <Content Include="CustomErrors\ErrorPage1.aspx" />
+    <Content Include="Images\Cart\cart4.svg" />
     <Content Include="Images\Contact\center-spot.svg" />
     <Content Include="Images\Contact\clock.svg" />
     <Content Include="Images\Contact\email_desktop.svg" />
@@ -775,18 +775,12 @@
     <Content Include="Images\steamDeck\hero-banner-sequence-english.mp4" />
     <Content Include="Images\Contact\warranty-information-l.svg" />
     <Content Include="Images\steamDeck\Steam-Deck4K-Resolution.jpeg" />
-    <Content Include="Images\Xbox\seriesS\ot8wmyVSd8hoDgJsUK9c9a.jpg" />
-    <Content Include="Images\Xbox\seriesS\still-image-xbox-series-s-5-horizontal-view-console-controller-1604250614.png" />
-    <Content Include="Images\Xbox\seriesS\XboxOneSStand.jpg" />
-    <Content Include="Images\Xbox\seriesX\9eccdb3c-e965-4ab7-97d2-651c5f5a7fbe.jpg" />
-    <Content Include="Images\Xbox\seriesX\uFicTu3Ti56psJpsTGQ64C.jpg" />
     <Content Include="Images\steamDeck\steamdeck_photo_skus.png" />
     <Content Include="Images\switchOled\ImgW.jpg" />
     <Content Include="Images\switchOled\jVc4Rij62TqrC5AGnWRCoR.jpg" />
     <Content Include="Images\switchOled\photo01.png" />
-    <Content Include="Images\Xbox\seriesX\XboxX1.jpg" />
-    <Content Include="Images\Xbox\xbox_series_x_s_pre_order_packaging.jpg" />
     <Content Include="ManageProduct.aspx" />
+    <Content Include="ManageUsers.aspx" />
     <Content Include="PS5.aspx" />
     <Content Include="PS5Digital.aspx" />
     <Content Include="Registration.aspx" />
@@ -870,6 +864,13 @@
     </Compile>
     <Compile Include="Cart.aspx.designer.cs">
       <DependentUpon>Cart.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ManageUsers.aspx.cs">
+      <DependentUpon>ManageUsers.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ManageUsers.aspx.designer.cs">
+      <DependentUpon>ManageUsers.aspx</DependentUpon>
     </Compile>
     <Compile Include="ShoppingCart.cs" />
     <Compile Include="Contact.aspx.cs">
@@ -959,7 +960,6 @@
       <DependentUpon>Switch Oled model.aspx</DependentUpon>
     </Compile>
     <Compile Include="User.cs" />
-    <Compile Include="UserValidator.cs" />
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1008,6 +1008,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Images\Xbox\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-reboot.min.css.map" />

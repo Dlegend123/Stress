@@ -39,11 +39,11 @@ div {
 <body runat="server" id="stress">
  <form runat="server">
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-static-top">
             <div class="container-fluid">
                 
                     <a class="navbar-brand" aria-current="page" href="./">
-                        <img src="~/Images/Logox.png" style="padding-right:1em; border-right:1px solid;height:30px;width:45px;" runat="server"></img>
+                        <img src="~/Images/Logox.png" style="padding-right:1em; border-right:1px solid;height:30px;width:45px;" runat="server"/>
                     </a>
             
                     
@@ -76,8 +76,14 @@ div {
                           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <li><a class="dropdown-item" href="Default.aspx">Home</a></li>
                             <li><a class="dropdown-item" href="ManageProduct.aspx">Products</a></li>
+                            <li><a class="dropdown-item" href="ManageUsers.aspx">Users</a></li>
                           </ul>
                     </li>
+                      <li class="nav-item" id="CartLink" runat="server" visible="false">
+                          <a class="nav-link" href="Cart.aspx" runat="server">
+                              <img src="Images/Cart/cart4.svg" />
+                          </a>
+                      </li>
                   </ul>
                     
                 </div>

@@ -14,6 +14,8 @@ namespace LabAssignment
     {
         void Session_Start(object sender, EventArgs e)
         {
+            Exception err=new Exception();
+            Session["LastError"] = err; //initialize the session
             IdentityUser Account;
             IdentityUserRole role = new IdentityUserRole
             {
@@ -36,29 +38,35 @@ namespace LabAssignment
         }
         void Application_Error(object sender, EventArgs e)
         {
-            if (Context != null)
-            {
-                // Of course, you don't need to use both conditions bellow
-                // If you want, you can use only your user name or only role name
-                if (Context.User.IsInRole("Developers") ||
-                (Context.User.Identity.Name == "YourUserName"))
-                {
-                    // Use Server.GetLastError to recieve current exception object
-                    Exception CurrentException = Server.GetLastError();
+            Exception err = Server.GetLastError();
+            HttpContext context = HttpContext.Current;
 
-                    // We need this line to avoid real error page
-                    Server.ClearError();
+            if (context != null && context.Session != null)
+                if (Session["LastError"]!=null)
+                        Session["LastError"]= err;
+            /* if (Context != null)
+             {
+                 // Of course, you don't need to use both conditions bellow
+                 // If you want, you can use only your user name or only role name
+                 if (Context.User.IsInRole("Developers") ||
+                 (Context.User.Identity.Name == "YourUserName"))
+                 {
+                     // Use Server.GetLastError to recieve current exception object
+                     Exception CurrentException = Server.GetLastError();
 
-                    // Clear current output
-                    Response.Clear();
+                     // We need this line to avoid real error page
+                     Server.ClearError();
 
-                    // Show error message as a title
-                    Response.Write("<h1>Error message: " + CurrentException.Message + "</h1>");
-                    // Show error details
-                    Response.Write("<p>Error details:</p>");
-                    Response.Write(CurrentException.ToString());
-                }
-            }
+                     // Clear current output
+                     Response.Clear();
+
+                     // Show error message as a title
+                     Response.Write("<h1>Error message: " + CurrentException.Message + "</h1>");
+                     // Show error details
+                     Response.Write("<p>Error details:</p>");
+                     Response.Write(CurrentException.ToString());
+                 }
+             }*/
         }
     }
 }

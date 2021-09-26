@@ -19,6 +19,7 @@ namespace LabAssignment
         ShoppingCart shoppingCart;
         List<float> subTotals;
         List<float> prices;
+        List<Product> Quantities;
         int x;
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -31,31 +32,50 @@ namespace LabAssignment
             {
                 if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
                     Page.Master.FindControl("AdminFunc").Visible = true;
+                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Cust"))
+                    Page.Master.FindControl("CartLink").Visible = true;
             }
             conn = new SqlConnection
             {
                 ConnectionString = ConfigurationManager.ConnectionStrings["LIConnectionString"].ConnectionString
             };
-            sqlCommand = new SqlCommand("select * from proorder inner join proimage on proorder.p_id=proimage.p_id where proorder.c_name='" + (Session["Account"] as IdentityUser).UserName+"'", conn);
-            conn.Open();
-            shoppingCart = new ShoppingCart();
-            subTotals= new List<float>();
-            x = 0;
+            CartTable.Style.Add("max-width", "fit-content");
+            stressTable.Style.Add("max-width", "fit-content");
             try
             {
+                Quantities = new List<Product>();
+                sqlCommand = new SqlCommand("select product.quantity,product.p_id  from product inner join proorder on proorder.p_id=product.p_id where proorder.c_name='" + (Session["Account"] as IdentityUser).UserName + "'", conn);
+                conn.Open();
                 reader = sqlCommand.ExecuteReader();
-                int count = 0;
+
+                while (reader.Read())
+                {
+                    Product product = new Product
+                    {
+                        p_id = reader["p_id"].ToString(),
+                        quantity = int.Parse(reader["quantity"].ToString())
+                    };
+                    Quantities.Add(product);
+                }
+                sqlCommand = new SqlCommand("select * from proorder inner join proimage on proorder.p_id=proimage.p_id where proorder.c_name='" + (Session["Account"] as IdentityUser).UserName + "'", conn);
+
+                shoppingCart = new ShoppingCart();
+                subTotals = new List<float>();
+                x = 0;
+
+                reader = sqlCommand.ExecuteReader();
                 string id = "";
+                prices = new List<float>();
                 while (reader.Read())
                 {
                     if (id != reader["p_id"].ToString())
                     {
                         id = reader["p_id"].ToString();
-                        QuickFunction(DataCollect(), count++);
+                        QuickFunction(DataCollect());
                     }
                 }
                 GrandTotal.Text = "$" + subTotals.Sum().ToString();
-                prices = new List<float>();
+
                 if (subTotals.Count == 0)
                 {
                     TableRow tableRow = new TableRow();
@@ -67,12 +87,12 @@ namespace LabAssignment
                     tableRow.Cells.Add(tableCell);
                     stressTable.Rows.Add(tableRow);
                 }
+                conn.Close();
             }
-            catch (SqlException)
+            catch (Exception x)
             {
-
+                Session["LastError"] = x;
             }
-            conn.Close();
         }
 
         protected void ProceedCheck_Click(object sender, EventArgs e)
@@ -82,62 +102,158 @@ namespace LabAssignment
         protected void RemoveProduct_Click(object sender, EventArgs e)
         {
             Button button = sender as Button;
-            conn = new SqlConnection
+            sqlCommand = new SqlCommand("Delete  from proorder where c_name= '" + (Session["Account"] as IdentityUser).UserName + "' and p_id='" + button.ID.Split('*').First() + "'", conn);
+            try
             {
-                ConnectionString = ConfigurationManager.ConnectionStrings["LIConnectionString"].ConnectionString
-            };
-            sqlCommand = new SqlCommand("Delete  from proorder where c_name= '"+(Session["Account"] as User).UserName+"' and product.p_id='"+ button.ID.Split('*').First() + "'", conn);
-            conn.Open();
-            sqlCommand.ExecuteNonQuery();
-            conn.Close();
+                conn.Open();
+                sqlCommand.ExecuteNonQuery();
+                conn.Close();
+            }
+            catch (Exception x)
+            {
+                Session["LastError"] = x;
+            }
+            shoppingCart.products.RemoveAll(x => x.p_id == button.ID.Split('*').First());
+            Session["shoppingCart"] = shoppingCart;
+        }
+        /*
+        protected void Increase_Quantity(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+            TextBox temp = stressTable.FindControl(button.ID.Split('+')[1]) as TextBox;
+            subTotals[(Convert.ToInt32(temp.ID.Split('*')[1]))] = Convert.ToInt32(temp.Text) * prices[(Convert.ToInt32(temp.ID.Split('*')[1]))];
+            temp.Text = (int.Parse(temp.Text) + 1).ToString();
+            shoppingCart.products.Find(x => x.p_id == temp.ID.Split('*').First()).quantity = int.Parse(temp.Text);
+            GrandTotal.Text = "$" + subTotals.Sum().ToString();
+            sqlCommand = new SqlCommand("Update proorder set quantity = " + temp.Text + " where c_name = '" + (Session["Account"] as IdentityUser).UserName + "' and p_id='" + temp.ID.Split('*').First() + "'", conn);
+            try
+            {
+                conn.Open();
+                sqlCommand.ExecuteNonQuery();
+                conn.Close();
+            }
+            catch (Exception x)
+            {
+                Session["LastError"] = x;
+            }
+        }
+        protected void Decrease_Quantity(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+            TextBox temp = stressTable.FindControl(button.ID.Split('-')[1]) as TextBox;
+            subTotals[(Convert.ToInt32(temp.ID.Split('*')[1]))] = Convert.ToInt32(temp.Text) * prices[(Convert.ToInt32(temp.ID.Split('*')[1]))];
+            temp.Text = (int.Parse(temp.Text) - 1).ToString();
+            shoppingCart.products.Find(x => x.p_id == temp.ID.Split('*').First()).quantity = int.Parse(temp.Text);
+            Session["shoppingCart"] = shoppingCart;
+            GrandTotal.Text = "$" + subTotals.Sum().ToString();
+            sqlCommand = new SqlCommand("Update proorder set quantity = " + temp.Text + " where c_name = '" + (Session["Account"] as IdentityUser).UserName + "' and p_id='" + temp.ID.Split('*').First() + "'", conn);
+            try
+            {
+                conn.Open();
+                sqlCommand.ExecuteNonQuery();
+                conn.Close();
+            }
+            catch (Exception x)
+            {
+                Session["LastError"] = x;
+            }
         }
         protected void Quantity_Changed(object sender, EventArgs e)
         {
             TextBox textBox = sender as TextBox;
-            TextBox temp = stressTable.FindControl("Subtotal" + textBox.ID) as TextBox;
-            subTotals[(Convert.ToInt32(textBox.ID))]=Convert.ToInt32(textBox.Text)*prices[(Convert.ToInt32(textBox.ID))] ;
-            temp.Text = "Subtotal: " + subTotals[(Convert.ToInt32(textBox.ID))].ToString();
-            GrandTotal.Text = "$"+subTotals.Sum().ToString();   
+            TextBox temp = stressTable.FindControl("Subtotal" + textBox.ID.Split('*')[1]) as TextBox;
+            subTotals[(Convert.ToInt32(textBox.ID.Split('*')[1]))] = Convert.ToInt32(textBox.Text) * prices[(Convert.ToInt32(textBox.ID.Split('*')[1]))];
+            shoppingCart.products.Find(x => x.p_id == textBox.ID.Split('*').First()).quantity = int.Parse(textBox.Text);
+            temp.Text = "Subtotal: " + subTotals[(Convert.ToInt32(textBox.ID.Split('*')[1]))].ToString();
+            GrandTotal.Text = "$" + subTotals.Sum().ToString();
+            Session["shoppingCart"] = shoppingCart;
+            sqlCommand = new SqlCommand("Update proorder set quantity = " + textBox.Text + " where c_name = '" + (Session["Account"] as IdentityUser).UserName + "' and p_id='" + textBox.ID.Split('*').First() + "'", conn);
+            try
+            {
+                conn.Open();
+                sqlCommand.ExecuteNonQuery();
+                conn.Close();
+            }
+            catch (Exception x)
+            {
+                Session["LastError"] = x;
+            }
         }
+        */
+        protected void Quantity_Selected(object sender, EventArgs e)
+        {
+            DropDownList DropDown = sender as DropDownList;
+            TextBox temp = stressTable.FindControl("Subtotal" + DropDown.ID.Split('*')[1]) as TextBox;
+            subTotals[Convert.ToInt32(DropDown.ID.Split('*')[1])] = Convert.ToInt32(DropDown.SelectedItem.Text) * prices[(Convert.ToInt32(DropDown.ID.Split('*')[1]))];
+            shoppingCart.products.Find(x => x.p_id == DropDown.ID.Split('*').First()).quantity = int.Parse(DropDown.SelectedItem.Text);
+            GrandTotal.Text = "$" + subTotals.Sum().ToString();
+            temp.Text = "Subtotal: $" + subTotals[(Convert.ToInt32(DropDown.ID.Split('*')[1]))].ToString();
+            Session["shoppingCart"] = shoppingCart;
+            sqlCommand = new SqlCommand("Update proorder set quantity = " + DropDown.SelectedItem.Text + ", subtotal = "+ subTotals[Convert.ToInt32(DropDown.ID.Split('*')[1])].ToString() + " where c_name = '" + (Session["Account"] as IdentityUser).UserName + "' and p_id='" + DropDown.ID.Split('*').First() + "'", conn);
+            try
+            {
+                conn.Open();
+                sqlCommand.ExecuteNonQuery();
+                conn.Close();
+            }
+            catch (Exception x)
+            {
+                Session["LastError"] = x;
+            }
+        }
+
         Product DataCollect()
         {
             Product product = new Product
             {
                 p_id = reader["p_id"].ToString(),
                 p_url = reader["p_url"].ToString(),
-                p_details = reader["p_details"].ToString(),
                 p_name = reader["p_name"].ToString(),
                 u_price = float.Parse(reader["u_price"].ToString()),
-                quantity = reader["quantity"].ToString(),
+                quantity = int.Parse(reader["quantity"].ToString()),
                 p_image = (byte[])(reader["p_image"]),
-                category = reader["category"].ToString()
             };
             prices.Add(float.Parse(reader["u_price"].ToString()));
             shoppingCart.products.Add(product);
 
             return product;
         }
-        void QuickFunction(Product p, int count)
+        DropDownList DropDownItems(string pid, int chosen)
         {
-            int width = (Request.Browser.ScreenPixelsWidth) * 2 - 100;
-            int height = (Request.Browser.ScreenPixelsHeight) * 2 - 100;
-            /*    else
-                {
-                    if (ProductTable.CssClass.Contains("container"))
-                        ProductTable.CssClass.Remove(ProductTable.CssClass.IndexOf("container"), "container".Length - 1);
-                }*/
-
-            TableRow tableRow = new TableRow();
-            TableCell tableCell = new TableCell();
+            DropDownList dropDown = new DropDownList
+            {
+                CssClass = "btn btn-warning dropdown-toggle",
+                AutoPostBack = true,
+                ID = pid + "*" + (x++).ToString()
+            };
+            dropDown.SelectedIndexChanged += new EventHandler(Quantity_Selected);
+            for (int i = 0; i < Quantities.Find(t => t.p_id == pid).quantity; i++)
+            {
+                dropDown.Items.Add(new ListItem((i + 1).ToString()));
+            }
+            dropDown.Items.FindByText(chosen.ToString()).Selected = true;
+            return dropDown;
+        }
+        void QuickFunction(Product p)
+        {
+            TableCell tableCell = new TableCell
+            {
+                HorizontalAlign = HorizontalAlign.Left
+            };
             Image image = new Image
             {
                 ImageUrl = "data:image/jpeg;base64," + Convert.ToBase64String(p.p_image),
                 CssClass = "img-fluid",
-                Height = Unit.Percentage(70)
             };
-            tableRow.HorizontalAlign = HorizontalAlign.Justify;
-            tableRow.BorderStyle = BorderStyle.Solid;
-            tableRow.BorderWidth = Unit.Pixel(3);
+            image.Style.Add("max-height", "40vh");
+            image.Style.Add("max-width", "30vw");
+            TableRow tableRow = new TableRow
+            {
+                BorderStyle = BorderStyle.Solid,
+                CssClass = "border-bottom-0",
+                BorderWidth = Unit.Pixel(3),
+                HorizontalAlign = HorizontalAlign.Justify
+            };
             image.Visible = true;
             DynamicHyperLink hyperLink = new DynamicHyperLink
             {
@@ -147,20 +263,19 @@ namespace LabAssignment
                 ForeColor = System.Drawing.Color.WhiteSmoke
             };
             hyperLink.Controls.Add(image);
-
             tableCell.Controls.Add(hyperLink);
             tableRow.Visible = true;
             tableRow.Cells.Add(tableCell);
             stressTable.Rows.Add(tableRow);
             DynamicHyperLink hyperLink2 = new DynamicHyperLink();
-            TableCell tableCell2 = new TableCell();
+
             tableCell.Visible = true;
             hyperLink2.Visible = true;
             hyperLink2.NavigateUrl = p.p_url;
             hyperLink2.ForeColor = System.Drawing.Color.WhiteSmoke;
             hyperLink2.CssClass = "nav-link active";
             hyperLink2.Controls.Add(new LiteralControl("Name: " + p.p_name + "<br />"));
-            hyperLink2.Controls.Add(new LiteralControl("Unit Price: " + p.u_price + "<br />"));
+            hyperLink2.Controls.Add(new LiteralControl("Unit Price: $" + p.u_price + "<br />"));
 
             TextBox textBox1 = new TextBox
             {
@@ -168,48 +283,50 @@ namespace LabAssignment
                 ForeColor = System.Drawing.Color.WhiteSmoke,
                 ReadOnly = true,
                 BorderStyle = BorderStyle.None,
-                ID = "Subtotal" + x.ToString()
+                ID = "Subtotal" + x.ToString(),
             };
 
-            subTotals.Add(float.Parse(p.quantity) * p.u_price);
-            textBox1.Text = "Subtotal: "+(float.Parse(p.quantity) * p.u_price).ToString();
-            
-            hyperLink2.Controls.Add(textBox1 );
+            subTotals.Add(float.Parse(p.quantity.ToString()) * p.u_price);
+            textBox1.Text = "Subtotal: $" + (float.Parse(p.quantity.ToString()) * p.u_price).ToString();
+
+            hyperLink2.Controls.Add(textBox1);
+            TableCell tableCell2 = new TableCell
+            {
+                HorizontalAlign = HorizontalAlign.Left,
+                Visible = true
+            };
             tableCell2.Controls.Add(hyperLink2);
-            tableCell2.RowSpan = 1;
-            tableCell2.HorizontalAlign = HorizontalAlign.Left;
-            tableCell2.Visible = true;
-            stressTable.Rows[count].Cells.Add(tableCell2);
-            
-            DropDownList dropDown= new DropDownList();
-            List < ListItem > temp= new List<ListItem>();
-            
-            Button button = new Button();
+            stressTable.Rows[stressTable.Rows.Count - 1].Cells.Add(tableCell2);
+
             Button button1 = new Button();
 
-            TextBox textBox = new TextBox
+            Button button = new Button
             {
-                Text = p.quantity,
-                ID = (x++).ToString(),
-                TextMode = TextBoxMode.Number
+                Text = "Delete",
+                CssClass = "btn btn-outline-warning",
+                Visible = true,
+                ID = p.p_id + "*Delete"
             };
-            textBox.TextChanged += new EventHandler(Quantity_Changed);
-            Button button2= new Button();
-            button.Text = "Delete";
-            button.CssClass = "btn btn-outline-warning";
-            button.Visible = true;
-            button.ID = p.p_id + "*Delete";
+            button.Click += new EventHandler(RemoveProduct_Click);
             TableCell tableCell1 = new TableCell
             {
-                HorizontalAlign = HorizontalAlign.Center
+                HorizontalAlign = HorizontalAlign.Center,
+                ColumnSpan = 2,
             };
-            tableCell1.Controls.Add(dropDown);
-            tableCell1.Controls.Add(new LiteralControl("&nbsp;"));
+            DropDownList dropDownList = new DropDownList();
+
+            tableCell1.Controls.Add(DropDownItems(p.p_id, p.quantity));
+            tableCell1.Controls.Add(new LiteralControl("&nbsp;&nbsp;&nbsp;"));
             tableCell1.Controls.Add(button);
-            tableCell1.Visible= true;
-            TableRow tableRow1= new TableRow();
+            tableCell1.Visible = true;
+            TableRow tableRow1 = new TableRow
+            {
+                BorderStyle = BorderStyle.Solid,
+                CssClass = "border-top-0",
+                BorderWidth = Unit.Pixel(3),
+                Visible = true
+            };
             tableRow1.Cells.Add(tableCell1);
-            tableRow1.Visible= true;
             stressTable.Rows.Add(tableRow1);
         }
     }

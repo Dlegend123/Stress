@@ -1,18 +1,9 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Data.Entity;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Web;
-using System.Web.DynamicData;
 using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Data.Entity.Validation;
 
 namespace LabAssignment
 {
@@ -28,6 +19,8 @@ namespace LabAssignment
             {
                 if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
                     Page.Master.FindControl("AdminFunc").Visible = true;
+                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Cust"))
+                    Page.Master.FindControl("CartLink").Visible = true;
             }
             entity = new Entity();
             entity.Database.Connection.ConnectionString = ConfigurationManager
@@ -67,7 +60,6 @@ namespace LabAssignment
                     CreateUser(Customers, count, entity);
                 }
             }
-            
         }
     
         public void CreateUser(UserManager<IdentityUser> Customers,int count, Entity entity)
@@ -112,10 +104,10 @@ namespace LabAssignment
                     }
                     //}
                 }
-                catch (Exception e)
+                catch (Exception x)
                 {
-
-
+                    Session["LastError"] = x;
+    
                 }
             }
         }

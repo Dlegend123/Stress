@@ -8,7 +8,7 @@
             <th class="text-center"><h1 style="color:whitesmoke">Featured Products</h1></th>
         </tr>
         </table>
-    <table class="container">
+    <table class="container border-bottom-0">
         
 <tr>
     <td class="img-fluid">
