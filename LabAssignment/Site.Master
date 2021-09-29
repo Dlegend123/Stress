@@ -74,7 +74,7 @@ div {
                           </a>
 
                           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item" href="Default.aspx">Home</a></li>
+                            <li><a class="dropdown-item" href="ManageHome.aspx">Home</a></li>
                             <li><a class="dropdown-item" href="ManageProduct.aspx">Products</a></li>
                             <li><a class="dropdown-item" href="ManageUsers.aspx">Users</a></li>
                           </ul>

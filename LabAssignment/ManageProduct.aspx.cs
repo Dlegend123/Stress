@@ -20,7 +20,6 @@ namespace LabAssignment
         private SqlCommand sqlCommand;
         private SqlConnection conn;
         private SqlDataReader reader;
-        private string filePath;
         private BinaryReader b;
         private byte[] binData;
         string key;
@@ -434,6 +433,8 @@ namespace LabAssignment
                         ProductAdd.Click+= new EventHandler(ProductAdd_Click);
                         if (!ProductVid.Parent.Parent.Visible)
                             ProductVid.Parent.Parent.Visible = true;
+                        if (!ProductImage1.Parent.Parent.Visible)
+                            ProductImage1.Parent.Parent.Visible = true;
                     }
                     break;
                 case 1:
@@ -445,6 +446,8 @@ namespace LabAssignment
                         ProductAdd.Click += new EventHandler(ProductUpdate_Click);
                         if (ProductVid.Parent.Parent.Visible)
                             ProductVid.Parent.Parent.Visible = false;
+                        if (ProductImage1.Parent.Parent.Visible)
+                            ProductImage1.Parent.Parent.Visible = false;
                     }
                     break;
             }
@@ -665,31 +668,6 @@ namespace LabAssignment
             ProductQuantity.Text = reader["quantity"].ToString();
             ProductCat.Text = reader["category"].ToString();
             ProductMob.Text = reader["p_urlM"].ToString();
-
-        }
-        protected void CarouselAdd_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                conn = new SqlConnection
-                {
-                    ConnectionString = ConfigurationManager.ConnectionStrings["LIConnectionString"].ConnectionString
-                };
-                sqlCommand = new SqlCommand("INSERT INTO Carousel(p_name,p_image,p_url,p_urlM) Values (@p_name,@p_image,@p_url,@p_urlM)", conn);
-                sqlCommand.Parameters.AddWithValue("@p_name", CarouselName.SelectedItem.Text);
-                b = new BinaryReader(CarouselImage.PostedFile.InputStream);
-                binData = b.ReadBytes(CarouselImage.PostedFile.ContentLength);
-                sqlCommand.Parameters.AddWithValue("@p_image", binData);
-                sqlCommand.Parameters.AddWithValue("@p_url", "~/" + CarouselDesk.Text);
-                sqlCommand.Parameters.AddWithValue("@p_urlM", "~/" + CarouselMob.Text);
-                conn.Open();
-                sqlCommand.ExecuteNonQuery();
-                conn.Close();
-            }
-            catch (Exception x)
-            {
-                Session["LastError"] = x;
-            }
         }
     }
 }

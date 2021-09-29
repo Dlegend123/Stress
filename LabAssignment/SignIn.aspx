@@ -7,7 +7,7 @@
         <asp:Table runat="server" HorizontalAlign="Center" ID="SignInTable" CssClass="container-fluid">
             <asp:TableRow>
                 <asp:TableCell HorizontalAlign="Center">
-    <table runat="server" class="table table-dark table-striped table-bordered" style="max-width:50vw;max-height:60vh;">
+    <table runat="server" class="table table-dark table-striped table-bordered" style="max-width:fit-content;">
        <thead>
            <tr>
                <th style="text-align:center">

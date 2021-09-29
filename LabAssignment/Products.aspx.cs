@@ -184,7 +184,6 @@ namespace LabAssignment
             catch (Exception x)
             {
                 Session["LastError"] = x;
-
             }
         }
         Product DataCollect()
@@ -226,7 +225,8 @@ namespace LabAssignment
                 ImageUrl = "data:image/jpeg;base64," + Convert.ToBase64String(p.p_image),
                 CssClass = "img-fluid",
             };
-            image.Style.Add("max-height", "70vh");
+            image.Style.Add("max-height", "40vh");
+            image.Style.Add("max-width", "40vw");
             tableRow.HorizontalAlign = HorizontalAlign.Justify;
             tableRow.BorderStyle = BorderStyle.Solid;
             tableRow.BorderWidth = Unit.Pixel(3);
@@ -245,7 +245,7 @@ namespace LabAssignment
                 hyperLink.Controls.Add(new LiteralControl("ID: " + p.p_id + "<br />"));
                 hyperLink.Controls.Add(new LiteralControl("Category: " + p.category + "<br />"));
                 hyperLink.Controls.Add(new LiteralControl("Unit Price: $" + p.u_price + "<br />"));
-                hyperLink.Controls.Add(new LiteralControl("Details: " + p.p_details));
+                hyperLink.Controls.Add(new LiteralControl("Details: " + p.p_details.Substring(0, 40) + "..."));
                 tableCell.Controls.Add(hyperLink);
                 tableCell.VerticalAlign = VerticalAlign.Middle;
                 tableCell.HorizontalAlign = HorizontalAlign.Center;
@@ -272,7 +272,7 @@ namespace LabAssignment
                 hyperLink2.Controls.Add(new LiteralControl("ID: " + p.p_id + "<br />"));
                 hyperLink2.Controls.Add(new LiteralControl("Category: " + p.category + "<br />"));
                 hyperLink2.Controls.Add(new LiteralControl("Unit Price: $" + p.u_price + "<br />"));
-                hyperLink2.Controls.Add(new LiteralControl("Details: " + p.p_details));
+                hyperLink2.Controls.Add(new LiteralControl("Details: " + p.p_details.Substring(0,40) + "..."));
                 tableCell2.Controls.Add(hyperLink2);
                 tableCell2.RowSpan = 1;
                 tableCell2.HorizontalAlign = HorizontalAlign.Left;

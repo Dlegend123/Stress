@@ -8,7 +8,7 @@
         <h4 id="ErrorSource" runat="server"></h4>
         <h5 id="InnerEx" runat="server"></h5>
         <h6 id="StackTrace" runat="server"></h6>
-        <p runat="server" id="ErrorMessage"><br />We are very sorry for the inconvenience caused to you... </p>
+        <p runat="server" id="ErrorMessage"><br /> We are very sorry for the inconvenience caused to you... </p>
         
     </div>
         

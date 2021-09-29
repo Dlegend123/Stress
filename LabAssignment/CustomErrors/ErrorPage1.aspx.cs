@@ -11,7 +11,7 @@ namespace LabAssignment.CustomErrors
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            Exception err = Server.GetLastError();
+            Exception err = Session["LastError"]==null? Session["LastError"] as Exception: Server.GetLastError();
             //Exception err = Server.GetLastError();
             if ( err!= null)
             {

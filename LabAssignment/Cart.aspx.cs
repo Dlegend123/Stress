@@ -74,6 +74,7 @@ namespace LabAssignment
                         QuickFunction(DataCollect());
                     }
                 }
+                Session["subTotals"] = subTotals;
                 GrandTotal.Text = "$" + subTotals.Sum().ToString();
 
                 if (subTotals.Count == 0)
@@ -97,7 +98,7 @@ namespace LabAssignment
 
         protected void ProceedCheck_Click(object sender, EventArgs e)
         {
-
+            Response.Redirect("~/Checkout.aspx", false);
         }
         protected void RemoveProduct_Click(object sender, EventArgs e)
         {
@@ -184,7 +185,7 @@ namespace LabAssignment
         {
             DropDownList DropDown = sender as DropDownList;
             TextBox temp = stressTable.FindControl("Subtotal" + DropDown.ID.Split('*')[1]) as TextBox;
-            subTotals[Convert.ToInt32(DropDown.ID.Split('*')[1])] = Convert.ToInt32(DropDown.SelectedItem.Text) * prices[(Convert.ToInt32(DropDown.ID.Split('*')[1]))];
+            Session["subTotals"]=subTotals[Convert.ToInt32(DropDown.ID.Split('*')[1])] = Convert.ToInt32(DropDown.SelectedItem.Text) * prices[(Convert.ToInt32(DropDown.ID.Split('*')[1]))];
             shoppingCart.products.Find(x => x.p_id == DropDown.ID.Split('*').First()).quantity = int.Parse(DropDown.SelectedItem.Text);
             GrandTotal.Text = "$" + subTotals.Sum().ToString();
             temp.Text = "Subtotal: $" + subTotals[(Convert.ToInt32(DropDown.ID.Split('*')[1]))].ToString();

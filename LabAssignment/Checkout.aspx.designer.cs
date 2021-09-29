@@ -11,16 +11,25 @@ namespace LabAssignment
 {
 
 
-    public partial class ManageProduct
+    public partial class Checkout
     {
 
         /// <summary>
-        /// AdminHouse control.
+        /// stressTable control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl AdminHouse;
+        protected global::System.Web.UI.WebControls.Table stressTable;
+
+        /// <summary>
+        /// ProcessOrder control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ProcessOrder;
     }
 }

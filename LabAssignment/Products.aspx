@@ -39,7 +39,7 @@
         <asp:TableRow>
 
             <asp:TableCell BorderStyle="Solid" BorderWidth="3px" CssClass="w-75">
-                <asp:Table runat="server" ID="stressTable" CssClass="table h-100" BorderStyle="Solid" ForeColor="WhiteSmoke"  BorderWidth="3px" >
+                <asp:Table runat="server" ID="stressTable" CssClass="table table-dark table-striped table-bordered" BorderStyle="Solid" ForeColor="WhiteSmoke"  BorderWidth="3px" >
 
                 </asp:Table>
             </asp:TableCell>

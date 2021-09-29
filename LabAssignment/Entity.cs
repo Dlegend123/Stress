@@ -20,9 +20,10 @@ namespace LabAssignment
         public DbSet<Customer> customers;
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+         /*   modelBuilder.Entity<Admin>().ToTable("WebAdmin");
+            modelBuilder.Entity<Admin>().ToTable("Customer");*/
             base.OnModelCreating(modelBuilder);
             //modelBuilder.Seed();
-            
         }
     }
 }
