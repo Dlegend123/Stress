@@ -54,7 +54,7 @@
                 <br />
                 <br />
                 </div>
-                <button type="button"class="btn btn-secondary btn-sm active" data-bs-toggle="button" ><h3 style="width:max-content;">Buy it now&nbsp;</h3></button>
+                <button type="button"  class="btn btn-secondary btn-sm active" data-bs-toggle="button" runat="server" id="BuyNow" onserverclick="BuyNow_ServerClick" ><h3 style="width:max-content;">Buy it now&nbsp;</h3></button>
             </td>
 
 

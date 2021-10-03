@@ -8,6 +8,7 @@ using System.Web.UI.WebControls;
 using System.Web.DynamicData;
 using System.Linq;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Web.UI.HtmlControls;
 
 namespace LabAssignment
 {
@@ -17,7 +18,7 @@ namespace LabAssignment
         SqlConnection conn;
         SqlDataReader reader;
         List<Product> list;
-        
+
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -28,10 +29,18 @@ namespace LabAssignment
             }
             if (Session["Account"] != null)
             {
+                if ((Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText != "Sign Out")
+                    (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
                 if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
-                    Page.Master.FindControl("AdminFunc").Visible = true;
+                {
+                    if (!Page.Master.FindControl("AdminFunc").Visible)
+                        Page.Master.FindControl("AdminFunc").Visible = true;
+                }
                 if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Cust"))
-                    Page.Master.FindControl("CartLink").Visible = true;
+                {
+                    if (!Page.Master.FindControl("CartLink").Visible)
+                        Page.Master.FindControl("CartLink").Visible = true;
+                }
             }
 
             conn = new SqlConnection
@@ -205,11 +214,11 @@ namespace LabAssignment
         }
         void QuickFunction(Product p)
         {
-            int width = (Request.Browser.ScreenPixelsWidth)*2-100;
-            int height = (Request.Browser.ScreenPixelsHeight)*2-100;
+            int width = (Request.Browser.ScreenPixelsWidth) * 2 - 100;
+            int height = (Request.Browser.ScreenPixelsHeight) * 2 - 100;
             if (width <= 700)
             {
-                if(!ProductTable.CssClass.Contains("-fluid"))
+                if (!ProductTable.CssClass.Contains("-fluid"))
                     ProductTable.CssClass += "-fluid";
             }
             /*    else
@@ -272,12 +281,12 @@ namespace LabAssignment
                 hyperLink2.Controls.Add(new LiteralControl("ID: " + p.p_id + "<br />"));
                 hyperLink2.Controls.Add(new LiteralControl("Category: " + p.category + "<br />"));
                 hyperLink2.Controls.Add(new LiteralControl("Unit Price: $" + p.u_price + "<br />"));
-                hyperLink2.Controls.Add(new LiteralControl("Details: " + p.p_details.Substring(0,40) + "..."));
+                hyperLink2.Controls.Add(new LiteralControl("Details: " + p.p_details.Substring(0, 40) + "..."));
                 tableCell2.Controls.Add(hyperLink2);
                 tableCell2.RowSpan = 1;
                 tableCell2.HorizontalAlign = HorizontalAlign.Left;
                 tableCell2.Visible = true;
-                stressTable.Rows[stressTable.Rows.Count-1].Cells.Add(tableCell2);
+                stressTable.Rows[stressTable.Rows.Count - 1].Cells.Add(tableCell2);
                 ProductFilter.RowSpan++;
             }
         }

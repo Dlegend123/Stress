@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -6,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
 namespace LabAssignment
@@ -24,6 +26,14 @@ namespace LabAssignment
             {
                 string url = ConfigurationManager.AppSettings["SecurePath"] + "ManageHome.aspx";
                 Response.Redirect(url);
+            }
+            if (Session["Account"] != null)
+            {
+                (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
+                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
+                    Page.Master.FindControl("AdminFunc").Visible = true;
+                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Cust"))
+                    Page.Master.FindControl("CartLink").Visible = true;
             }
         }
         protected void CarouselAdd_Click(object sender, EventArgs e)

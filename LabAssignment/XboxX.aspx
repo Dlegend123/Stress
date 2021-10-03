@@ -1,8 +1,6 @@
 ﻿<%@ Page Title="Xbox Series X" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="XboxX.aspx.cs" Inherits="LabAssignment.XboxX" EnableEventValidation="false" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    
-
         <br />
     <br />
         <asp:table class="table container table-dark table-striped table-bordered" runat="server" ID="Table1">
@@ -57,7 +55,7 @@
                 <br />
                 </div>
 
-                <button type="button"  class="btn btn-secondary btn-sm active" data-bs-toggle="button" runat="server" onserverclick="SeriesSHomeLaunch_ServerClick" ><h3 style="width:max-content;">Buy it now&nbsp;</h3></button>
+                <button type="button"  class="btn btn-secondary btn-sm active" data-bs-toggle="button" runat="server" id="BuyNow" onserverclick="BuyNow_ServerClick" ><h3 style="width:max-content;">Buy it now&nbsp;</h3></button>
             </td>
 
 

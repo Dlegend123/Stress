@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.DynamicData;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
 namespace LabAssignment
@@ -30,6 +31,7 @@ namespace LabAssignment
             }
             if (Session["Account"] != null)
             {
+                (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
                 if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
                     Page.Master.FindControl("AdminFunc").Visible = true;
                 if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Cust"))
@@ -43,41 +45,57 @@ namespace LabAssignment
             stressTable.Style.Add("max-width", "fit-content");
             try
             {
-                Quantities = new List<Product>();
-                sqlCommand = new SqlCommand("select product.quantity,product.p_id  from product inner join proorder on proorder.p_id=product.p_id where proorder.c_name='" + (Session["Account"] as IdentityUser).UserName + "'", conn);
+                sqlCommand = new SqlCommand("Select * from proorder where c_name = '" + (Session["Account"] as IdentityUser).UserName + "' and o_id <> null", conn);
                 conn.Open();
                 reader = sqlCommand.ExecuteReader();
-
-                while (reader.Read())
+                if (!reader.HasRows)
                 {
-                    Product product = new Product
-                    {
-                        p_id = reader["p_id"].ToString(),
-                        quantity = int.Parse(reader["quantity"].ToString())
-                    };
-                    Quantities.Add(product);
-                }
-                sqlCommand = new SqlCommand("select * from proorder inner join proimage on proorder.p_id=proimage.p_id where proorder.c_name='" + (Session["Account"] as IdentityUser).UserName + "'", conn);
+                    Quantities = new List<Product>();
+                    sqlCommand = new SqlCommand("select product.quantity,product.p_id  from product inner join proorder on proorder.p_id=product.p_id where proorder.c_name='" + (Session["Account"] as IdentityUser).UserName + "'", conn);
+                    reader = sqlCommand.ExecuteReader();
 
-                shoppingCart = new ShoppingCart();
-                subTotals = new List<float>();
-                x = 0;
-
-                reader = sqlCommand.ExecuteReader();
-                string id = "";
-                prices = new List<float>();
-                while (reader.Read())
-                {
-                    if (id != reader["p_id"].ToString())
+                    while (reader.Read())
                     {
-                        id = reader["p_id"].ToString();
-                        QuickFunction(DataCollect());
+                        Product product = new Product
+                        {
+                            p_id = reader["p_id"].ToString(),
+                            quantity = int.Parse(reader["quantity"].ToString())
+                        };
+                        Quantities.Add(product);
+                    }
+                    sqlCommand = new SqlCommand("select * from proorder inner join proimage on proorder.p_id=proimage.p_id where proorder.c_name='" + (Session["Account"] as IdentityUser).UserName + "'", conn);
+
+                    shoppingCart = new ShoppingCart();
+                    subTotals = new List<float>();
+                    x = 0;
+
+                    reader = sqlCommand.ExecuteReader();
+                    string id = "";
+                    prices = new List<float>();
+                    while (reader.Read())
+                    {
+                        if (id != reader["p_id"].ToString())
+                        {
+                            id = reader["p_id"].ToString();
+                            QuickFunction(DataCollect());
+                        }
+                    }
+                    Session["subTotals"] = subTotals;
+                    GrandTotal.Text = "$" + subTotals.Sum().ToString();
+
+                    if (subTotals.Count == 0)
+                    {
+                        TableRow tableRow = new TableRow();
+                        TableCell tableCell = new TableCell();
+                        tableRow.HorizontalAlign = HorizontalAlign.Justify;
+                        tableRow.BorderStyle = BorderStyle.Solid;
+                        tableRow.BorderWidth = Unit.Pixel(3);
+                        tableCell.Controls.Add(new LiteralControl("The cart is empty"));
+                        tableRow.Cells.Add(tableCell);
+                        stressTable.Rows.Add(tableRow);
                     }
                 }
-                Session["subTotals"] = subTotals;
-                GrandTotal.Text = "$" + subTotals.Sum().ToString();
-
-                if (subTotals.Count == 0)
+                else
                 {
                     TableRow tableRow = new TableRow();
                     TableCell tableCell = new TableCell();
@@ -94,6 +112,7 @@ namespace LabAssignment
             {
                 Session["LastError"] = x;
             }
+            Session["shoppingCart"] = shoppingCart;
         }
 
         protected void ProceedCheck_Click(object sender, EventArgs e)
@@ -116,81 +135,19 @@ namespace LabAssignment
             }
             shoppingCart.products.RemoveAll(x => x.p_id == button.ID.Split('*').First());
             Session["shoppingCart"] = shoppingCart;
+            Response.Redirect("~/Cart.aspx");
         }
-        /*
-        protected void Increase_Quantity(object sender, EventArgs e)
-        {
-            Button button = sender as Button;
-            TextBox temp = stressTable.FindControl(button.ID.Split('+')[1]) as TextBox;
-            subTotals[(Convert.ToInt32(temp.ID.Split('*')[1]))] = Convert.ToInt32(temp.Text) * prices[(Convert.ToInt32(temp.ID.Split('*')[1]))];
-            temp.Text = (int.Parse(temp.Text) + 1).ToString();
-            shoppingCart.products.Find(x => x.p_id == temp.ID.Split('*').First()).quantity = int.Parse(temp.Text);
-            GrandTotal.Text = "$" + subTotals.Sum().ToString();
-            sqlCommand = new SqlCommand("Update proorder set quantity = " + temp.Text + " where c_name = '" + (Session["Account"] as IdentityUser).UserName + "' and p_id='" + temp.ID.Split('*').First() + "'", conn);
-            try
-            {
-                conn.Open();
-                sqlCommand.ExecuteNonQuery();
-                conn.Close();
-            }
-            catch (Exception x)
-            {
-                Session["LastError"] = x;
-            }
-        }
-        protected void Decrease_Quantity(object sender, EventArgs e)
-        {
-            Button button = sender as Button;
-            TextBox temp = stressTable.FindControl(button.ID.Split('-')[1]) as TextBox;
-            subTotals[(Convert.ToInt32(temp.ID.Split('*')[1]))] = Convert.ToInt32(temp.Text) * prices[(Convert.ToInt32(temp.ID.Split('*')[1]))];
-            temp.Text = (int.Parse(temp.Text) - 1).ToString();
-            shoppingCart.products.Find(x => x.p_id == temp.ID.Split('*').First()).quantity = int.Parse(temp.Text);
-            Session["shoppingCart"] = shoppingCart;
-            GrandTotal.Text = "$" + subTotals.Sum().ToString();
-            sqlCommand = new SqlCommand("Update proorder set quantity = " + temp.Text + " where c_name = '" + (Session["Account"] as IdentityUser).UserName + "' and p_id='" + temp.ID.Split('*').First() + "'", conn);
-            try
-            {
-                conn.Open();
-                sqlCommand.ExecuteNonQuery();
-                conn.Close();
-            }
-            catch (Exception x)
-            {
-                Session["LastError"] = x;
-            }
-        }
-        protected void Quantity_Changed(object sender, EventArgs e)
-        {
-            TextBox textBox = sender as TextBox;
-            TextBox temp = stressTable.FindControl("Subtotal" + textBox.ID.Split('*')[1]) as TextBox;
-            subTotals[(Convert.ToInt32(textBox.ID.Split('*')[1]))] = Convert.ToInt32(textBox.Text) * prices[(Convert.ToInt32(textBox.ID.Split('*')[1]))];
-            shoppingCart.products.Find(x => x.p_id == textBox.ID.Split('*').First()).quantity = int.Parse(textBox.Text);
-            temp.Text = "Subtotal: " + subTotals[(Convert.ToInt32(textBox.ID.Split('*')[1]))].ToString();
-            GrandTotal.Text = "$" + subTotals.Sum().ToString();
-            Session["shoppingCart"] = shoppingCart;
-            sqlCommand = new SqlCommand("Update proorder set quantity = " + textBox.Text + " where c_name = '" + (Session["Account"] as IdentityUser).UserName + "' and p_id='" + textBox.ID.Split('*').First() + "'", conn);
-            try
-            {
-                conn.Open();
-                sqlCommand.ExecuteNonQuery();
-                conn.Close();
-            }
-            catch (Exception x)
-            {
-                Session["LastError"] = x;
-            }
-        }
-        */
+
         protected void Quantity_Selected(object sender, EventArgs e)
         {
             DropDownList DropDown = sender as DropDownList;
             TextBox temp = stressTable.FindControl("Subtotal" + DropDown.ID.Split('*')[1]) as TextBox;
-            Session["subTotals"]=subTotals[Convert.ToInt32(DropDown.ID.Split('*')[1])] = Convert.ToInt32(DropDown.SelectedItem.Text) * prices[(Convert.ToInt32(DropDown.ID.Split('*')[1]))];
+            Session["subTotals"] = subTotals[Convert.ToInt32(DropDown.ID.Split('*')[1])] = Convert.ToInt32(DropDown.SelectedItem.Text) * prices[(Convert.ToInt32(DropDown.ID.Split('*')[1]))];
             shoppingCart.products.Find(x => x.p_id == DropDown.ID.Split('*').First()).quantity = int.Parse(DropDown.SelectedItem.Text);
             GrandTotal.Text = "$" + subTotals.Sum().ToString();
             temp.Text = "Subtotal: $" + subTotals[(Convert.ToInt32(DropDown.ID.Split('*')[1]))].ToString();
             Session["shoppingCart"] = shoppingCart;
-            sqlCommand = new SqlCommand("Update proorder set quantity = " + DropDown.SelectedItem.Text + ", subtotal = "+ subTotals[Convert.ToInt32(DropDown.ID.Split('*')[1])].ToString() + " where c_name = '" + (Session["Account"] as IdentityUser).UserName + "' and p_id='" + DropDown.ID.Split('*').First() + "'", conn);
+            sqlCommand = new SqlCommand("Update proorder set quantity = " + DropDown.SelectedItem.Text + ", subtotal = " + subTotals[Convert.ToInt32(DropDown.ID.Split('*')[1])].ToString() + " where c_name = '" + (Session["Account"] as IdentityUser).UserName + "' and p_id='" + DropDown.ID.Split('*').First() + "'", conn);
             try
             {
                 conn.Open();

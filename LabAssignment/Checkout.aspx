@@ -29,18 +29,27 @@
                <h5>
                    Address
                </h5>
+                    <asp:TextBox runat="server" placeholder="Street address or P.O Box">
 
+               </asp:TextBox><br />
+                    <asp:TextBox runat="server" placeholder="Apt, Suite, Unit, Building (optional)">
+
+               </asp:TextBox><br />
+                    <asp:TextBox runat="server" placeholder="City">
+                        </asp:TextBox><br />
+                    <asp:TextBox runat="server" placeholder="ZIP Code">
+               </asp:TextBox>
            </td>
             </tr>
         <tr>
             <td>
-                <asp:Table runat="server" ID="stressTable" CssClass="table table-dark table-striped table-bordered" BorderStyle="Solid" ForeColor="WhiteSmoke"  BorderWidth="3px" >
+                <asp:Table runat="server" ID="stressTable" CssClass="table h-100 table-dark table-striped table-bordered" BorderStyle="Solid" ForeColor="WhiteSmoke"  BorderWidth="3px" >
 
                 </asp:Table>
            </td>
        </tr>
             <tr>
-            <td style="text-align:left;" colspan="2">
+            <td style="text-align:right;" colspan="2">
                 <asp:Button runat="server" Text="Go" CssClass="btn btn-outline-warning" ID="ProcessOrder" OnClick="ProcessOrder_Click"/>
                 </td>
             

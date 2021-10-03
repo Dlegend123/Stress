@@ -3,9 +3,11 @@ using System;
 
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.IO;
 using System.Linq;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
 namespace LabAssignment
@@ -47,6 +49,7 @@ namespace LabAssignment
             }
             if (Session["Account"] != null)
             {
+                (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
                 if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
                     Page.Master.FindControl("AdminFunc").Visible = true;
                 if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Cust"))
@@ -107,7 +110,7 @@ namespace LabAssignment
             dropDown.Items[1].Text = "Edit";
 
             dropDown.Visible = true;
-            dropDown.AutoPostBack= true;
+            dropDown.AutoPostBack = true;
             TableCell tableCell = new TableCell
             {
                 HorizontalAlign = HorizontalAlign.Right,
@@ -128,7 +131,7 @@ namespace LabAssignment
             ManageTable.Rows.Add(row2);
             AdminHouse.Controls.Add(ManageTable);
             AdminHouse.Controls.Add(new LiteralControl("<br/>"));
-            
+
         }
         void XAddTable()
         {
@@ -254,7 +257,7 @@ namespace LabAssignment
             {
                 ID = "Details",
                 Visible = true,
-                CssClass="container-fluid"
+                CssClass = "container-fluid"
             };
 
             tableCell3.Controls.Add(label);
@@ -430,7 +433,7 @@ namespace LabAssignment
                             SearchTable.Visible = false;
                         if (!AddTable.Visible)
                             AddTable.Visible = true;
-                        ProductAdd.Click+= new EventHandler(ProductAdd_Click);
+                        ProductAdd.Click += new EventHandler(ProductAdd_Click);
                         if (!ProductVid.Parent.Parent.Visible)
                             ProductVid.Parent.Parent.Visible = true;
                         if (!ProductImage1.Parent.Parent.Visible)
@@ -442,7 +445,7 @@ namespace LabAssignment
                         if (AddTable.Visible)
                             AddTable.Visible = false;
                         if (!SearchTable.Visible)
-                            SearchTable.Visible=true;
+                            SearchTable.Visible = true;
                         ProductAdd.Click += new EventHandler(ProductUpdate_Click);
                         if (ProductVid.Parent.Parent.Visible)
                             ProductVid.Parent.Parent.Visible = false;
@@ -507,7 +510,7 @@ namespace LabAssignment
 
         private void RemoveProduct_Click(object sender, EventArgs e)
         {
-            sqlCommand = new SqlCommand("Delete  from product where p_id = '" + key+ "'", conn);
+            sqlCommand = new SqlCommand("Delete  from product where p_id = '" + key + "'", conn);
             try
             {
                 conn.Open();
@@ -526,7 +529,7 @@ namespace LabAssignment
             Button button = new Button
             {
                 CssClass = "btn btn-outline-warning",
-                Text = "Search", 
+                Text = "Search",
             };
             button.Click += new EventHandler(Search);
             TableHeaderCell tableCell = new TableHeaderCell
@@ -574,7 +577,7 @@ namespace LabAssignment
                 sqlCommand.Parameters.AddWithValue("@p_name", ProductName.Text);
                 sqlCommand.Parameters.AddWithValue("@p_details", ProductDetail.Text);
                 sqlCommand.Parameters.AddWithValue("@category", ProductCat.Text);
-                sqlCommand.Parameters.AddWithValue("@u_price", ProductPrice.Text);
+                sqlCommand.Parameters.AddWithValue("@u_price", SqlMoney.Parse( ProductPrice.Text));
 
                 sqlCommand.Parameters.AddWithValue("@quantity", Convert.ToInt32(ProductQuantity.Text));
                 sqlCommand.Parameters.AddWithValue("@p_url", "~/" + ProductDesk.Text);
@@ -632,7 +635,7 @@ namespace LabAssignment
                 sqlCommand.Parameters.AddWithValue("@p_name", ProductName.Text);
                 sqlCommand.Parameters.AddWithValue("@p_details", ProductDetail.Text);
                 sqlCommand.Parameters.AddWithValue("@category", ProductCat.Text);
-                sqlCommand.Parameters.AddWithValue("@u_price", ProductPrice.Text);
+                sqlCommand.Parameters.AddWithValue("@u_price",SqlMoney.Parse( ProductPrice.Text));
 
                 sqlCommand.Parameters.AddWithValue("@quantity", Convert.ToInt32(ProductQuantity.Text));
                 sqlCommand.Parameters.AddWithValue("@p_url", "~/" + ProductDesk.Text);
@@ -656,11 +659,11 @@ namespace LabAssignment
                 p_name = reader["p_name"].ToString(),
                 u_price = float.Parse(reader["u_price"].ToString()),
                 quantity = int.Parse(reader["quantity"].ToString()),
-            //    p_image = (byte[])(reader["p_video"]),
+                //    p_image = (byte[])(reader["p_video"]),
                 category = reader["category"].ToString(),
                 p_urlM = reader["p_urlM"].ToString()
             };
-            key=ProductID.Text = reader["p_id"].ToString();
+            key = ProductID.Text = reader["p_id"].ToString();
             ProductDesk.Text = reader["p_url"].ToString();
             ProductDetail.Text = reader["p_details"].ToString();
             ProductName.Text = reader["p_name"].ToString();

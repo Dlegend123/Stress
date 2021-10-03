@@ -2,8 +2,10 @@
 using System;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
 namespace LabAssignment
@@ -24,12 +26,16 @@ namespace LabAssignment
             }
             if (Session["Account"] != null)
             {
+                if ((Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText != "Sign Out")
+                    (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
                 if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
-                    Page.Master.FindControl("AdminFunc").Visible = true;
+                    if (!Page.Master.FindControl("AdminFunc").Visible)
+                        Page.Master.FindControl("AdminFunc").Visible = true;
                 if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Cust"))
                 {
                     HideCart.Visible = true;
-                    Page.Master.FindControl("CartLink").Visible = true;
+                    if (!Page.Master.FindControl("CartLink").Visible)
+                        Page.Master.FindControl("CartLink").Visible = true;
                 }
             }
             conn = new SqlConnection
@@ -52,11 +58,13 @@ namespace LabAssignment
                         p_name = reader["p_name"].ToString(),
                         u_price = float.Parse(reader["u_price"].ToString()),
                         quantity = int.Parse(reader["quantity"].ToString()),
-                        p_urlM= reader["p_urlM"].ToString()
+                        p_urlM = reader["p_urlM"].ToString()
                     };
                     Price2.InnerText = "$" + float.Parse(reader["u_price"].ToString()).ToString();
-                    TableCell tableCell = new TableCell();
-                    tableCell.HorizontalAlign = HorizontalAlign.Center;
+                    TableCell tableCell = new TableCell
+                    {
+                        HorizontalAlign = HorizontalAlign.Center
+                    };
                     tableCell.Controls.Add(new LiteralControl(reader["p_details"].ToString()));
                     TableRow tableRow = new TableRow();
                     tableCell.Font.Size = FontUnit.Medium;
@@ -67,7 +75,6 @@ namespace LabAssignment
                     {
                         temp = (byte[])reader["p_image"];
                         CarouselImg2.Src = "data:image/jpeg;base64," + Convert.ToBase64String(temp);
-
                     }
                     if (reader.Read())
                     {
@@ -90,48 +97,66 @@ namespace LabAssignment
         {
             try
             {
-                sqlCommand = new SqlCommand("select * from Cart where c_owner = '" + (Session["Account"] as IdentityUser).UserName + "'", conn);
+                sqlCommand = new SqlCommand("select * from proorder where p_id = " + Convert.ToInt32(product.p_id), conn);
                 conn.Open();
                 reader = sqlCommand.ExecuteReader();
                 reader.Read();
                 if (!reader.HasRows)
                 {
-                    sqlCommand = new SqlCommand("Insert into Cart(c_owner) Values(@c_owner)", conn);
-                    sqlCommand.Parameters.AddWithValue("@c_owner", (Session["Account"] as IdentityUser).UserName);
+                    sqlCommand = new SqlCommand("Insert into proorder(p_id,p_name,c_name,u_price,quantity,p_url,p_urlM,subtotal) Values (@p_id,@p_name,@c_name,@u_price,@quantity,@p_url,@p_urlM,@subtotal)", conn);
+                    sqlCommand.Parameters.AddWithValue("@p_id", Convert.ToInt32(product.p_id));
+                    sqlCommand.Parameters.AddWithValue("@p_name", product.p_name);
+                    sqlCommand.Parameters.AddWithValue("@c_name", (Session["Account"] as IdentityUser).UserName);
+                    sqlCommand.Parameters.AddWithValue("@u_price", product.u_price);
+                    sqlCommand.Parameters.AddWithValue("@quantity", Convert.ToInt32(Quantity.Text));
+                    sqlCommand.Parameters.AddWithValue("@p_url", product.p_url);
+                    sqlCommand.Parameters.AddWithValue("@p_urlM", product.p_urlM);
+                    sqlCommand.Parameters.AddWithValue("@subtotal", SqlMoney.Parse((Convert.ToInt32(Quantity.Text) * product.u_price).ToString()));
+
                     sqlCommand.ExecuteNonQuery();
                 }
                 else
                 {
-                    sqlCommand = new SqlCommand("select p_id from proorder where p_id = " + Convert.ToInt32(product.p_id), conn);
-                    reader = sqlCommand.ExecuteReader();
-                    reader.Read();
-                    if (!reader.HasRows)
-                    {
-                        sqlCommand = new SqlCommand("Insert into proorder(p_id,p_name,c_name,u_price,quantity,p_url,p_urlM) Values (@p_id,@p_name,@c_name,@u_price,@quantity,@p_url,@p_urlM)", conn);
-                        sqlCommand.Parameters.AddWithValue("@p_id", Convert.ToInt32(product.p_id));
-                        sqlCommand.Parameters.AddWithValue("@p_name", product.p_name);
-                        sqlCommand.Parameters.AddWithValue("@c_name", (Session["Account"] as IdentityUser).UserName);
-                        sqlCommand.Parameters.AddWithValue("@u_price", product.u_price);
-                        sqlCommand.Parameters.AddWithValue("@quantity", Convert.ToInt32(Quantity.Text));
-                        sqlCommand.Parameters.AddWithValue("@p_url", product.p_url);
-                        sqlCommand.Parameters.AddWithValue("@p_urlM", product.p_urlM);
-
-                        sqlCommand.ExecuteNonQuery();
-                    }
+                    var quantity = Convert.ToInt32(reader["quantity"]);
+                    if ((quantity + Convert.ToInt32(Quantity.Text)) > product.quantity)
+                        quantity = product.quantity;
                     else
-                    {
-                        reader.Read();
-                        var quantity = Convert.ToInt32(reader["quantity"]);
                         quantity += Convert.ToInt32(Quantity.Text);
-                        sqlCommand = new SqlCommand("update proorder set quantity = @quantity, subtotal = @subtotal where p_id = @p_id" + (Convert.ToInt32(Quantity.Text) + quantity).ToString(), conn);
-                        sqlCommand.Parameters.AddWithValue("@quantity", quantity);
-                        sqlCommand.Parameters.AddWithValue("@subtotal", quantity * product.u_price);
-                        sqlCommand.Parameters.AddWithValue("@p_id", Convert.ToInt32(product.p_id));
-                        sqlCommand.ExecuteNonQuery();
-                    }
+                    sqlCommand = new SqlCommand("update proorder set quantity = @quantity, subtotal = @subtotal where p_id = @p_id", conn);
+                    sqlCommand.Parameters.AddWithValue("@quantity", quantity);
+                    sqlCommand.Parameters.AddWithValue("@subtotal", SqlMoney.Parse((quantity * product.u_price).ToString()));
+                    sqlCommand.Parameters.AddWithValue("@p_id", Convert.ToInt32(product.p_id));
                     sqlCommand.ExecuteNonQuery();
-                    conn.Close();
                 }
+                conn.Close();
+            }
+            catch (Exception x)
+            {
+                Session["LastError"] = x;
+            }
+        }
+        protected void BuyNow_ServerClick(object sender, EventArgs e)
+        {
+            try
+            {
+                conn.Open();
+                Product temp = product;
+                temp.quantity = Convert.ToInt32(Quantity.Text);
+                ShoppingCart shoppingCart = new ShoppingCart();
+                shoppingCart.products.Add(temp);
+                Session["shoppingCart"] = shoppingCart;
+                sqlCommand = new SqlCommand("Insert into proorder(p_id,p_name,u_price,quantity,c_name,p_url,p_urlM,subtotal) Values (@p_id,@p_name,@u_price,@quantity,@c_name,@p_url,@p_urlM,@subtotal)", conn);
+                sqlCommand.Parameters.AddWithValue("@p_id", Convert.ToInt32(product.p_id));
+                sqlCommand.Parameters.AddWithValue("@p_name", product.p_name);
+                sqlCommand.Parameters.AddWithValue("@u_price", product.u_price);
+                sqlCommand.Parameters.AddWithValue("@quantity", Convert.ToInt32(Quantity.Text));
+                sqlCommand.Parameters.AddWithValue("@c_name", "Default");
+                sqlCommand.Parameters.AddWithValue("@p_url", product.p_url);
+                sqlCommand.Parameters.AddWithValue("@p_urlM", product.p_urlM);
+                sqlCommand.Parameters.AddWithValue("@subtotal", SqlMoney.Parse((Convert.ToInt32(Quantity.Text) * product.u_price).ToString()));
+                sqlCommand.ExecuteNonQuery();
+                conn.Close();
+                Response.Redirect("~/Checkout.aspx", false);
             }
             catch (Exception x)
             {

@@ -66,7 +66,7 @@ div {
                       <a class="nav-link" href="Contact" style="font-size:larger" runat="server">Contact Us</a>
                     </li>
                       <li class="nav-item">
-                      <a class="nav-link" href="SignIn.aspx" style="font-size:larger" runat="server">Sign In</a>
+                      <a class="nav-link" href="SignIn.aspx" style="font-size:larger" runat="server" id="SignInLink">Sign In</a>
                     </li>
                       <li class="nav-item dropdown" runat="server" id="AdminFunc" visible="false">
                           <a class="nav-link active dropdown-toggle" style="font-size:larger" href="#" role="button" id="AdminList" data-bs-toggle="dropdown" aria-expanded="false">

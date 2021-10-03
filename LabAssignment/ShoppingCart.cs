@@ -7,10 +7,12 @@ namespace LabAssignment
 {
     public class ShoppingCart
     {
+        string owner { get; set; }
         public List<Product> products { get; set; }
         public ShoppingCart()
         {
             products = new List<Product>();
+            owner = "Default";
         }
     }
 }

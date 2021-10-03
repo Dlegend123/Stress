@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Error Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ErrorPage1.aspx.cs" Inherits="LabAssignment.CustomErrors.ErrorPage1" EnableEventValidation="false" %>
+﻿<%@ Page Title="Error Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ErrorPage1.aspx.cs" Inherits="LabAssignment.CustomErrors.ErrorPage1"%>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div style="color:whitesmoke;vertical-align:central">
         <br />
