@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
 namespace LabAssignment
@@ -20,9 +21,12 @@ namespace LabAssignment
             }
             if (Session["Account"] != null)
             {
+                if ((Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText != "Sign Out")
+                    (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
                 if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
-                    Page.Master.FindControl("AdminFunc").Visible = true;
-                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Cust"))
+                    if (!Page.Master.FindControl("AdminFunc").Visible)
+                        Page.Master.FindControl("AdminFunc").Visible = true;
+                if (!Page.Master.FindControl("CartLink").Visible)
                     Page.Master.FindControl("CartLink").Visible = true;
             }
         }

@@ -28,10 +28,12 @@ namespace LabAssignment
             }
             if (Session["Account"] != null)
             {
-                (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
+                if ((Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText != "Sign Out")
+                    (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
                 if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
-                    Page.Master.FindControl("AdminFunc").Visible = true;
-                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Cust"))
+                    if (!Page.Master.FindControl("AdminFunc").Visible)
+                        Page.Master.FindControl("AdminFunc").Visible = true;
+                if (!Page.Master.FindControl("CartLink").Visible)
                     Page.Master.FindControl("CartLink").Visible = true;
             }
         }

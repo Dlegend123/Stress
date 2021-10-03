@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
 namespace LabAssignment.CustomErrors
@@ -11,6 +13,16 @@ namespace LabAssignment.CustomErrors
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["Account"] != null)
+            {
+                if ((Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText != "Sign Out")
+                    (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
+                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
+                    if (!Page.Master.FindControl("AdminFunc").Visible)
+                        Page.Master.FindControl("AdminFunc").Visible = true;
+                if (!Page.Master.FindControl("CartLink").Visible)
+                    Page.Master.FindControl("CartLink").Visible = true;
+            }
             Exception err = Session["LastError"] as Exception;
             //Exception err = Server.GetLastError();
             if ( err!= null)

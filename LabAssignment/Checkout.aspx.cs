@@ -31,15 +31,40 @@ namespace LabAssignment
             if (Session["Account"] != null)
             {
                 user = Session["Account"] as IdentityUser;
-                (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
+                if ((Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText != "Sign Out")
+                    (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
                 if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
-                    Page.Master.FindControl("AdminFunc").Visible = true;
-                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Cust"))
+                    if (!Page.Master.FindControl("AdminFunc").Visible)
+                        Page.Master.FindControl("AdminFunc").Visible = true;
+                if (!Page.Master.FindControl("CartLink").Visible)
                     Page.Master.FindControl("CartLink").Visible = true;
             }
 
             if (Session["shoppingCart"] != null)
             {
+                conn = new SqlConnection
+                {
+                    ConnectionString = ConfigurationManager.ConnectionStrings["LIConnectionString"].ConnectionString
+                };
+                sqlCommand = new SqlCommand("select * from RAddress where c_name= '" + user.UserName + "'", conn);
+                try
+                {
+                    conn.Open();
+                    reader = sqlCommand.ExecuteReader();
+                    reader.Read();
+                    if (reader.HasRows)
+                    {
+                        Address1.Text = reader["street"].ToString();
+                        Address2.Text = reader["optional"].ToString();
+                        Address3.Text = reader["city"].ToString();
+                        Address4.Text = reader["zipcode"].ToString();
+                    }
+                    conn.Close();
+                }
+                catch (Exception f)
+                {
+                    Session["LastError"] = f;
+                }
                 shoppingCart = Session["shoppingCart"] as ShoppingCart;
                 subTotals = Session["subTotals"] as List<float>;
                 int count = 0;
@@ -102,10 +127,6 @@ namespace LabAssignment
         }
         protected void ProcessOrder_Click(object sender, EventArgs e)
         {
-            conn = new SqlConnection
-            {
-                ConnectionString = ConfigurationManager.ConnectionStrings["LIConnectionString"].ConnectionString
-            };
             int x;
             try
             {
@@ -128,7 +149,6 @@ namespace LabAssignment
                 shoppingCart.products.Clear();
                 Session["shoppingCart"] = shoppingCart;
                 sqlCommand = new SqlCommand("Insert into CustOrder(c_name,p_date,o_id) Values(@c_name,@p_date,@o_id)", conn);
-
                 conn.Close();
             }
             catch (Exception f)

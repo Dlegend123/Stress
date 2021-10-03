@@ -140,30 +140,36 @@ namespace LabAssignment
         }
         protected void BuyNow_ServerClick(object sender, EventArgs e)
         {
-            try
+            if (int.Parse(Quantity.Text) > 0)
             {
-                conn.Open();
-                Product temp = product;
-                temp.quantity = Convert.ToInt32(Quantity.Text);
-                ShoppingCart shoppingCart = new ShoppingCart();
-                shoppingCart.products.Add(temp);
-                Session["shoppingCart"] = shoppingCart;
-                sqlCommand = new SqlCommand("Insert into proorder(p_id,p_name,u_price,quantity,c_name,p_url,p_urlM,subtotal) Values (@p_id,@p_name,@u_price,@quantity,@c_name,@p_url,@p_urlM,@subtotal)", conn);
-                sqlCommand.Parameters.AddWithValue("@p_id", Convert.ToInt32(product.p_id));
-                sqlCommand.Parameters.AddWithValue("@p_name", product.p_name);
-                sqlCommand.Parameters.AddWithValue("@u_price", product.u_price);
-                sqlCommand.Parameters.AddWithValue("@quantity", Convert.ToInt32(Quantity.Text));
-                sqlCommand.Parameters.AddWithValue("@c_name", "Default");
-                sqlCommand.Parameters.AddWithValue("@p_url", product.p_url);
-                sqlCommand.Parameters.AddWithValue("@p_urlM", product.p_urlM);
-                sqlCommand.Parameters.AddWithValue("@subtotal", SqlMoney.Parse((Convert.ToInt32(Quantity.Text) * product.u_price).ToString()));
-                sqlCommand.ExecuteNonQuery();
-                conn.Close();
-                Response.Redirect("~/Checkout.aspx", false);
-            }
-            catch (Exception x)
-            {
-                Session["LastError"] = x;
+                try
+                {
+                    conn.Open();
+                    Product temp = product;
+                    temp.quantity = Convert.ToInt32(Quantity.Text);
+                    ShoppingCart shoppingCart = new ShoppingCart();
+                    shoppingCart.products.Add(temp);
+                    Session["shoppingCart"] = shoppingCart;
+                    sqlCommand = new SqlCommand("Insert into proorder(p_id,p_name,u_price,quantity,c_name,p_url,p_urlM,subtotal) Values (@p_id,@p_name,@u_price,@quantity,@c_name,@p_url,@p_urlM,@subtotal)", conn);
+                    sqlCommand.Parameters.AddWithValue("@p_id", Convert.ToInt32(product.p_id));
+                    sqlCommand.Parameters.AddWithValue("@p_name", product.p_name);
+                    sqlCommand.Parameters.AddWithValue("@u_price", product.u_price);
+                    sqlCommand.Parameters.AddWithValue("@quantity", Convert.ToInt32(Quantity.Text));
+                    if ((Session["Account"] as IdentityUser).UserName != "Default")
+                        sqlCommand.Parameters.AddWithValue("@c_name", (Session["Account"] as IdentityUser).UserName);
+                    else
+                        sqlCommand.Parameters.AddWithValue("@c_name", "Default");
+                    sqlCommand.Parameters.AddWithValue("@p_url", product.p_url);
+                    sqlCommand.Parameters.AddWithValue("@p_urlM", product.p_urlM);
+                    sqlCommand.Parameters.AddWithValue("@subtotal", SqlMoney.Parse((Convert.ToInt32(Quantity.Text) * product.u_price).ToString()));
+                    sqlCommand.ExecuteNonQuery();
+                    conn.Close();
+                    Response.Redirect("~/Checkout.aspx", false);
+                }
+                catch (Exception x)
+                {
+                    Session["LastError"] = x;
+                }
             }
         }
     }
