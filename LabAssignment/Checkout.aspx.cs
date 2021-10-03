@@ -30,19 +30,14 @@ namespace LabAssignment
             }
             if (Session["Account"] != null)
             {
+                user = Session["Account"] as IdentityUser;
                 (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
                 if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
                     Page.Master.FindControl("AdminFunc").Visible = true;
                 if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Cust"))
                     Page.Master.FindControl("CartLink").Visible = true;
             }
-            else
-            {
-                user = new IdentityUser
-                {
-                    UserName = "Default"
-                };
-            }
+
             if (Session["shoppingCart"] != null)
             {
                 shoppingCart = Session["shoppingCart"] as ShoppingCart;

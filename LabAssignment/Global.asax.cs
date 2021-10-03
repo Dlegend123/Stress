@@ -24,7 +24,7 @@ namespace LabAssignment
             };
             Account = new IdentityUser
             {
-                UserName = "Unknown",
+                UserName = "Default",
                 Id = "Random"
             };
             Account.Roles.Add(role);
