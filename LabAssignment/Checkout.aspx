@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Checkout.aspx.cs" Inherits="LabAssignment.Checkout" EnableEventValidation="false" %>
+﻿<%@ Page Title="Checkout" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Checkout.aspx.cs" Inherits="LabAssignment.Checkout" EnableEventValidation="false" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="container"> 
   
@@ -55,5 +55,7 @@
             
             </tr>
         </table>
+        <br />
+        <br />
         </div>
 </asp:Content>

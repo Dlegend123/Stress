@@ -66,7 +66,8 @@ namespace LabAssignment
                     Session["LastError"] = f;
                 }
                 shoppingCart = Session["shoppingCart"] as ShoppingCart;
-                subTotals = Session["subTotals"] as List<float>;
+                if (Session["subTotals"] != null)
+                    subTotals = Session["subTotals"] as List<float>;
                 int count = 0;
                 shoppingCart.products.ForEach(x => QuickFunction(x, count++));
             }
@@ -118,7 +119,10 @@ namespace LabAssignment
             hyperLink2.CssClass = "nav-link active";
             hyperLink2.Controls.Add(new LiteralControl("<br /> ID: " + p.p_id + "<br />"));
             hyperLink2.Controls.Add(new LiteralControl("Quantity: " + p.quantity + "<br />"));
-            hyperLink2.Controls.Add(new LiteralControl("Subtotal: $" + subTotals[count]));
+            if (Session["subTotals"] == null)
+                hyperLink2.Controls.Add(new LiteralControl("Subtotal: $" + float.Parse(p.quantity.ToString()) * p.u_price));
+            else
+                hyperLink2.Controls.Add(new LiteralControl("Subtotal: $" + subTotals[count]));
             tableCell2.Controls.Add(hyperLink2);
             tableCell2.RowSpan = 1;
             tableCell2.HorizontalAlign = HorizontalAlign.Left;
@@ -150,6 +154,7 @@ namespace LabAssignment
                 Session["shoppingCart"] = shoppingCart;
                 sqlCommand = new SqlCommand("Insert into CustOrder(c_name,p_date,o_id) Values(@c_name,@p_date,@o_id)", conn);
                 conn.Close();
+                Response.Redirect("~/Default.aspx", false);
             }
             catch (Exception f)
             {

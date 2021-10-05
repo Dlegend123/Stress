@@ -48,7 +48,7 @@
             </td>
             <td style="vertical-align: middle;text-align:center">
                 <h3 style="text-align:center;color:whitesmoke" runat="server" id="Price2" ></h3>
-                <asp:TextBox runat="server" ID="Quantity" TextMode="Number" ToolTip="Quantity" placeholder="Qty" Font-Size="Medium" Width="100px" ></asp:TextBox><br/><br />
+                <asp:DropDownList runat="server" ID="QuantityList" CssClass="btn btn-warning dropdown-toggle"></asp:DropDownList><br /><br />
                 <div id="HideCart" runat="server" visible="false">
                 <button type="button" class="btn btn-secondary btn-sm active" data-bs-toggle="button" runat="server" id="AddToCart" onserverclick="AddToCart_ServerClick"><h3 style="width:max-content">Add to cart</h3></button>
                 <br />

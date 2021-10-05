@@ -753,7 +753,12 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="CustomErrors\Error Page5.aspx" />
     <Content Include="CustomErrors\ErrorPage1.aspx" />
+    <Content Include="CustomErrors\ErrorPage2.aspx" />
+    <Content Include="CustomErrors\ErrorPage3.aspx" />
+    <Content Include="CustomErrors\ErrorPage4.aspx" />
+    <Content Include="CustomErrors\Images\Cart\cart4.svg" />
     <Content Include="Images\Cart\cart4.svg" />
     <Content Include="Images\Contact\center-spot.svg" />
     <Content Include="Images\Contact\clock.svg" />
@@ -876,6 +881,34 @@
     </Compile>
     <Compile Include="Checkout.aspx.designer.cs">
       <DependentUpon>Checkout.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CustomErrors\Error Page5.aspx.cs">
+      <DependentUpon>Error Page5.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomErrors\Error Page5.aspx.designer.cs">
+      <DependentUpon>Error Page5.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CustomErrors\ErrorPage2.aspx.cs">
+      <DependentUpon>ErrorPage2.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomErrors\ErrorPage2.aspx.designer.cs">
+      <DependentUpon>ErrorPage2.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CustomErrors\ErrorPage3.aspx.cs">
+      <DependentUpon>ErrorPage3.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomErrors\ErrorPage3.aspx.designer.cs">
+      <DependentUpon>ErrorPage3.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CustomErrors\ErrorPage4.aspx.cs">
+      <DependentUpon>ErrorPage4.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomErrors\ErrorPage4.aspx.designer.cs">
+      <DependentUpon>ErrorPage4.aspx</DependentUpon>
     </Compile>
     <Compile Include="Entity.cs" />
     <Compile Include="ManageHome.aspx.cs">

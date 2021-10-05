@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -13,15 +14,23 @@ namespace LabAssignment.CustomErrors
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!Request.IsSecureConnection)
+            {
+                string url = ConfigurationManager.AppSettings["SecurePath"] + "~/CustomErrors/ErrorPage1.aspx";
+                Response.Redirect(url);
+            }
             if (Session["Account"] != null)
             {
-                if ((Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText != "Sign Out")
-                    (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
                 if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
                     if (!Page.Master.FindControl("AdminFunc").Visible)
                         Page.Master.FindControl("AdminFunc").Visible = true;
-                if (!Page.Master.FindControl("CartLink").Visible)
-                    Page.Master.FindControl("CartLink").Visible = true;
+                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Cust"))
+                {
+                    if (!Page.Master.FindControl("CartLink").Visible)
+                        Page.Master.FindControl("CartLink").Visible = true;
+                    if ((Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText != "Sign Out")
+                        (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
+                }
             }
             Exception err = Session["LastError"] as Exception;
             //Exception err = Server.GetLastError();

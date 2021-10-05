@@ -79,32 +79,20 @@ namespace LabAssignment
         {
             filePath = reader["p_url"].ToString();
         }
-        void SetException()
-        {
-            Exception x = new Exception("Invalid Navigation")
-            {
-                Source = "Invalid Navigation"
-            };
-            Session["LastError"] = x;
-        }
         protected void Carousel1Link_ServerClick(object sender, EventArgs e)
         {
-            SetException();
             Response.Redirect(Carousel1Link.HRef, false);
         }
         protected void Carousel2Link_ServerClick(object sender, EventArgs e)
         {
-            SetException();
             Response.Redirect(Carousel2Link.HRef, false);
         }
         protected void Carousel3Link_ServerClick(object sender, EventArgs e)
         {
-            SetException();
             Response.Redirect(Carousel3Link.HRef,false);
         }
         protected void Carousel4Link_ServerClick(object sender, EventArgs e)
         {
-            SetException();
             Response.Redirect(Carousel4Link.HRef, false);
         }
     }

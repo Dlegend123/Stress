@@ -45,13 +45,13 @@ namespace LabAssignment
             stressTable.Style.Add("max-width", "fit-content");
             try
             {
-                sqlCommand = new SqlCommand("Select * from proorder where c_name = '" + (Session["Account"] as IdentityUser).UserName + "' and o_id <> null", conn);
+                sqlCommand = new SqlCommand("Select * from proorder where c_name = '" + (Session["Account"] as IdentityUser).UserName + "' and o_id IS NULL", conn);
                 conn.Open();
                 reader = sqlCommand.ExecuteReader();
-                if (!reader.HasRows)
+                if (reader.HasRows)
                 {
                     Quantities = new List<Product>();
-                    sqlCommand = new SqlCommand("select product.quantity,product.p_id  from product inner join proorder on proorder.p_id=product.p_id where proorder.c_name='" + (Session["Account"] as IdentityUser).UserName + "'", conn);
+                    sqlCommand = new SqlCommand("select product.quantity,product.p_id from product inner join proorder on proorder.p_id=product.p_id where proorder.c_name='" + (Session["Account"] as IdentityUser).UserName + "' and o_id IS NULL", conn);
                     reader = sqlCommand.ExecuteReader();
 
                     while (reader.Read())
@@ -63,15 +63,12 @@ namespace LabAssignment
                         };
                         Quantities.Add(product);
                     }
-                    sqlCommand = new SqlCommand("select * from proorder inner join proimage on proorder.p_id=proimage.p_id where proorder.c_name='" + (Session["Account"] as IdentityUser).UserName + "'", conn);
-
+                    sqlCommand = new SqlCommand("select * from proorder inner join proimage on proorder.p_id=proimage.p_id where proorder.c_name='" + (Session["Account"] as IdentityUser).UserName + "' and o_id IS NULL", conn); reader = sqlCommand.ExecuteReader();
+                    string id = "";
+                    prices = new List<float>();
                     shoppingCart = new ShoppingCart();
                     subTotals = new List<float>();
                     x = 0;
-
-                    reader = sqlCommand.ExecuteReader();
-                    string id = "";
-                    prices = new List<float>();
                     while (reader.Read())
                     {
                         if (id != reader["p_id"].ToString())
@@ -80,31 +77,17 @@ namespace LabAssignment
                             QuickFunction(DataCollect());
                         }
                     }
+                    
                     Session["subTotals"] = subTotals;
                     GrandTotal.Text = "$" + subTotals.Sum().ToString();
-
                     if (subTotals.Count == 0)
                     {
-                        TableRow tableRow = new TableRow();
-                        TableCell tableCell = new TableCell();
-                        tableRow.HorizontalAlign = HorizontalAlign.Justify;
-                        tableRow.BorderStyle = BorderStyle.Solid;
-                        tableRow.BorderWidth = Unit.Pixel(3);
-                        tableCell.Controls.Add(new LiteralControl("The cart is empty"));
-                        tableRow.Cells.Add(tableCell);
-                        stressTable.Rows.Add(tableRow);
+                        ShowEmpty();
                     }
                 }
                 else
                 {
-                    TableRow tableRow = new TableRow();
-                    TableCell tableCell = new TableCell();
-                    tableRow.HorizontalAlign = HorizontalAlign.Justify;
-                    tableRow.BorderStyle = BorderStyle.Solid;
-                    tableRow.BorderWidth = Unit.Pixel(3);
-                    tableCell.Controls.Add(new LiteralControl("The cart is empty"));
-                    tableRow.Cells.Add(tableCell);
-                    stressTable.Rows.Add(tableRow);
+                    ShowEmpty();
                 }
                 conn.Close();
             }
@@ -122,7 +105,7 @@ namespace LabAssignment
         protected void RemoveProduct_Click(object sender, EventArgs e)
         {
             Button button = sender as Button;
-            sqlCommand = new SqlCommand("Delete  from proorder where c_name= '" + (Session["Account"] as IdentityUser).UserName + "' and p_id='" + button.ID.Split('*').First() + "'", conn);
+            sqlCommand = new SqlCommand("Delete  from proorder where c_name= '" + (Session["Account"] as IdentityUser).UserName + "' and p_id='" + button.ID.Split('*').First() + "' and o_id IS NULL", conn);
             try
             {
                 conn.Open();
@@ -147,7 +130,7 @@ namespace LabAssignment
             GrandTotal.Text = "$" + subTotals.Sum().ToString();
             temp.Text = "Subtotal: $" + subTotals[(Convert.ToInt32(DropDown.ID.Split('*')[1]))].ToString();
             Session["shoppingCart"] = shoppingCart;
-            sqlCommand = new SqlCommand("Update proorder set quantity = " + DropDown.SelectedItem.Text + ", subtotal = " + subTotals[Convert.ToInt32(DropDown.ID.Split('*')[1])].ToString() + " where c_name = '" + (Session["Account"] as IdentityUser).UserName + "' and p_id='" + DropDown.ID.Split('*').First() + "'", conn);
+            sqlCommand = new SqlCommand("Update proorder set quantity = " + DropDown.SelectedItem.Text + ", subtotal = " + subTotals[Convert.ToInt32(DropDown.ID.Split('*')[1])].ToString() + " where c_name = '" + (Session["Account"] as IdentityUser).UserName + "' and p_id='" + DropDown.ID.Split('*').First() + "' and o_id IS NULL", conn);
             try
             {
                 conn.Open();
@@ -159,7 +142,18 @@ namespace LabAssignment
                 Session["LastError"] = x;
             }
         }
-
+        void ShowEmpty()
+        {
+            TableRow tableRow = new TableRow();
+            TableCell tableCell = new TableCell();
+            tableRow.HorizontalAlign = HorizontalAlign.Justify;
+            tableRow.BorderStyle = BorderStyle.Solid;
+            tableRow.BorderWidth = Unit.Pixel(3);
+            tableCell.Controls.Add(new LiteralControl("The cart is empty"));
+            tableRow.Cells.Add(tableCell);
+            stressTable.Rows.Add(tableRow);
+            ProceedCheck.Parent.Parent.Visible = false;
+        }
         Product DataCollect()
         {
             Product product = new Product

@@ -7,47 +7,47 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LabAssignment
+namespace LabAssignment.CustomErrors
 {
 
 
-    public partial class SiteMaster
+    public partial class Error_Page5
     {
 
         /// <summary>
-        /// SignInLink control.
+        /// ErrorSource control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor SignInLink;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ErrorSource;
 
         /// <summary>
-        /// AdminFunc control.
+        /// InnerEx control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl AdminFunc;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl InnerEx;
 
         /// <summary>
-        /// CartLink control.
+        /// StackTrace control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl CartLink;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl StackTrace;
 
         /// <summary>
-        /// MainContent control.
+        /// ErrorMessage control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder MainContent;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ErrorMessage;
     }
 }

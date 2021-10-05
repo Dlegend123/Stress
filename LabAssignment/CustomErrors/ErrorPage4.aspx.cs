@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -9,21 +8,15 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
-namespace LabAssignment
+namespace LabAssignment.CustomErrors
 {
-    public partial class Contact : Page
+    public partial class ErrorPage4 : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            int width = (Request.Browser.ScreenPixelsWidth)*2-100;
-            int height = (Request.Browser.ScreenPixelsHeight)*2-100;
-            if (width <= 700)
-            {
-                Response.Redirect("~/ContactM.aspx");
-            }
             if (!Request.IsSecureConnection)
             {
-                string url = ConfigurationManager.AppSettings["SecurePath"] + "Contact.aspx";
+                string url = ConfigurationManager.AppSettings["SecurePath"] + "~/CustomErrors/ErrorPage4.aspx";
                 Response.Redirect(url);
             }
             if (Session["Account"] != null)
