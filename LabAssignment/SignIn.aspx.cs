@@ -33,28 +33,23 @@ namespace LabAssignment
                 if (!SignInTable.CssClass.Contains("container-fluid"))
                     SignInTable.CssClass += "container-fluid";
             }
-
             if (Session["Account"] != null)
             {
-                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
-                    Page.Master.FindControl("AdminFunc").Visible = true;
-                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Cust"))
-                    Page.Master.FindControl("CartLink").Visible = true;
-            }
-            else
-            {
-                if ((Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText != "Sign Out")
-                    (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
-                Session["Account"] = null;
-                if(Page.Master.FindControl("CartLink").Visible)
-                    Page.Master.FindControl("CartLink").Visible = false;
-                if (Page.Master.FindControl("AdminFunc").Visible)
-                    Page.Master.FindControl("AdminFunc").Visible = false;
-                Response.Redirect("~/Default.aspx", false);
-                HttpContext.Current.Response.Flush(); // Sends all currently buffered output to the client.
-                HttpContext.Current.Response.SuppressContent = true;  // Gets or sets a value indicating whether to send HTTP content to the client.
-                HttpContext.Current.ApplicationInstance.CompleteRequest(); // Causes ASP.NET to bypass all events and filtering in the HTTP pipeline chain of execution and directly execute the EndRequest event.
-                SignInTable.Visible = false;
+                if ((Session["Account"] as IdentityUser).UserName != "Default")
+                {
+                    if ((Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText != "Sign Out")
+                        (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
+                    Session["Account"] = null;
+                    if (Page.Master.FindControl("CartLink").Visible)
+                        Page.Master.FindControl("CartLink").Visible = false;
+                    if (Page.Master.FindControl("AdminFunc").Visible)
+                        Page.Master.FindControl("AdminFunc").Visible = false;
+                    Response.Redirect("~/Default.aspx", false);
+                  //  HttpContext.Current.Response.Flush(); // Sends all currently buffered output to the client.
+                  //  HttpContext.Current.Response.SuppressContent = true;  // Gets or sets a value indicating whether to send HTTP content to the client.
+                  // HttpContext.Current.ApplicationInstance.CompleteRequest(); // Causes ASP.NET to bypass all events and filtering in the HTTP pipeline chain of execution and directly execute the EndRequest event.
+                    SignInTable.Visible = false;
+                }
             }
         }
         protected void Validate(object sender, EventArgs e)

@@ -127,7 +127,6 @@ namespace LabAssignment
                 else
                     list.ForEach(x => QuickFunction(x));
             }
-
         }
 
         void PriceCategory()
@@ -215,7 +214,7 @@ namespace LabAssignment
         void QuickFunction(Product p)
         {
             int width = (Request.Browser.ScreenPixelsWidth) * 2 - 100;
-            int height = (Request.Browser.ScreenPixelsHeight) * 2 - 100;
+            
             if (width <= 700)
             {
                 if (!ProductTable.CssClass.Contains("-fluid"))
