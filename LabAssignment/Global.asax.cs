@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using LabAssignment.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,15 +15,15 @@ namespace LabAssignment
     {
         void Session_Start(object sender, EventArgs e)
         {
-            Exception err=new Exception();
+            Exception err = new Exception();
             Session["LastError"] = err; //initialize the session
-            IdentityUser Account;
+            ApplicationUser Account;
             IdentityUserRole role = new IdentityUserRole
             {
                 RoleId = "Visitor",
                 UserId = "Random"
             };
-            Account = new IdentityUser
+            Account = new ApplicationUser
             {
                 UserName = "Default",
                 Id = "Random"
@@ -42,8 +43,8 @@ namespace LabAssignment
             HttpContext context = HttpContext.Current;
 
             if (context != null && context.Session != null)
-                if (Session["LastError"]!=null)
-                        Session["LastError"]= err;
+                if (Session["LastError"] != null)
+                    Session["LastError"] = err;
             /* if (Context != null)
              {
                  // Of course, you don't need to use both conditions bellow

@@ -9,6 +9,7 @@ using System.Web.DynamicData;
 using System.Linq;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Web.UI.HtmlControls;
+using LabAssignment.Models;
 
 namespace LabAssignment
 {
@@ -31,12 +32,12 @@ namespace LabAssignment
             {
                 if ((Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText != "Sign Out")
                     (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
-                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
+                if ((Session["Account"] as ApplicationUser).Roles.Any(x => x.RoleId == "Admin"))
                 {
                     if (!Page.Master.FindControl("AdminFunc").Visible)
                         Page.Master.FindControl("AdminFunc").Visible = true;
                 }
-                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Cust"))
+                if ((Session["Account"] as ApplicationUser).Roles.Any(x => x.RoleId == "Cust"))
                 {
                     if (!Page.Master.FindControl("CartLink").Visible)
                         Page.Master.FindControl("CartLink").Visible = true;

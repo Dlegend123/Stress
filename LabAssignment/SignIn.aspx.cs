@@ -6,15 +6,14 @@ using System.Linq;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web;
+using Microsoft.AspNet.Identity.Owin;
+using LabAssignment.Models;
 
 namespace LabAssignment
 {
     public partial class SignIn : System.Web.UI.Page
     {
-        
-        Entity entity;
-        UserStore<IdentityUser> userStore;
-        protected UserManager<IdentityUser> Customers;
+
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -35,7 +34,7 @@ namespace LabAssignment
             }
             if (Session["Account"] != null)
             {
-                if ((Session["Account"] as IdentityUser).UserName != "Default")
+                if ((Session["Account"] as ApplicationUser).UserName != "Default")
                 {
                     if ((Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText != "Sign Out")
                         (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
@@ -54,16 +53,20 @@ namespace LabAssignment
         }
         protected void Validate(object sender, EventArgs e)
         {
-            entity = new Entity();
-            entity.Database.Connection.ConnectionString = ConfigurationManager
-                .ConnectionStrings["LIConnectionString"].ConnectionString;
-            userStore = new UserStore<IdentityUser>(entity);
-            Customers = new UserManager<IdentityUser>(userStore);
+            //entity = new Entity();
+           // entity.Database.Connection.ConnectionString = ConfigurationManager
+              //  .ConnectionStrings["LIConnectionString"].ConnectionString;
+            //userStore = new UserStore<IdentityUser>(entity);
+            var Customers = Context.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            var signInmanager = Context.GetOwinContext().GetUserManager<ApplicationSignInManager>();
+           
             try
             {
-                IdentityUser customer = Customers.FindByName(SName.Text);
+                var customer = Customers.FindByName(SName.Text);
                 if (customer != null)
                 {
+                    var result=signInmanager.SignInAsync(customer,isPersistent:true,rememberBrowser:true);
+                    if(result.IsCompleted)
                     if (customer.Email == SPassword.Text)
                     {
                         if (PasswordNotValid.Visible)

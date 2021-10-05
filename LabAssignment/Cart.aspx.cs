@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using LabAssignment.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -32,9 +33,9 @@ namespace LabAssignment
             if (Session["Account"] != null)
             {
                 (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
-                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
+                if ((Session["Account"] as ApplicationUser).Roles.Any(x => x.RoleId == "Admin"))
                     Page.Master.FindControl("AdminFunc").Visible = true;
-                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Cust"))
+                if ((Session["Account"] as ApplicationUser).Roles.Any(x => x.RoleId == "Cust"))
                     Page.Master.FindControl("CartLink").Visible = true;
             }
             conn = new SqlConnection
@@ -45,13 +46,13 @@ namespace LabAssignment
             stressTable.Style.Add("max-width", "fit-content");
             try
             {
-                sqlCommand = new SqlCommand("Select * from proorder where c_name = '" + (Session["Account"] as IdentityUser).UserName + "' and o_id IS NULL", conn);
+                sqlCommand = new SqlCommand("Select * from proorder where c_name = '" + (Session["Account"] as ApplicationUser).UserName + "' and o_id IS NULL", conn);
                 conn.Open();
                 reader = sqlCommand.ExecuteReader();
                 if (reader.HasRows)
                 {
                     Quantities = new List<Product>();
-                    sqlCommand = new SqlCommand("select product.quantity,product.p_id from product inner join proorder on proorder.p_id=product.p_id where proorder.c_name='" + (Session["Account"] as IdentityUser).UserName + "' and o_id IS NULL", conn);
+                    sqlCommand = new SqlCommand("select product.quantity,product.p_id from product inner join proorder on proorder.p_id=product.p_id where proorder.c_name='" + (Session["Account"] as ApplicationUser).UserName + "' and o_id IS NULL", conn);
                     reader = sqlCommand.ExecuteReader();
 
                     while (reader.Read())
@@ -63,7 +64,7 @@ namespace LabAssignment
                         };
                         Quantities.Add(product);
                     }
-                    sqlCommand = new SqlCommand("select * from proorder inner join proimage on proorder.p_id=proimage.p_id where proorder.c_name='" + (Session["Account"] as IdentityUser).UserName + "' and o_id IS NULL", conn); reader = sqlCommand.ExecuteReader();
+                    sqlCommand = new SqlCommand("select * from proorder inner join proimage on proorder.p_id=proimage.p_id where proorder.c_name='" + (Session["Account"] as ApplicationUser).UserName + "' and o_id IS NULL", conn); reader = sqlCommand.ExecuteReader();
                     string id = "";
                     prices = new List<float>();
                     shoppingCart = new ShoppingCart();
@@ -105,7 +106,7 @@ namespace LabAssignment
         protected void RemoveProduct_Click(object sender, EventArgs e)
         {
             Button button = sender as Button;
-            sqlCommand = new SqlCommand("Delete  from proorder where c_name= '" + (Session["Account"] as IdentityUser).UserName + "' and p_id='" + button.ID.Split('*').First() + "' and o_id IS NULL", conn);
+            sqlCommand = new SqlCommand("Delete  from proorder where c_name= '" + (Session["Account"] as ApplicationUser).UserName + "' and p_id='" + button.ID.Split('*').First() + "' and o_id IS NULL", conn);
             try
             {
                 conn.Open();
@@ -130,7 +131,7 @@ namespace LabAssignment
             GrandTotal.Text = "$" + subTotals.Sum().ToString();
             temp.Text = "Subtotal: $" + subTotals[(Convert.ToInt32(DropDown.ID.Split('*')[1]))].ToString();
             Session["shoppingCart"] = shoppingCart;
-            sqlCommand = new SqlCommand("Update proorder set quantity = " + DropDown.SelectedItem.Text + ", subtotal = " + subTotals[Convert.ToInt32(DropDown.ID.Split('*')[1])].ToString() + " where c_name = '" + (Session["Account"] as IdentityUser).UserName + "' and p_id='" + DropDown.ID.Split('*').First() + "' and o_id IS NULL", conn);
+            sqlCommand = new SqlCommand("Update proorder set quantity = " + DropDown.SelectedItem.Text + ", subtotal = " + subTotals[Convert.ToInt32(DropDown.ID.Split('*')[1])].ToString() + " where c_name = '" + (Session["Account"] as ApplicationUser).UserName + "' and p_id='" + DropDown.ID.Split('*').First() + "' and o_id IS NULL", conn);
             try
             {
                 conn.Open();

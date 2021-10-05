@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using LabAssignment.Models;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
@@ -28,10 +29,10 @@ namespace LabAssignment
             }
             if (Session["Account"] != null)
             {
-                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
+                if ((Session["Account"] as ApplicationUser).Roles.Any(x => x.RoleId == "Admin"))
                     if (!Page.Master.FindControl("AdminFunc").Visible)
                         Page.Master.FindControl("AdminFunc").Visible = true;
-                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Cust"))
+                if ((Session["Account"] as ApplicationUser).Roles.Any(x => x.RoleId == "Cust"))
                 {
                     if (!Page.Master.FindControl("CartLink").Visible)
                         Page.Master.FindControl("CartLink").Visible = true;

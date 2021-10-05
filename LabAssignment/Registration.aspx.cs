@@ -5,6 +5,9 @@ using System.Configuration;
 using System.Linq;
 using System.Web.UI;
 using System.Data.SqlClient;
+using System.Web;
+using Microsoft.AspNet.Identity.Owin;
+using LabAssignment.Models;
 
 namespace LabAssignment
 {
@@ -18,9 +21,9 @@ namespace LabAssignment
 
             if (Session["Account"] != null)
             {
-                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
+                if ((Session["Account"] as ApplicationUser).Roles.Any(x => x.RoleId == "Admin"))
                     Page.Master.FindControl("AdminFunc").Visible = true;
-                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Cust"))
+                if ((Session["Account"] as ApplicationUser).Roles.Any(x => x.RoleId == "Cust"))
                     Page.Master.FindControl("CartLink").Visible = true;
             }
             entity = new Entity();
@@ -43,84 +46,45 @@ namespace LabAssignment
 
         protected void RegisterClick_Click(object sender, EventArgs e)
         {
-            var result = Customers.PasswordValidator.ValidateAsync(Password.Text).Result;
-            if (!result.Succeeded)
-                PasswordNotValid.Visible = true;
-            else
-            {
-                if (PasswordNotValid.Visible)
-                    PasswordNotValid.Visible = false;
-                int count = entity.Users.Count();
-                if (count > 0)
-                {
-                    if (!Customers.Users.Any(x => x.UserName == Name.Text))
-                    {
-                        CreateUser(Customers, count, entity);
-                    }
-                }
-                else
-                {
-                    CreateUser(Customers, count, entity);
-                }
-            }
-        }
+            var manager = Context.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            var signInManager = Context.GetOwinContext().Get<ApplicationSignInManager>();
+            var user = new ApplicationUser() { UserName = Name.Text, Email = Password.Text };
 
-        public void CreateUser(UserManager<IdentityUser> Customers, int count, Entity entity)
-        {
-            //  RoleStore<IdentityRole> roleStore = new RoleStore<IdentityRole>(entity);
-            // RoleManager<IdentityRole> roleManager = new RoleManager<IdentityRole>(roleStore);
-            IdentityUser customer = new IdentityUser
-            {
-                UserName = Name.Text,
-                Id = (count + 1).ToString(),
-            };
-            /*  IdentityRole identityRole = new IdentityRole
-              {
-                  Id= "Cust",
-                  Name = "Customer"
-              };*/
+            user.Id = (manager.Users.Count() + 1).ToString();
+            
             IdentityUserRole userRole = new IdentityUserRole
             {
-                UserId = customer.Id,
+                UserId = user.Id,
                 RoleId = "Cust"
             };
-
-            if (Password.Text == CPassword.Text)
+            user.Roles.Add(userRole);
+            IdentityResult result = manager.Create(user, Password.Text);
+            if (result.Succeeded)
             {
+                Session["Account"] = user;
                 try
                 {
-                    //var roleResult = roleManager.CreateAsync(identityRole).Result;
-                    //if (roleResult.Succeeded)
-                    //{
-                    var result = Customers.CreateAsync(customer, Password.Text).Result;
-                    if (result.Succeeded)
+                    SqlConnection conn = new SqlConnection
                     {
-                        Customers.FindByNameAsync(customer.UserName).Result.Email = Password.Text;
-                        Customers.FindByNameAsync(customer.UserName).Result.Roles.Add(userRole);
-                        result = Customers.UpdateAsync(customer).Result;
-                        if (result.Succeeded)
-                        {
-                            Session["Account"] = customer;
-                            SqlConnection conn = new SqlConnection
-                            {
-                                ConnectionString = ConfigurationManager.ConnectionStrings["LIConnectionString"].ConnectionString
-                            };
+                        ConnectionString = ConfigurationManager.ConnectionStrings["LIConnectionString"].ConnectionString
+                    };
 
-                            SqlCommand sqlCommand = new SqlCommand("Insert into Cart(c_owner) Values(@c_owner)", conn);
-                            conn.Open();
-                            sqlCommand.Parameters.AddWithValue("@c_owner", customer.UserName);
-                            sqlCommand.ExecuteNonQuery();
-                            conn.Close();
-                            //var x = signInManager.PasswordSignInAsync(customer.UserName, customer.PasswordHash, isPersistent: true, false).Result;
-                            Response.Redirect("~/Default.aspx", false);
-                        }
-                    }
-                    //}
+                    SqlCommand sqlCommand = new SqlCommand("Insert into Cart(c_owner) Values(@c_owner)", conn);
+                    conn.Open();
+                    sqlCommand.Parameters.AddWithValue("@c_owner", user.UserName);
+                    sqlCommand.ExecuteNonQuery();
+                    conn.Close();
                 }
                 catch (Exception x)
                 {
                     Session["LastError"] = x;
                 }
+                signInManager.SignIn(user, isPersistent: true, rememberBrowser: false);
+                IdentityHelper.RedirectToReturnUrl(Request.QueryString["~/Default.aspx"], Response);
+            }
+            else
+            {
+                PasswordNotValid.Visible = true;
             }
         }
         protected void CPassword_TextChanged(object sender, EventArgs e)

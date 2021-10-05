@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using LabAssignment.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 
 using System.Configuration;
@@ -27,10 +28,10 @@ namespace LabAssignment
             }
             if (Session["Account"] != null)
             {
-                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Admin"))
+                if ((Session["Account"] as ApplicationUser).Roles.Any(x => x.RoleId == "Admin"))
                     if (!Page.Master.FindControl("AdminFunc").Visible)
                         Page.Master.FindControl("AdminFunc").Visible = true;
-                if ((Session["Account"] as IdentityUser).Roles.Any(x => x.RoleId == "Cust"))
+                if ((Session["Account"] as ApplicationUser).Roles.Any(x => x.RoleId == "Cust"))
                 {
                     HideCart.Visible = true;
                     if (!Page.Master.FindControl("CartLink").Visible)
@@ -104,7 +105,7 @@ namespace LabAssignment
         {
             try
             {
-                sqlCommand = new SqlCommand("select * from proorder where p_id = " + Convert.ToInt32(product.p_id) + "and c_name= '" + (Session["Account"] as IdentityUser).UserName + "'" + " and o_id IS NULL", conn);
+                sqlCommand = new SqlCommand("select * from proorder where p_id = " + Convert.ToInt32(product.p_id) + "and c_name= '" + (Session["Account"] as ApplicationUser).UserName + "'" + " and o_id IS NULL", conn);
                 conn.Open();
                 reader = sqlCommand.ExecuteReader();
                 reader.Read();
@@ -113,7 +114,7 @@ namespace LabAssignment
                     sqlCommand = new SqlCommand("Insert into proorder(p_id,p_name,c_name,u_price,quantity,p_url,p_urlM,subtotal) Values (@p_id,@p_name,@c_name,@u_price,@quantity,@p_url,@p_urlM,@subtotal)", conn);
                     sqlCommand.Parameters.AddWithValue("@p_id", Convert.ToInt32(product.p_id));
                     sqlCommand.Parameters.AddWithValue("@p_name", product.p_name);
-                    sqlCommand.Parameters.AddWithValue("@c_name", (Session["Account"] as IdentityUser).UserName);
+                    sqlCommand.Parameters.AddWithValue("@c_name", (Session["Account"] as ApplicationUser).UserName);
                     sqlCommand.Parameters.AddWithValue("@u_price", product.u_price);
                     sqlCommand.Parameters.AddWithValue("@quantity", Convert.ToInt32(QuantityList.SelectedItem.Text));
                     sqlCommand.Parameters.AddWithValue("@p_url", product.p_url);
@@ -133,7 +134,7 @@ namespace LabAssignment
                     sqlCommand.Parameters.AddWithValue("@quantity", quantity);
                     sqlCommand.Parameters.AddWithValue("@subtotal", SqlMoney.Parse((quantity * product.u_price).ToString()));
                     sqlCommand.Parameters.AddWithValue("@p_id", Convert.ToInt32(product.p_id));
-                    sqlCommand.Parameters.AddWithValue("@c_name", (Session["Account"] as IdentityUser).UserName);
+                    sqlCommand.Parameters.AddWithValue("@c_name", (Session["Account"] as ApplicationUser).UserName);
                     sqlCommand.ExecuteNonQuery();
                 }
                 conn.Close();
@@ -158,8 +159,8 @@ namespace LabAssignment
                 sqlCommand.Parameters.AddWithValue("@p_name", product.p_name);
                 sqlCommand.Parameters.AddWithValue("@u_price", product.u_price);
                 sqlCommand.Parameters.AddWithValue("@quantity", Convert.ToInt32(QuantityList.SelectedItem.Text));
-                if ((Session["Account"] as IdentityUser).UserName != "Default")
-                    sqlCommand.Parameters.AddWithValue("@c_name", (Session["Account"] as IdentityUser).UserName);
+                if ((Session["Account"] as ApplicationUser).UserName != "Default")
+                    sqlCommand.Parameters.AddWithValue("@c_name", (Session["Account"] as ApplicationUser).UserName);
                 else
                     sqlCommand.Parameters.AddWithValue("@c_name", "Default");
                 sqlCommand.Parameters.AddWithValue("@p_url", product.p_url);
