@@ -196,7 +196,6 @@
     <Content Include="CustomErrors\ErrorPage4.aspx" />
     <Content Include="CustomErrors\Images\Cart\cart4.svg" />
     <Content Include="Default.aspx" />
-    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Account\Web.config" />
     <Content Include="Images\1812936.jpg" />

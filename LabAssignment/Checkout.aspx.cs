@@ -32,13 +32,16 @@ namespace LabAssignment
             if (Session["Account"] != null)
             {
                 user = Session["Account"] as ApplicationUser;
-                if ((Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText != "Sign Out")
-                    (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
                 if ((Session["Account"] as ApplicationUser).Roles.Any(x => x.RoleId == "Admin"))
                     if (!Page.Master.FindControl("AdminFunc").Visible)
                         Page.Master.FindControl("AdminFunc").Visible = true;
-                if (!Page.Master.FindControl("CartLink").Visible)
-                    Page.Master.FindControl("CartLink").Visible = true;
+                if ((Session["Account"] as ApplicationUser).Roles.Any(x => x.RoleId == "Cust"))
+                {
+                    if (!Page.Master.FindControl("CartLink").Visible)
+                        Page.Master.FindControl("CartLink").Visible = true;
+                    if ((Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText != "Sign Out")
+                        (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
+                }
             }
 
             if (Session["shoppingCart"] != null)

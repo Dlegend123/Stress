@@ -6,7 +6,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="./" />
-    <title><%: Page.Title %> - My ASP.NET Application</title>
+    <link href="~/Images/Logox.png" rel="shortcut icon" type="image/x-icon" class="img-fluid" />
+    <title><%: Page.Title %></title>
    <!-- <link rel="stylesheet" href="cssStyle.css" media="all" type="text/css" />-->
  <style>
 body {
@@ -32,7 +33,7 @@ div {
     </asp:PlaceHolder>
        
     <web opt:bundlereference runat="server" path="~/Content/css" /> 
-    <link href="Images/Logox.png" rel="shortcut icon" type="image/x-icon" class="img-fluid" />
+    
     <link href="Content/bootstrap.min.css" rel="stylesheet" />
         <script src="Scripts/bootstrap.bundle.min.js" ></script>
 </head>
