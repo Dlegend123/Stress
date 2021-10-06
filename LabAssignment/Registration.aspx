@@ -38,9 +38,9 @@
 
                 </asp:TextBox>
                 <br />
-                <asp:TextBox runat="server" ForeColor="Red" Font-Bold="true" ID="PasswordNotValid" Visible="false" BackColor="Transparent" BorderStyle="None" AutoPostBack="true">
+                <asp:Label runat="server" ForeColor="Red" Font-Bold="true" ID="PasswordNotValid" Visible="false" AutoPostBack="true">
 
-                </asp:TextBox>
+                </asp:Label>
             </td>
         </tr>
         <tr>

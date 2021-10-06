@@ -1,6 +1,7 @@
 ﻿using LabAssignment.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -16,17 +17,16 @@ namespace LabAssignment
     public partial class ManageUsers : System.Web.UI.Page
     {
         private Table ManageTable;
+        ApplicationUserManager manager;
+        ApplicationUser user;
         private Table AddTable;
         TextBox UserName;
         TextBox UserID;
         TextBox RoleID;
         TextBox RoleName;
         TableCell HouseTable;
-        protected IdentityUser customer;
         Table SearchTable;
-        UserStore<IdentityUser> userStore;
-        Entity entity;
-        protected UserManager<IdentityUser> Customers;
+
         private Button UserUpdate;
         private TextBox SearchBox;
 
@@ -50,13 +50,6 @@ namespace LabAssignment
                         (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
                 }
             }
-
-            entity = new Entity();
-            entity.Database.Connection.ConnectionString = ConfigurationManager
-                .ConnectionStrings["LIConnectionString"].ConnectionString;
-
-            userStore = new UserStore<IdentityUser>(entity);
-            Customers = new UserManager<IdentityUser>(userStore);
             AdminHouse.Controls.Add(new LiteralControl("<br/> <br/>"));
             LargeTable();
             EditTable();
@@ -273,7 +266,8 @@ namespace LabAssignment
         {
             try
             {
-                customer = Customers.FindById(SearchBox.Text);
+                manager = Context.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                user = manager.FindById(SearchBox.Text);
                 TableRow tableRow = new TableRow();
                 TableCell tableCell = new TableCell();
                 tableRow.HorizontalAlign = HorizontalAlign.Center;
@@ -285,7 +279,7 @@ namespace LabAssignment
                 };
                 tableRow.BorderWidth = Unit.Pixel(3);
 
-                if (customer == null)
+                if (user == null)
                 {
                     if (AddTable.Visible)
                         AddTable.Visible = false;
@@ -296,10 +290,10 @@ namespace LabAssignment
                 }
                 else
                 {
-                    UserName.Text = customer.UserName;
-                    UserID.Text = customer.Id;
-                    RoleID.Text = customer.Roles.First().RoleId;
-                    RoleName.Text = customer.Roles.First().UserId;
+                    UserName.Text = user.UserName;
+                    UserID.Text = user.Id;
+                    RoleID.Text = user.Roles.First().RoleId;
+                    RoleName.Text = user.Roles.First().UserId;
                     if (!AddTable.Visible)
                         AddTable.Visible = true;
                     Button Removal = new Button
@@ -325,22 +319,20 @@ namespace LabAssignment
         }
         private void RemoveUser_Click(object sender, EventArgs e)
         {
-            Customers.DeleteAsync(customer);
+            manager.DeleteAsync(user);
         }
         private void Update_Click(object sender, EventArgs e)
         {
-            IdentityUser temp = customer;
+            ApplicationUser temp = user;
             temp.Id = UserID.Text;
             temp.UserName=UserName.Text;
             temp.Roles.First().RoleId= RoleID.Text;
             temp.Roles.First().UserId= UserID.Text;
-            Customers.FindByIdAsync(UserID.Text).Result.UserName = temp.UserName;
-            Customers.FindByIdAsync(UserID.Text).Result.Id = temp.Id;
-            Customers.FindByIdAsync(UserID.Text).Result.Roles.First().RoleId = temp.Roles.First().RoleId;
-            Customers.FindByIdAsync(UserID.Text).Result.Roles.First().UserId = temp.Roles.First().UserId;
-            var result=Customers.UpdateAsync(customer).Result;
-            if (result.Succeeded)
-                SearchBox.Text = "succeeded";
+            manager.FindByIdAsync(UserID.Text).Result.UserName = temp.UserName;
+            manager.FindByIdAsync(UserID.Text).Result.Id = temp.Id;
+            manager.FindByIdAsync(UserID.Text).Result.Roles.First().RoleId = temp.Roles.First().RoleId;
+            manager.FindByIdAsync(UserID.Text).Result.Roles.First().UserId = temp.Roles.First().UserId;
+            var result= manager.UpdateAsync(user).Result;
         }
     }
 }

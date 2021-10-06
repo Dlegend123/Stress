@@ -13,8 +13,7 @@ namespace LabAssignment
 {
     public partial class Registration : System.Web.UI.Page
     {
-        UserManager<IdentityUser> Customers;
-        Entity entity;
+        ApplicationUserManager manager;
         //private readonly Microsoft.AspNetCore.Identity.SignInManager<IdentityUser> signInManager;
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -26,27 +25,13 @@ namespace LabAssignment
                 if ((Session["Account"] as ApplicationUser).Roles.Any(x => x.RoleId == "Cust"))
                     Page.Master.FindControl("CartLink").Visible = true;
             }
-            entity = new Entity();
-            entity.Database.Connection.ConnectionString = ConfigurationManager
-                .ConnectionStrings["LIConnectionString"].ConnectionString;
-            UserStore<IdentityUser> userStore1 = new UserStore<IdentityUser>(entity);
-            Customers = new UserManager<IdentityUser>(userStore1)
-            {
-                PasswordValidator = new PasswordValidator
-                {
-                    RequireDigit = true,
-                    RequiredLength = 6,
-                    RequireLowercase = true,
-                    RequireUppercase = true,
-                    RequireNonLetterOrDigit = false
-                }
-            };
-            PasswordNotValid.Text = "Password must contain atleast one digit, atleast 6 characters long,include lowercase and uppercase letters";
+            manager = Context.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            PasswordNotValid.Text = "Password must contain atleast one digit, atleast 6 characters long, include lowercase and uppercase letters";
         }
 
         protected void RegisterClick_Click(object sender, EventArgs e)
         {
-            var manager = Context.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            
             var signInManager = Context.GetOwinContext().Get<ApplicationSignInManager>();
             var user = new ApplicationUser() { UserName = Name.Text, Email = Password.Text };
 
@@ -58,7 +43,7 @@ namespace LabAssignment
                 RoleId = "Cust"
             };
             user.Roles.Add(userRole);
-            IdentityResult result = manager.Create(user, Password.Text);
+            IdentityResult result = manager.CreateAsync(user, Password.Text).Result;
             if (result.Succeeded)
             {
                 Session["Account"] = user;
@@ -93,7 +78,7 @@ namespace LabAssignment
 
         protected void Password_TextChanged(object sender, EventArgs e)
         {
-            var result = Customers.PasswordValidator.ValidateAsync(Password.Text).Result;
+            var result = manager.PasswordValidator.ValidateAsync(Password.Text).Result;
             if (!result.Succeeded)
                 PasswordNotValid.Visible = true;
             else
