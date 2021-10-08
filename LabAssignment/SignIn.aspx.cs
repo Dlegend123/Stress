@@ -13,8 +13,6 @@ namespace LabAssignment
 {
     public partial class SignIn : System.Web.UI.Page
     {
-
-
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -53,10 +51,7 @@ namespace LabAssignment
         }
         protected void Validate(object sender, EventArgs e)
         {
-            //entity = new Entity();
-           // entity.Database.Connection.ConnectionString = ConfigurationManager
-              //  .ConnectionStrings["LIConnectionString"].ConnectionString;
-            //userStore = new UserStore<IdentityUser>(entity);
+
             var Customers = Context.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var signInmanager = Context.GetOwinContext().GetUserManager<ApplicationSignInManager>();
            
