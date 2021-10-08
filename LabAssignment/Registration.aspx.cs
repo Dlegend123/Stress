@@ -17,7 +17,11 @@ namespace LabAssignment
         //private readonly Microsoft.AspNetCore.Identity.SignInManager<IdentityUser> signInManager;
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (!Request.IsSecureConnection)
+            {
+                string url = ConfigurationManager.AppSettings["SecurePath"] + "Registration.aspx";
+                Response.Redirect(url);
+            }
             if (Session["Account"] != null)
             {
                 if ((Session["Account"] as ApplicationUser).Roles.Any(x => x.RoleId == "Admin"))
