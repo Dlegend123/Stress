@@ -23,12 +23,16 @@ namespace LabAssignment.CustomErrors
             if (Session["Account"] != null)
             {
                 if ((Session["Account"] as ApplicationUser).Roles.Any(x => x.RoleId == "Admin"))
+                {
                     if (!Page.Master.FindControl("AdminFunc").Visible)
                         Page.Master.FindControl("AdminFunc").Visible = true;
+                    if ((Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText != "Sign Out")
+                        (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
+                }
                 if ((Session["Account"] as ApplicationUser).Roles.Any(x => x.RoleId == "Cust"))
                 {
-                    if (!Page.Master.FindControl("CartLink").Visible)
-                        Page.Master.FindControl("CartLink").Visible = true;
+                    if (!Page.Master.FindControl("CustFunc").Visible)
+                        Page.Master.FindControl("CustFunc").Visible = true;
                     if ((Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText != "Sign Out")
                         (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
                 }

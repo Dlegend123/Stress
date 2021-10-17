@@ -27,7 +27,7 @@ namespace LabAssignment
                 if ((Session["Account"] as ApplicationUser).Roles.Any(x => x.RoleId == "Admin"))
                     Page.Master.FindControl("AdminFunc").Visible = true;
                 if ((Session["Account"] as ApplicationUser).Roles.Any(x => x.RoleId == "Cust"))
-                    Page.Master.FindControl("CartLink").Visible = true;
+                    Page.Master.FindControl("CustFunc").Visible = true;
             }
             manager = Context.GetOwinContext().GetUserManager<ApplicationUserManager>();
             PasswordNotValid.Text = "Password must contain atleast one digit, atleast 6 characters long, include lowercase and uppercase letters";

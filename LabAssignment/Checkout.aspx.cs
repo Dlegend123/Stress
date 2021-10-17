@@ -33,20 +33,25 @@ namespace LabAssignment
             {
                 user = Session["Account"] as ApplicationUser;
                 if ((Session["Account"] as ApplicationUser).Roles.Any(x => x.RoleId == "Admin"))
+                {
                     if (!Page.Master.FindControl("AdminFunc").Visible)
                         Page.Master.FindControl("AdminFunc").Visible = true;
-                if ((Session["Account"] as ApplicationUser).Roles.Any(x => x.RoleId == "Cust"))
-                {
-                    if (!Page.Master.FindControl("CartLink").Visible)
-                        Page.Master.FindControl("CartLink").Visible = true;
                     if ((Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText != "Sign Out")
                         (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
+                }
+                if ((Session["Account"] as ApplicationUser).Roles.Any(x => x.RoleId == "Cust"))
+                {
+                    if (!Page.Master.FindControl("CustFunc").Visible)
+                        Page.Master.FindControl("CustFunc").Visible = true;
+                    if ((Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText != "Sign Out")
+                        (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
+                    (Page.Master.FindControl("CustList") as HtmlAnchor).InnerText = (Session["Account"] as ApplicationUser).UserName;
                 }
             }
 
             if (Session["shoppingCart"] != null)
             {
-                conn = new SqlConnection
+              /*  conn = new SqlConnection
                 {
                     ConnectionString = ConfigurationManager.ConnectionStrings["LIConnectionString"].ConnectionString
                 };
@@ -69,6 +74,7 @@ namespace LabAssignment
                 {
                     Session["LastError"] = f;
                 }
+              */
                 shoppingCart = Session["shoppingCart"] as ShoppingCart;
                 if (Session["subTotals"] != null)
                     subTotals = Session["subTotals"] as List<float>;
@@ -156,7 +162,6 @@ namespace LabAssignment
                 shoppingCart.products.ForEach(v => ProcessO(v, t, x));
                 shoppingCart.products.Clear();
                 Session["shoppingCart"] = shoppingCart;
-                sqlCommand = new SqlCommand("Insert into CustOrder(c_name,p_date,o_id) Values(@c_name,@p_date,@o_id)", conn);
                 conn.Close();
                 Response.Redirect("~/Default.aspx", false);
             }

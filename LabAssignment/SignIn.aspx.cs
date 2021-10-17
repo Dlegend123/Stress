@@ -37,8 +37,8 @@ namespace LabAssignment
                     if ((Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText != "Sign Out")
                         (Page.Master.FindControl("SignInLink") as HtmlAnchor).InnerText = "Sign Out";
                     Session["Account"] = null;
-                    if (Page.Master.FindControl("CartLink").Visible)
-                        Page.Master.FindControl("CartLink").Visible = false;
+                    if (Page.Master.FindControl("CustFunc").Visible)
+                        Page.Master.FindControl("CustFunc").Visible = false;
                     if (Page.Master.FindControl("AdminFunc").Visible)
                         Page.Master.FindControl("AdminFunc").Visible = false;
                     Response.Redirect("~/Default.aspx", false);

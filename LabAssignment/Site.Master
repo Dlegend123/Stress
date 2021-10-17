@@ -66,9 +66,7 @@ div {
                     <li class="nav-item">
                       <a class="nav-link" href="Contact" style="font-size:larger" runat="server">Contact Us</a>
                     </li>
-                      <li class="nav-item">
-                      <a class="nav-link" href="SignIn.aspx" style="font-size:larger" runat="server" id="SignInLink">Sign In</a>
-                    </li>
+                      
                       <li class="nav-item dropdown" runat="server" id="AdminFunc" visible="false">
                           <a class="nav-link active dropdown-toggle" style="font-size:larger" href="#" role="button" id="AdminList" data-bs-toggle="dropdown" aria-expanded="false">
                             Manage
@@ -80,11 +78,23 @@ div {
                             <li><a class="dropdown-item" href="ManageUsers.aspx">Users</a></li>
                           </ul>
                     </li>
-                      <li class="nav-item" id="CartLink" runat="server" visible="false">
-                          <a class="nav-link" href="Cart.aspx" runat="server">
-                              <img src="Images/Cart/cart4.svg" />
+                      <li class="nav-item dropdown" id="CustFunc" runat="server" visible="false">
+                          <a class="nav-link active dropdown-toggle" style="font-size:larger" runat="server" href="#" role="button" id="CustList" data-bs-toggle="dropdown" aria-expanded="false">
                           </a>
+                          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                          <li>
+                          <a class="dropdown-item bg-dark" href="Cart.aspx" runat="server">
+                              <img src="Images/Cart/cart4.svg"/>
+                          </a>
+                          </li>
+                              <li>
+                                  <a class="dropdown-item" href="ManageHome.aspx">View Order History</a>
+                              </li>
+                          </ul>
                       </li>
+                      <li class="nav-item">
+                      <a class="nav-link" href="SignIn.aspx" style="font-size:larger" runat="server" id="SignInLink">Sign In</a>
+                    </li>
                   </ul>
                     
                 </div>

@@ -24,15 +24,6 @@ namespace LabAssignment
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl stress;
 
         /// <summary>
-        /// SignInLink control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor SignInLink;
-
-        /// <summary>
         /// AdminFunc control.
         /// </summary>
         /// <remarks>
@@ -42,13 +33,31 @@ namespace LabAssignment
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl AdminFunc;
 
         /// <summary>
-        /// CartLink control.
+        /// CustFunc control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl CartLink;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl CustFunc;
+
+        /// <summary>
+        /// CustList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor CustList;
+
+        /// <summary>
+        /// SignInLink control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor SignInLink;
 
         /// <summary>
         /// MainContent control.

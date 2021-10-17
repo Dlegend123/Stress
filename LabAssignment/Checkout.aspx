@@ -12,18 +12,6 @@
                </h3>
            </td>
        </tr>
-         <tr>
-           <td style="text-align:left;" colspan="2">
-               
-               <h5>
-                   Username
-               </h5>
-               <asp:TextBox runat="server">
-
-               </asp:TextBox>
-           </td>
-            
-       </tr>
             <tr>
                 <td style="text-align:left;" colspan="2">
                <h5>
