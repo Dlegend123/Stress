@@ -444,6 +444,7 @@ namespace LabAssignment
                             SearchTable.Visible = false;
                         if (!AddTable.Visible)
                             AddTable.Visible = true;
+                        ProductAdd.Text = "Add";
                         ProductAdd.Click += new EventHandler(ProductAdd_Click);
                         if (!ProductVid.Parent.Parent.Visible)
                             ProductVid.Parent.Parent.Visible = true;
@@ -457,6 +458,7 @@ namespace LabAssignment
                             AddTable.Visible = false;
                         if (!SearchTable.Visible)
                             SearchTable.Visible = true;
+                        ProductAdd.Text = "Update";
                         ProductAdd.Click += new EventHandler(ProductUpdate_Click);
                         if (ProductVid.Parent.Parent.Visible)
                             ProductVid.Parent.Parent.Visible = false;
