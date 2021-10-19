@@ -26,6 +26,10 @@
                 <asp:TextBox runat="server" Font-Size="Medium" CssClass="w-100" ID="Name">
 
                 </asp:TextBox>
+                <br />
+                <asp:Label runat="server" ForeColor="Red" Font-Bold="true" ID="UsernameErr" Visible="false" AutoPostBack="true" Text="UserName already exists">
+
+                </asp:Label>
                 </td>
             </tr>
         <tr>
@@ -38,7 +42,7 @@
 
                 </asp:TextBox>
                 <br />
-                <asp:Label runat="server" ForeColor="Red" Font-Bold="true" ID="PasswordNotValid" Visible="false" AutoPostBack="true">
+                <asp:Label runat="server" ForeColor="Red" Font-Bold="true" ID="PasswordNotValid" Visible="false" AutoPostBack="true" Text="Password must contain atleast one digit, atleast 6 characters long, include lowercase and uppercase letters">
 
                 </asp:Label>
             </td>

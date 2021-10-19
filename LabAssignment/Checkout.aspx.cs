@@ -21,7 +21,6 @@ namespace LabAssignment
         SqlCommand sqlCommand;
         SqlConnection conn;
         SqlDataReader reader;
-        int temp;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Request.IsSecureConnection)
@@ -51,30 +50,31 @@ namespace LabAssignment
 
             if (Session["shoppingCart"] != null)
             {
-              /*  conn = new SqlConnection
+                conn = new SqlConnection
                 {
                     ConnectionString = ConfigurationManager.ConnectionStrings["LIConnectionString"].ConnectionString
                 };
-                sqlCommand = new SqlCommand("select * from RAddress where c_name= '" + user.UserName + "'", conn);
-                try
-                {
-                    conn.Open();
-                    reader = sqlCommand.ExecuteReader();
-                    reader.Read();
-                    if (reader.HasRows)
-                    {
-                        Address1.Text = reader["street"].ToString();
-                        Address2.Text = reader["optional"].ToString();
-                        Address3.Text = reader["city"].ToString();
-                        Address4.Text = reader["zipcode"].ToString();
-                    }
-                    conn.Close();
-                }
-                catch (Exception f)
-                {
-                    Session["LastError"] = f;
-                }
-              */
+                /*  
+                  sqlCommand = new SqlCommand("select * from RAddress where c_name= '" + user.UserName + "'", conn);
+                  try
+                  {
+                      conn.Open();
+                      reader = sqlCommand.ExecuteReader();
+                      reader.Read();
+                      if (reader.HasRows)
+                      {
+                          Address1.Text = reader["street"].ToString();
+                          Address2.Text = reader["optional"].ToString();
+                          Address3.Text = reader["city"].ToString();
+                          Address4.Text = reader["zipcode"].ToString();
+                      }
+                      conn.Close();
+                  }
+                  catch (Exception f)
+                  {
+                      Session["LastError"] = f;
+                  }
+                */
                 shoppingCart = Session["shoppingCart"] as ShoppingCart;
                 if (Session["subTotals"] != null)
                     subTotals = Session["subTotals"] as List<float>;
@@ -172,9 +172,8 @@ namespace LabAssignment
         }
         void ProcessO(Product v,DateTime t,int x)
         {
-            sqlCommand = new SqlCommand("Update proorder set o_id=@o_id,p_date=@p_date where p_id=@p_id and c_name=@c_name", conn);
+            sqlCommand = new SqlCommand("Update proorder set o_id=@o_id where p_id=@p_id and c_name=@c_name", conn);
             sqlCommand.Parameters.AddWithValue("@c_name", user.UserName);
-            sqlCommand.Parameters.AddWithValue("@p_date", t);
             sqlCommand.Parameters.AddWithValue("@o_id", x);
             sqlCommand.Parameters.AddWithValue("@p_id", v.p_id);
             sqlCommand.ExecuteNonQuery();

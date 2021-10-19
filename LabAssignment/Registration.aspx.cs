@@ -30,50 +30,77 @@ namespace LabAssignment
                     Page.Master.FindControl("CustFunc").Visible = true;
             }
             manager = Context.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            PasswordNotValid.Text = "Password must contain atleast one digit, atleast 6 characters long, include lowercase and uppercase letters";
         }
 
         protected void RegisterClick_Click(object sender, EventArgs e)
         {
-            
-            var signInManager = Context.GetOwinContext().Get<ApplicationSignInManager>();
-            var user = new ApplicationUser() { UserName = Name.Text, Email = Password.Text };
+            PasswordNotValid.Text = "Password must contain atleast one digit, atleast 6 characters long, include lowercase and uppercase letters";
 
-            user.Id = (manager.Users.Count() + 1).ToString();
-            
-            IdentityUserRole userRole = new IdentityUserRole
+            if (manager.Users.Any(x => x.UserName == Name.Text))
             {
-                UserId = user.Id,
-                RoleId = "Cust"
-            };
-            user.Roles.Add(userRole);
-            IdentityResult result = manager.CreateAsync(user, Password.Text).Result;
-            if (result.Succeeded)
-            {
-                Session["Account"] = user;
-                try
-                {
-                    SqlConnection conn = new SqlConnection
-                    {
-                        ConnectionString = ConfigurationManager.ConnectionStrings["LIConnectionString"].ConnectionString
-                    };
-
-                    SqlCommand sqlCommand = new SqlCommand("Insert into Cart(c_owner) Values(@c_owner)", conn);
-                    conn.Open();
-                    sqlCommand.Parameters.AddWithValue("@c_owner", user.UserName);
-                    sqlCommand.ExecuteNonQuery();
-                    conn.Close();
-                }
-                catch (Exception x)
-                {
-                    Session["LastError"] = x;
-                }
-                signInManager.SignIn(user, isPersistent: true, rememberBrowser: false);
-                IdentityHelper.RedirectToReturnUrl(Request.QueryString["~/Default.aspx"], Response);
+                UsernameErr.Visible = true;
             }
             else
             {
-                PasswordNotValid.Visible = true;
+                if (string.IsNullOrEmpty(CPassword.Text))
+                {
+                    PasswordNotValid.Text = "The confirmed password should be entered";
+                    PasswordNotValid.Visible = true;
+                }
+                else
+                {
+                    if (CPassword.Text == Password.Text)
+                    {
+
+                        UsernameErr.Visible = false;
+                        var signInManager = Context.GetOwinContext().Get<ApplicationSignInManager>();
+                        var user = new ApplicationUser() { UserName = Name.Text, Email = Password.Text };
+
+                        user.Id = (manager.Users.Count() + 1).ToString();
+
+                        IdentityUserRole userRole = new IdentityUserRole
+                        {
+                            UserId = user.Id,
+                            RoleId = "Cust"
+                        };
+                        user.Roles.Add(userRole);
+                        IdentityResult result = manager.CreateAsync(user, Password.Text).Result;
+
+
+                        if (result.Succeeded)
+                        {
+                            Session["Account"] = user;
+                            try
+                            {
+                                SqlConnection conn = new SqlConnection
+                                {
+                                    ConnectionString = ConfigurationManager.ConnectionStrings["LIConnectionString"].ConnectionString
+                                };
+
+                                SqlCommand sqlCommand = new SqlCommand("Insert into Cart(c_owner) Values(@c_owner)", conn);
+                                conn.Open();
+                                sqlCommand.Parameters.AddWithValue("@c_owner", user.UserName);
+                                sqlCommand.ExecuteNonQuery();
+                                conn.Close();
+                            }
+                            catch (Exception x)
+                            {
+                                Session["LastError"] = x;
+                            }
+                            signInManager.SignIn(user, isPersistent: true, rememberBrowser: false);
+                            IdentityHelper.RedirectToReturnUrl(Request.QueryString["~/Default.aspx"], Response);
+                        }
+                        else
+                        {
+                            PasswordNotValid.Visible = true;
+                        }
+                    }
+                    else
+                    {
+                        PasswordNotValid.Text = "The passwords do not match";
+                        PasswordNotValid.Visible = true;
+                    }
+                }
             }
         }
         protected void CPassword_TextChanged(object sender, EventArgs e)
@@ -82,11 +109,12 @@ namespace LabAssignment
 
         protected void Password_TextChanged(object sender, EventArgs e)
         {
+            PasswordNotValid.Text = "Password must contain atleast one digit, atleast 6 characters long, include lowercase and uppercase letters";
+
             var result = manager.PasswordValidator.ValidateAsync(Password.Text).Result;
             if (!result.Succeeded)
                 PasswordNotValid.Visible = true;
             else
-                if (PasswordNotValid.Visible)
                 PasswordNotValid.Visible = false;
         }
     }

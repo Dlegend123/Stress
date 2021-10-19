@@ -485,6 +485,8 @@ namespace LabAssignment
                 tableRow.BorderWidth = Unit.Pixel(3);
                 if (!reader.HasRows)
                 {
+                    if (AddTable.Visible)
+                        AddTable.Visible = false;
                     tableCell.Controls.Add(new LiteralControl("Product not found"));
                     tableRow.Cells.Add(tableCell);
                     table.Rows.Add(tableRow);
