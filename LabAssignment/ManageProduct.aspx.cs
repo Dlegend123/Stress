@@ -384,6 +384,7 @@ namespace LabAssignment
                 Text = "Page(Desktop)"
             };
             tableCell7.Controls.Add(PageD);
+            tableCell7.Controls.Add(new LiteralControl("<br/>"));
             ProductDesk = new TextBox
             {
                 Visible = true,
@@ -402,12 +403,14 @@ namespace LabAssignment
                 Visible = true
             };
             tableCell8.Controls.Add(PageM);
+            tableCell7.Controls.Add(new LiteralControl("<br/>"));
             ProductMob = new TextBox
             {
                 ID = "ProductMob"
             };
             tableCell8.Controls.Add(ProductMob);
             row6.Cells.Add(tableCell8);
+            AddTable.Rows.Add(row6);
             TableFooterRow row7 = new TableFooterRow
             {
                 Visible = true
@@ -440,30 +443,46 @@ namespace LabAssignment
             {
                 case 0:
                     {
-                        if (SearchTable.Visible)
-                            SearchTable.Visible = false;
-                        if (!AddTable.Visible)
-                            AddTable.Visible = true;
-                        ProductAdd.Text = "Add";
-                        ProductAdd.Click += new EventHandler(ProductAdd_Click);
-                        if (!ProductVid.Parent.Parent.Visible)
-                            ProductVid.Parent.Parent.Visible = true;
-                        if (!ProductImage1.Parent.Parent.Visible)
-                            ProductImage1.Parent.Parent.Visible = true;
+                        try
+                        {
+                            if (SearchTable.Visible)
+                                SearchTable.Visible = false;
+                            if (!AddTable.Visible)
+                                AddTable.Visible = true;
+                            ProductAdd.Text = "Add";
+                                ProductAdd.Click -= ProductUpdate_Click;
+                            ProductAdd.Click += new EventHandler(ProductAdd_Click);
+                            if (!ProductVid.Parent.Parent.Visible)
+                                ProductVid.Parent.Parent.Visible = true;
+                            if (!ProductImage1.Parent.Parent.Visible)
+                                ProductImage1.Parent.Parent.Visible = true;
+                        }
+                        catch (Exception)
+                        {
+
+                        }
                     }
                     break;
                 case 1:
                     {
-                        if (AddTable.Visible)
-                            AddTable.Visible = false;
-                        if (!SearchTable.Visible)
-                            SearchTable.Visible = true;
-                        ProductAdd.Text = "Update";
-                        ProductAdd.Click += new EventHandler(ProductUpdate_Click);
-                        if (ProductVid.Parent.Parent.Visible)
-                            ProductVid.Parent.Parent.Visible = false;
-                        if (ProductImage1.Parent.Parent.Visible)
-                            ProductImage1.Parent.Parent.Visible = false;
+                        try
+                        {
+                            if (AddTable.Visible)
+                                AddTable.Visible = false;
+                            if (!SearchTable.Visible)
+                                SearchTable.Visible = true;
+                            ProductAdd.Text = "Update";
+                            ProductAdd.Click -= ProductAdd_Click;
+                            ProductAdd.Click += new EventHandler(ProductUpdate_Click);
+                            if (ProductVid.Parent.Parent.Visible)
+                                ProductVid.Parent.Parent.Visible = false;
+                            if (ProductImage1.Parent.Parent.Visible)
+                                ProductImage1.Parent.Parent.Visible = false;
+                        }
+                        catch (Exception)
+                        {
+
+                        }
                     }
                     break;
             }
@@ -512,7 +531,6 @@ namespace LabAssignment
                     table.Rows.Add(tableRow);
                     SearchTable.Rows.Add(tableRow);
                     Removal.Click += new EventHandler(RemoveProduct_Click);
-                    ProductAdd.Text = "Update";
                 }
                 conn.Close();
             }

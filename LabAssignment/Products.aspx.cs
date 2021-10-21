@@ -257,7 +257,7 @@ namespace LabAssignment
                 hyperLink.Controls.Add(new LiteralControl("ID: " + p.p_id + "<br />"));
                 hyperLink.Controls.Add(new LiteralControl("Category: " + p.category + "<br />"));
                 hyperLink.Controls.Add(new LiteralControl("Unit Price: $" + p.u_price + "<br />"));
-                hyperLink.Controls.Add(new LiteralControl("Details: " + p.p_details.Substring(0, 40) + "..."));
+                hyperLink.Controls.Add(new LiteralControl("Details: " + ((p.p_details.Length > 40) ? p.p_details.Substring(0, 40) + "..." : "")));
                 tableCell.Controls.Add(hyperLink);
                 tableCell.VerticalAlign = VerticalAlign.Middle;
                 tableCell.HorizontalAlign = HorizontalAlign.Center;
@@ -284,7 +284,7 @@ namespace LabAssignment
                 hyperLink2.Controls.Add(new LiteralControl("ID: " + p.p_id + "<br />"));
                 hyperLink2.Controls.Add(new LiteralControl("Category: " + p.category + "<br />"));
                 hyperLink2.Controls.Add(new LiteralControl("Unit Price: $" + p.u_price + "<br />"));
-                hyperLink2.Controls.Add(new LiteralControl("Details: " + p.p_details.Substring(0, 40) + "..."));
+                hyperLink2.Controls.Add(new LiteralControl("Details: " + ((p.p_details.Length>40)?p.p_details.Substring(0, 40) + "...":"")));
                 tableCell2.Controls.Add(hyperLink2);
                 tableCell2.RowSpan = 1;
                 tableCell2.HorizontalAlign = HorizontalAlign.Left;
