@@ -376,7 +376,8 @@ namespace LabAssignment
             };
             TableCell tableCell7 = new TableCell
             {
-                Visible = true
+                Visible = true,
+                HorizontalAlign = HorizontalAlign.Left
             };
             Label PageD = new Label
             {
@@ -395,7 +396,8 @@ namespace LabAssignment
             row6.Cells.Add(tableCell7);
             TableCell tableCell8 = new TableCell
             {
-                Visible = true
+                Visible = true,
+                HorizontalAlign = HorizontalAlign.Left
             };
             Label PageM = new Label
             {
@@ -403,7 +405,7 @@ namespace LabAssignment
                 Visible = true
             };
             tableCell8.Controls.Add(PageM);
-            tableCell7.Controls.Add(new LiteralControl("<br/>"));
+            tableCell8.Controls.Add(new LiteralControl("<br/>"));
             ProductMob = new TextBox
             {
                 ID = "ProductMob"
@@ -543,10 +545,13 @@ namespace LabAssignment
 
         private void RemoveProduct_Click(object sender, EventArgs e)
         {
-            sqlCommand = new SqlCommand("Delete  from product where p_id = '" + key + "'", conn);
+            key = SearchBox.Text;
+            sqlCommand = new SqlCommand("Delete  from proimage where p_id = " + key , conn);
             try
             {
                 conn.Open();
+                sqlCommand.ExecuteNonQuery();
+                sqlCommand = new SqlCommand("Delete  from product where p_id = " + key, conn);
                 sqlCommand.ExecuteNonQuery();
                 conn.Close();
             }
