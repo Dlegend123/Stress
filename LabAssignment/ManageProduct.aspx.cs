@@ -546,12 +546,13 @@ namespace LabAssignment
         private void RemoveProduct_Click(object sender, EventArgs e)
         {
             key = SearchBox.Text;
-            sqlCommand = new SqlCommand("Delete  from proimage where p_id = " + key , conn);
+            sqlCommand = new SqlCommand("delete from proimage where p_id=" + key , conn);
             try
             {
                 conn.Open();
                 sqlCommand.ExecuteNonQuery();
-                sqlCommand = new SqlCommand("Delete  from product where p_id = " + key, conn);
+                sqlCommand.Parameters.Clear();
+                sqlCommand = new SqlCommand("delete from product where p_id=" + key, conn);
                 sqlCommand.ExecuteNonQuery();
                 conn.Close();
             }
