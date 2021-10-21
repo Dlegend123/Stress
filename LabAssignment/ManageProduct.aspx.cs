@@ -547,7 +547,7 @@ namespace LabAssignment
             try
             {
                 SqlCommand cmd = new SqlCommand("Delete from ProImage Where p_id = @ID ; Delete from Product Where p_id = @ID;", conn);
-                cmd.Parameters.AddWithValue("@ID", int.Parse(SearchBox.Text.ToString()));
+                cmd.Parameters.Add("@ID", System.Data.SqlDbType.Int).Value = int.Parse(SearchBox.Text.Trim());
                 conn.Open();
                 cmd.ExecuteNonQuery();
                 conn.Close();
