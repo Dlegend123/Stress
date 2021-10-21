@@ -25,7 +25,6 @@ namespace LabAssignment
         private SqlDataReader reader;
         private BinaryReader b;
         private byte[] binData;
-        string key;
         Product temp;
         FileUpload ProductVid;
         TextBox ProductID;
@@ -545,16 +544,12 @@ namespace LabAssignment
 
         private void RemoveProduct_Click(object sender, EventArgs e)
         {
-            key = SearchBox.Text;
-            sqlCommand = new SqlCommand("delete from proimage where p_id=@p_id", conn);
             try
             {
+                SqlCommand cmd = new SqlCommand("Delete from ProImage Where p_id= @ID ; Delete from Product Where p_id= @ID;", conn);
+                cmd.Parameters.AddWithValue("@ID", Convert.ToInt32(SearchBox.Text));
                 conn.Open();
-                sqlCommand.Parameters.AddWithValue("p_id", Convert.ToInt32(key));
-                sqlCommand.ExecuteNonQuery();
-                sqlCommand = new SqlCommand("delete from product where p_id=@p_id", conn);
-                sqlCommand.Parameters.AddWithValue("p_id", Convert.ToInt32(key));
-                sqlCommand.ExecuteNonQuery();
+                cmd.ExecuteNonQuery();
                 conn.Close();
             }
             catch (Exception x)
@@ -703,7 +698,7 @@ namespace LabAssignment
                 category = reader["category"].ToString(),
                 p_urlM = reader["p_urlM"].ToString()
             };
-            key = ProductID.Text = reader["p_id"].ToString();
+            ProductID.Text = reader["p_id"].ToString();
             ProductDesk.Text = reader["p_url"].ToString();
             ProductDetail.Text = reader["p_details"].ToString();
             ProductName.Text = reader["p_name"].ToString();
