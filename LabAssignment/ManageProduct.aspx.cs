@@ -174,6 +174,7 @@ namespace LabAssignment
             {
                 ID = "ProductID",
                 Visible = true,
+                TextMode = TextBoxMode.Number
             };
             cell.Controls.Add(ProductID);
             TableCell tableCell = new TableCell
@@ -546,8 +547,8 @@ namespace LabAssignment
         {
             try
             {
-                SqlCommand cmd = new SqlCommand("Delete from ProImage Where p_id = @ID ; Delete from Product Where p_id = @ID;", conn);
-                cmd.Parameters.Add("@ID", System.Data.SqlDbType.Int).Value = int.Parse(SearchBox.Text.Trim());
+                SqlCommand cmd = new SqlCommand("Delete from ProImage Where p_id = @ID ; Delete from Product Where p_id = @ID", conn);
+                cmd.Parameters.Add("@ID", System.Data.SqlDbType.Int).Value = int.Parse(SearchBox.Text);
                 conn.Open();
                 cmd.ExecuteNonQuery();
                 conn.Close();
@@ -608,13 +609,13 @@ namespace LabAssignment
                 {
                     sqlCommand = new SqlCommand("INSERT INTO Product(p_id,p_name,p_details,category,u_price,quantity,p_url,p_urlM) Values (@p_id,@p_name,@p_details,@category,@u_price,@quantity,@p_url,@p_urlM)", conn);
                 }
-                sqlCommand.Parameters.AddWithValue("@p_id", Convert.ToInt32(ProductID.Text));
+                sqlCommand.Parameters.AddWithValue("@p_id", SqlInt32.Parse(ProductID.Text));
                 sqlCommand.Parameters.AddWithValue("@p_name", ProductName.Text);
                 sqlCommand.Parameters.AddWithValue("@p_details", ProductDetail.Text);
                 sqlCommand.Parameters.AddWithValue("@category", ProductCat.Text);
                 sqlCommand.Parameters.AddWithValue("@u_price", SqlMoney.Parse( ProductPrice.Text));
 
-                sqlCommand.Parameters.AddWithValue("@quantity", Convert.ToInt32(ProductQuantity.Text));
+                sqlCommand.Parameters.AddWithValue("@quantity", SqlInt32.Parse(ProductQuantity.Text));
                 sqlCommand.Parameters.AddWithValue("@p_url", "~/" + ProductDesk.Text);
                 sqlCommand.Parameters.AddWithValue("@p_urlM", "~/" + ProductMob.Text);
                 conn.Open();
@@ -666,13 +667,13 @@ namespace LabAssignment
                 {
                     sqlCommand = new SqlCommand("Update Product SET p_id = @p_id, p_name = @p_name, p_details = @p_details, category = @category, u_price = @u_price, quantity = @quantity, p_url = @p_url, p_urlM = @p_urlM where p_id = '" + temp.p_id + "'", conn);
                 }
-                sqlCommand.Parameters.AddWithValue("@p_id", Convert.ToInt32(ProductID.Text));
+                sqlCommand.Parameters.AddWithValue("@p_id", SqlInt32.Parse(ProductID.Text));
                 sqlCommand.Parameters.AddWithValue("@p_name", ProductName.Text);
                 sqlCommand.Parameters.AddWithValue("@p_details", ProductDetail.Text);
                 sqlCommand.Parameters.AddWithValue("@category", ProductCat.Text);
                 sqlCommand.Parameters.AddWithValue("@u_price",SqlMoney.Parse( ProductPrice.Text));
 
-                sqlCommand.Parameters.AddWithValue("@quantity", Convert.ToInt32(ProductQuantity.Text));
+                sqlCommand.Parameters.AddWithValue("@quantity", SqlInt32.Parse(ProductQuantity.Text));
                 sqlCommand.Parameters.AddWithValue("@p_url", "~/" + ProductDesk.Text);
                 sqlCommand.Parameters.AddWithValue("@p_urlM", "~/" + ProductMob.Text);
                 conn.Open();
